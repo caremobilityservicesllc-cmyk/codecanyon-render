@@ -54,6 +54,9 @@
 - `/track` now supports deep links via `?id=` and `?ref=` used by notification and booking actions.
 - Booking confirmation email resend now falls back to the booking `contact_email` instead of requiring an active session.
 - Local seed now creates deterministic admin, customer, driver, setup completion, and booking reference `DEMO-0001`.
+- Render production now accepts the deterministic demo credentials for admin, customer, and driver lanes.
+- Render production now has a real `drivers` row for `driver@demo.com` and a real booking `DEMO-0001` for `user@demo.com`.
+- Render production `db/query` now prefers migrated `bookings` and `drivers` tables over legacy fallbacks, with legacy paths used only when the migrated tables are missing.
 
 ## Current Route Intent
 
@@ -100,9 +103,9 @@
 
 ## Pending Deploy Batch
 
-- Current unpublished batch includes auth/session stabilization, customer booking ownership fixes, track deep-link support, and deterministic local seed credentials.
+- No unpublished production-critical batch at this time.
 
 ## Latest Deploy Reference
 
-- Latest pushed commit for the route/navigation stabilization batch: `e44809111abcabab63fc2cda4880e091adfecede`
-- Previous deploy reference: `0e863b8`
+- Latest pushed commit for the Render production validation batch: `296d0ba`
+- Previous deploy reference: `aa90d061b616c8d8810717bfdbe12dfea06a4893`
