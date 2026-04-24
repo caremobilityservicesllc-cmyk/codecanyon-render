@@ -344,26 +344,6 @@ async function executeLegacyBookingsQuery(state) {
 export async function executeDbQuery(state) {
   assertTable(state.table);
 
-  if (state.table === 'drivers') {
-    try {
-      return await executeLegacyDriversQuery(state);
-    } catch (error) {
-      if (!isMissingRelation(error, 'admin_drivers')) {
-        throw error;
-      }
-    }
-  }
-
-  if (state.table === 'bookings') {
-    try {
-      return await executeLegacyBookingsQuery(state);
-    } catch (error) {
-      if (!isMissingRelation(error, 'dispatch_trips')) {
-        throw error;
-      }
-    }
-  }
-
   if (state.operation === 'select') {
     const values = [];
     const where = buildWhere(state.filters, values);
@@ -372,9 +352,21 @@ export async function executeDbQuery(state) {
     const offset = state.range ? ` offset ${Math.max(0, state.range.from)}` : '';
     const rangeLimit = state.range ? ` limit ${Math.max(0, state.range.to - state.range.from + 1)}` : '';
     const select = parseSelect(state.select);
-    const result = await query(`select ${select} from "${state.table}"${where}${orderBy}${state.range ? rangeLimit : limit}${offset}`.trim(), values);
-    const data = state.single || state.maybeSingle ? (result.rows[0] || null) : result.rows;
-    return { data, count: result.rowCount, error: null };
+    try {
+      const result = await query(`select ${select} from "${state.table}"${where}${orderBy}${state.range ? rangeLimit : limit}${offset}`.trim(), values);
+      const data = state.single || state.maybeSingle ? (result.rows[0] || null) : result.rows;
+      return { data, count: result.rowCount, error: null };
+    } catch (error) {
+      if (state.table === 'drivers' && isMissingRelation(error, 'drivers')) {
+        return executeLegacyDriversQuery(state);
+      }
+
+      if (state.table === 'bookings' && isMissingRelation(error, 'bookings')) {
+        return executeLegacyBookingsQuery(state);
+      }
+
+      throw error;
+    }
   }
 
   if (state.operation === 'insert') {
