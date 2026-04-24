@@ -57,6 +57,8 @@
 - Render production now accepts the deterministic demo credentials for admin, customer, and driver lanes.
 - Render production now has a real `drivers` row for `driver@demo.com` and a real booking `DEMO-0001` for `user@demo.com`.
 - Render production `db/query` now prefers migrated `bookings` and `drivers` tables over legacy fallbacks, with legacy paths used only when the migrated tables are missing.
+- Fleet catalog loaded in local and Render production with 12 active vehicles from the current medical transport roster.
+- Booking now starts with no static fallback vehicle selected, so the live DB catalog drives what customers see in step 2.
 
 ## Current Route Intent
 

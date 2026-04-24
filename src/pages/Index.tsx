@@ -13,7 +13,6 @@ import { Button } from '@/components/ui/button';
 
 import { BookingDetails, initialBillingDetails, initialBankTransferDetails } from '@/types/booking';
 import { useSystemSettings } from '@/contexts/SystemSettingsContext';
-import { vehicles } from '@/data/vehicles';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
@@ -40,7 +39,7 @@ const initialBookingDetails: BookingDetails = {
   bookingHours: 2,
   routeDistanceKm: null,
   routeDurationMinutes: null,
-  selectedVehicle: vehicles[0] || null,
+  selectedVehicle: null,
   paymentMethod: null,
   guestEmail: '',
   promoCode: '',

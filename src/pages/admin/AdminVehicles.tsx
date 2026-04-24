@@ -76,7 +76,7 @@ type VehicleFormData = Omit<Vehicle, 'id' | 'created_at' | 'updated_at'> & {
   max_hours: number;
 };
 
-const categories = ['Luxury', 'Van', 'SUV', 'Business', 'Comfort', 'Economy'];
+const categories = ['Ambulance', 'Luxury', 'Van', 'SUV', 'Business', 'Comfort', 'Economy'];
 
 const defaultFormData: VehicleFormData = {
   name: '',

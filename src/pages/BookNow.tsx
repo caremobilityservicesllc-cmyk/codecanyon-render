@@ -10,7 +10,6 @@ import { Footer } from '@/components/Footer';
 import { InstallPromptBanner } from '@/components/InstallPromptBanner';
 import { Button } from '@/components/ui/button';
 import { BookingDetails, initialBankTransferDetails, initialBillingDetails } from '@/types/booking';
-import { vehicles } from '@/data/vehicles';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
 import { useSystemSettings } from '@/contexts/SystemSettingsContext';
@@ -34,7 +33,7 @@ const initialBookingDetails: BookingDetails = {
   bookingHours: 2,
   routeDistanceKm: null,
   routeDurationMinutes: null,
-  selectedVehicle: vehicles[0] || null,
+  selectedVehicle: null,
   paymentMethod: null,
   guestEmail: '',
   promoCode: '',
