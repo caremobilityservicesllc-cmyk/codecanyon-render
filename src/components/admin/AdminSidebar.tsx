@@ -40,6 +40,31 @@ interface AdminSidebarProps {
   onToggle: () => void;
 }
 
+function MaybeTooltip({
+  enabled,
+  side,
+  content,
+  children,
+}: {
+  enabled: boolean;
+  side: 'left' | 'right';
+  content: string;
+  children: React.ReactElement;
+}) {
+  if (!enabled) {
+    return children;
+  }
+
+  return (
+    <Tooltip delayDuration={0}>
+      <TooltipTrigger asChild>{children}</TooltipTrigger>
+      <TooltipContent side={side} className="bg-popover">
+        {content}
+      </TooltipContent>
+    </Tooltip>
+  );
+}
+
 function SidebarContent({ 
   collapsed, 
   onToggle, 
@@ -136,8 +161,12 @@ function SidebarContent({
       {/* Navigation */}
       <nav className="flex-1 overflow-y-auto px-2 py-4">
         {navItems.map((item) => (
-          <Tooltip key={item.path} delayDuration={0}>
-            <TooltipTrigger asChild>
+          <MaybeTooltip
+            key={item.path}
+            enabled={collapsed}
+            side={tooltipSide}
+            content={item.label}
+          >
               <NavLink
                 to={item.path}
                 onClick={handleNavClick}
@@ -152,20 +181,17 @@ function SidebarContent({
                 <item.icon className="h-5 w-5 flex-shrink-0" />
                 {!collapsed && <span>{item.label}</span>}
               </NavLink>
-            </TooltipTrigger>
-            {collapsed && (
-              <TooltipContent side={tooltipSide} className="bg-popover">
-                {item.label}
-              </TooltipContent>
-            )}
-          </Tooltip>
+          </MaybeTooltip>
         ))}
       </nav>
 
       {/* Footer */}
       <div className="border-t border-border p-2 space-y-1">
-        <Tooltip delayDuration={0}>
-          <TooltipTrigger asChild>
+        <MaybeTooltip
+          enabled={collapsed}
+          side={tooltipSide}
+          content={t.nav.backToHome}
+        >
             <Button
               variant="ghost"
               className={cn(
@@ -180,16 +206,13 @@ function SidebarContent({
               <ChevronLeft className="h-5 w-5 flex-shrink-0" />
               {!collapsed && <span>{t.nav.backToHome}</span>}
             </Button>
-          </TooltipTrigger>
-          {collapsed && (
-            <TooltipContent side={tooltipSide} className="bg-popover">
-              {t.nav.backToHome}
-            </TooltipContent>
-          )}
-        </Tooltip>
+        </MaybeTooltip>
         
-        <Tooltip delayDuration={0}>
-          <TooltipTrigger asChild>
+        <MaybeTooltip
+          enabled={collapsed}
+          side={tooltipSide}
+          content={t.nav.signOut}
+        >
             <Button
               variant="ghost"
               className={cn(
@@ -201,13 +224,7 @@ function SidebarContent({
               <LogOut className="h-5 w-5 flex-shrink-0" />
               {!collapsed && <span>{t.nav.signOut}</span>}
             </Button>
-          </TooltipTrigger>
-          {collapsed && (
-            <TooltipContent side={tooltipSide} className="bg-popover">
-              {t.nav.signOut}
-            </TooltipContent>
-          )}
-        </Tooltip>
+        </MaybeTooltip>
       </div>
     </div>
   );

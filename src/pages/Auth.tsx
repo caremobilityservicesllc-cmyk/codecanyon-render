@@ -235,28 +235,6 @@ export default function Auth() {
     }
   };
 
-  // Handle session cleanup when browser closes (if "Remember me" was not checked)
-  useEffect(() => {
-    const handleBeforeUnload = () => {
-      const isTempSession = sessionStorage.getItem('rideflow_temp_session');
-      if (isTempSession) {
-        // Note: This won't actually work reliably in beforeunload,
-        // but we use sessionStorage which auto-clears on browser close
-        supabase.auth.signOut();
-      }
-    };
-
-    window.addEventListener('beforeunload', handleBeforeUnload);
-    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  }, []);
-
-  // Check for temp session on mount and clear if needed
-  useEffect(() => {
-    const isTempSession = sessionStorage.getItem('rideflow_temp_session');
-    // If we have a temp session marker but page reloaded (not closed), 
-    // we keep the session. The marker clears on browser close automatically.
-  }, []);
-
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrors({});

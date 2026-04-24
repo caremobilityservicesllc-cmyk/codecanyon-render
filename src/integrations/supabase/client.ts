@@ -68,6 +68,10 @@ function parseOrFilterExpression(expression: string): QueryState['filters'] {
 
 const authListeners = new Set<AuthChangeCallback>();
 
+function notifyAuthListeners(event: string, session: RenderSession | null) {
+  authListeners.forEach((listener) => listener(event, session));
+}
+
 function createId(prefix: string) {
   return `${prefix}-${Math.random().toString(36).slice(2, 10)}${Date.now().toString(36)}`;
 }
@@ -112,7 +116,26 @@ function writeStoredSession(session: RenderSession | null, event: string) {
     // Ignore storage failures in compatibility mode.
   }
 
-  authListeners.forEach((listener) => listener(event, session));
+  notifyAuthListeners(event, session);
+}
+
+if (typeof window !== 'undefined') {
+  window.addEventListener('storage', (event) => {
+    if (event.key !== AUTH_STORAGE_KEY) {
+      return;
+    }
+
+    if (!event.newValue) {
+      notifyAuthListeners('SIGNED_OUT', null);
+      return;
+    }
+
+    try {
+      notifyAuthListeners('STORAGE_SYNC', JSON.parse(event.newValue) as RenderSession);
+    } catch {
+      notifyAuthListeners('STORAGE_SYNC', null);
+    }
+  });
 }
 
 function ensureLocalDatabase(): LocalDatabaseState {

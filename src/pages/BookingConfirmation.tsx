@@ -162,7 +162,9 @@ export default function BookingConfirmationPage() {
   };
 
   const handleEmailReceipt = async () => {
-    if (!user?.email) {
+    const receiptEmail = (booking.contact_email || user?.email || '').trim().toLowerCase();
+
+    if (!receiptEmail) {
       toast({
         title: t.confirmation.emailConfirmation,
         description: t.auth.signInRequired,
@@ -174,7 +176,7 @@ export default function BookingConfirmationPage() {
     try {
       const { error } = await supabase.functions.invoke('send-booking-email', {
         body: {
-          email: user.email,
+          email: receiptEmail,
           type: 'created',
           bookingReference: booking.booking_reference,
           pickupLocation: booking.pickup_location,

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Navbar } from '@/components/booking/Navbar';
 import { Footer } from '@/components/Footer';
 import { Button } from '@/components/ui/button';
@@ -22,6 +23,7 @@ import { ModifyBookingDialog } from '@/components/booking/ModifyBookingDialog';
 import { toast } from 'sonner';
 import { useSystemSettings } from '@/contexts/SystemSettingsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 type BookingStatus = 'pending' | 'confirmed' | 'completed' | 'cancelled';
 
@@ -58,6 +60,8 @@ interface DriverData {
 export default function TrackBooking() {
   const { formatPrice } = useSystemSettings();
   const { t } = useLanguage();
+  const { user } = useAuth();
+  const [searchParams] = useSearchParams();
   const [reference, setReference] = useState('');
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -67,6 +71,8 @@ export default function TrackBooking() {
   const [isLive, setIsLive] = useState(false);
   const [hasRated, setHasRated] = useState(false);
   const [lastLocationUpdate, setLastLocationUpdate] = useState<Date | null>(null);
+  const lastAutoLookupRef = useRef('');
+  const normalizedUserEmail = user?.email?.trim().toLowerCase() || '';
 
   const statusConfig: Record<BookingStatus, { label: string; icon: React.ReactNode; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
     pending: { label: t.status.pending, icon: <Timer className="h-4 w-4" />, variant: 'secondary' },
@@ -169,25 +175,33 @@ export default function TrackBooking() {
     };
   }, [booking?.id]);
 
-  const handleTrack = async (e: React.FormEvent) => {
-    e.preventDefault();
+  const loadBooking = useCallback(async ({ bookingId, bookingReference, bookingEmail }: { bookingId?: string; bookingReference?: string; bookingEmail?: string }) => {
     setError('');
     setBooking(null);
-
-    if (!reference.trim() || !email.trim()) {
-      setError(t.trackPage.enterBothFields);
-      return;
-    }
-
     setIsLoading(true);
 
     try {
-      const { data, error: queryError } = await supabase
-        .from('bookings')
-        .select('*')
-        .eq('booking_reference', reference.trim().toUpperCase())
-        .eq('contact_email', email.trim().toLowerCase())
-        .single();
+      let query = supabase.from('bookings').select('*');
+
+      if (bookingId) {
+        query = query.eq('id', bookingId);
+
+        if (user?.id && (bookingEmail || normalizedUserEmail)) {
+          query = query.or(`user_id.eq.${user.id},contact_email.eq.${bookingEmail || normalizedUserEmail}`);
+        } else if (bookingEmail) {
+          query = query.eq('contact_email', bookingEmail);
+        }
+      } else if (bookingReference && bookingEmail) {
+        query = query
+          .eq('booking_reference', bookingReference)
+          .eq('contact_email', bookingEmail);
+      } else {
+        setError(t.trackPage.enterBothFields);
+        setIsLoading(false);
+        return;
+      }
+
+      const { data, error: queryError } = await query.single();
 
       if (queryError || !data) {
         setError(t.trackPage.bookingNotFound);
@@ -202,6 +216,46 @@ export default function TrackBooking() {
     }
 
     setIsLoading(false);
+  }, [normalizedUserEmail, t.trackPage.bookingNotFound, t.trackPage.enterBothFields, t.trackPage.errorOccurred, user?.id]);
+
+  useEffect(() => {
+    const bookingId = searchParams.get('id')?.trim() || '';
+    const bookingReference = searchParams.get('ref')?.trim().toUpperCase() || '';
+    const bookingEmail = (searchParams.get('email') || normalizedUserEmail).trim().toLowerCase();
+
+    if (bookingReference) {
+      setReference(bookingReference);
+    }
+
+    if (bookingEmail) {
+      setEmail(bookingEmail);
+    }
+
+    if (!bookingId && (!bookingReference || !bookingEmail)) {
+      return;
+    }
+
+    const autoLookupKey = `${bookingId}|${bookingReference}|${bookingEmail}`;
+    if (lastAutoLookupRef.current === autoLookupKey) {
+      return;
+    }
+
+    lastAutoLookupRef.current = autoLookupKey;
+    void loadBooking({ bookingId, bookingReference, bookingEmail });
+  }, [loadBooking, normalizedUserEmail, searchParams]);
+
+  const handleTrack = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    if (!reference.trim() || !email.trim()) {
+      setError(t.trackPage.enterBothFields);
+      return;
+    }
+
+    await loadBooking({
+      bookingReference: reference.trim().toUpperCase(),
+      bookingEmail: email.trim().toLowerCase(),
+    });
   };
 
   return (

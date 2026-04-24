@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useSystemSettings } from '@/contexts/SystemSettingsContext';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Navigate, useNavigate, useSearchParams } from 'react-router-dom';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useTheme } from 'next-themes';
 import { 
@@ -429,7 +429,8 @@ export default function Account() {
   }
 
   if (!user) {
-    return null;
+    const redirect = encodeURIComponent(`/account${searchParams.toString() ? `?${searchParams.toString()}` : ''}`);
+    return <Navigate to={`/auth?redirect=${redirect}`} replace />;
   }
 
   return (

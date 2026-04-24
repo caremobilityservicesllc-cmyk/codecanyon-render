@@ -14,6 +14,7 @@
     "dev": "vite",
     "server": "node backend/server.js",
     "db:bootstrap": "node backend/scripts/bootstrap.js",
+    "db:seed-local": "node backend/scripts/seed-local-data.js",
     "build": "vite build",
     "build:render": "vite build",
     "build:dev": "vite build --mode development",

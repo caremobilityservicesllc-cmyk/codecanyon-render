@@ -18,6 +18,9 @@ export function useUserRoles() {
         return;
       }
 
+      setLoading(true);
+      setRoles([]);
+
       try {
         const { data, error } = await supabase
           .rpc('get_user_roles', { _user_id: user.id });

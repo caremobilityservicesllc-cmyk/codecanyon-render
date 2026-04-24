@@ -7,6 +7,8 @@ interface BookingStatusChange {
   id: string;
   booking_reference: string;
   status: string;
+  user_id: string | null;
+  contact_email: string | null;
   driver_id: string | null;
   pickup_location: string;
   dropoff_location: string;
@@ -38,6 +40,7 @@ export function useBookingStatusNotifications() {
   const { user } = useAuth();
   const { isEnabled, sendLocalNotification } = usePushNotifications();
   const previousStatusesRef = useRef<Map<string, { status: string; driver_id: string | null; ride_started_at: string | null }>>(new Map());
+  const normalizedUserEmail = user?.email?.trim().toLowerCase() || '';
 
   const handleStatusChange = useCallback(async (
     newData: BookingStatusChange,
@@ -112,7 +115,7 @@ export function useBookingStatusNotifications() {
       const { data } = await supabase
         .from('bookings')
         .select('id, status, driver_id, ride_started_at')
-        .eq('user_id', user.id);
+        .or(`user_id.eq.${user.id},contact_email.eq.${normalizedUserEmail}`);
       
       if (data) {
         data.forEach((booking) => {
@@ -136,10 +139,16 @@ export function useBookingStatusNotifications() {
           event: 'UPDATE',
           schema: 'public',
           table: 'bookings',
-          filter: `user_id=eq.${user.id}`,
         },
         async (payload) => {
           const newData = payload.new as BookingStatusChange;
+          const matchesUser = newData.user_id === user.id;
+          const matchesEmail = String(newData.contact_email || '').trim().toLowerCase() === normalizedUserEmail;
+
+          if (!matchesUser && !matchesEmail) {
+            return;
+          }
+
           const previous = previousStatusesRef.current.get(newData.id);
           
           await handleStatusChange(newData, previous);
@@ -157,5 +166,5 @@ export function useBookingStatusNotifications() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [user, handleStatusChange]);
+  }, [user, normalizedUserEmail, handleStatusChange]);
 }

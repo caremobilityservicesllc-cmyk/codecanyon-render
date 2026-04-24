@@ -135,6 +135,7 @@ export default function MyBookings() {
   const { receivedShares, createdShares, acceptShare, declineShare, acceptCounterProposal } = useRideSharing();
   const { recurringBookings } = useRecurringBookings();
   const { unreadCount } = useNotifications();
+  const normalizedUserEmail = user?.email?.trim().toLowerCase() || '';
 
   // Server-side pagination
   const pagination = useServerPagination({ defaultPageSize: 10 });
@@ -236,7 +237,7 @@ export default function MyBookings() {
     let query = supabase
       .from('bookings')
       .select('*', { count: 'exact' })
-      .eq('user_id', user.id);
+      .or(`user_id.eq.${user.id},contact_email.eq.${normalizedUserEmail}`);
 
     if (statusFilter !== 'all') {
       query = query.eq('status', statusFilter as 'pending' | 'confirmed' | 'completed' | 'cancelled');
@@ -257,7 +258,7 @@ export default function MyBookings() {
       pagination.setTotalCount(count ?? 0);
     }
     setIsLoading(false);
-  }, [user, statusFilter, searchQuery, pagination.rangeFrom, pagination.rangeTo]);
+  }, [user, normalizedUserEmail, statusFilter, searchQuery, pagination.rangeFrom, pagination.rangeTo]);
 
   // Fetch all bookings for status counts (lightweight - just status field)
   const fetchStatusCounts = useCallback(async () => {
@@ -265,9 +266,9 @@ export default function MyBookings() {
     const { data } = await supabase
       .from('bookings')
       .select('status')
-      .eq('user_id', user.id);
+      .or(`user_id.eq.${user.id},contact_email.eq.${normalizedUserEmail}`);
     if (data) setAllBookings(data as Booking[]);
-  }, [user]);
+  }, [user, normalizedUserEmail]);
 
   useEffect(() => {
     if (user) {
@@ -442,8 +443,7 @@ export default function MyBookings() {
     const { error } = await supabase
       .from('bookings')
       .update({ pickup_date: newDate, pickup_time: newTime })
-      .eq('id', bookingId)
-      .eq('user_id', user?.id);
+      .eq('id', bookingId);
 
     if (error) {
       throw error;
@@ -451,17 +451,13 @@ export default function MyBookings() {
 
     // Send reschedule email notification
     try {
-      const { data: profile } = await supabase
-        .from('profiles')
-        .select('email')
-        .eq('id', user?.id)
-        .single();
+      const notificationEmail = (booking.contact_email || normalizedUserEmail).trim().toLowerCase();
 
-      if (profile?.email) {
+      if (notificationEmail) {
         await supabase.functions.invoke('send-booking-email', {
           body: {
             type: 'rescheduled',
-            email: profile.email,
+            email: notificationEmail,
             bookingReference: booking.booking_reference,
             pickupLocation: booking.pickup_location,
             dropoffLocation: booking.dropoff_location,
