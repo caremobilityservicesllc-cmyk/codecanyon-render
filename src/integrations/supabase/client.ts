@@ -50,6 +50,22 @@ type QueryState = {
   options?: Record<string, unknown>;
 };
 
+function parseOrFilterExpression(expression: string): QueryState['filters'] {
+  return String(expression || '')
+    .split(',')
+    .map((entry) => entry.trim())
+    .filter(Boolean)
+    .map((entry) => {
+      const match = entry.match(/^([^=]+)=([a-z]+)\.(.+)$/i);
+      if (!match) return null;
+
+      const [, column, operator, value] = match;
+      if (!['eq', 'neq', 'ilike'].includes(operator)) return null;
+      return { column, operator, value };
+    })
+    .filter(Boolean) as QueryState['filters'];
+}
+
 const authListeners = new Set<AuthChangeCallback>();
 
 function createId(prefix: string) {
@@ -373,10 +389,19 @@ function normalizeValues(values: unknown) {
 
 function applyFilters(rows: Array<Record<string, any>>, filters: QueryState['filters']) {
   return rows.filter((row) => filters.every((filter) => {
+    if (filter.operator === 'or' && Array.isArray(filter.value)) {
+      return filter.value.some((entry) => applyFilters([row], [entry as QueryState['filters'][number]]).length > 0);
+    }
+
     const cell = row[filter.column];
     if (filter.operator === 'eq') return cell === filter.value;
     if (filter.operator === 'neq') return cell !== filter.value;
     if (filter.operator === 'in') return Array.isArray(filter.value) && filter.value.includes(cell);
+    if (filter.operator === 'ilike') {
+      const haystack = String(cell ?? '').toLowerCase();
+      const needle = String(filter.value ?? '').toLowerCase().replace(/%/g, '');
+      return haystack.includes(needle);
+    }
     return true;
   }));
 }
@@ -553,6 +578,14 @@ class RenderQueryBuilder implements PromiseLike<{ data: any; error: Error | null
 
   in(column: string, value: unknown[]) {
     this.state.filters.push({ column, operator: 'in', value });
+    return this;
+  }
+
+  or(expression: string) {
+    const filters = parseOrFilterExpression(expression);
+    if (filters.length) {
+      this.state.filters.push({ column: '__or__', operator: 'or', value: filters });
+    }
     return this;
   }
 

@@ -550,6 +550,51 @@ create table if not exists push_subscriptions (
   updated_at timestamptz not null default now()
 );
 
+create table if not exists loyalty_balances (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null unique references auth_users(id) on delete cascade,
+  total_points integer not null default 0,
+  lifetime_points integer not null default 0,
+  tier text not null default 'bronze',
+  updated_at timestamptz not null default now()
+);
+
+create table if not exists loyalty_points (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid not null references auth_users(id) on delete cascade,
+  points integer not null default 0,
+  points_type text not null default 'earned',
+  source text,
+  description text,
+  reference_id text,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists email_logs (
+  id uuid primary key default gen_random_uuid(),
+  recipient_email text not null,
+  subject text not null,
+  email_type text not null default 'transactional',
+  provider text not null default 'system',
+  status text not null default 'sent',
+  error_message text,
+  booking_reference text,
+  metadata jsonb,
+  created_at timestamptz not null default now()
+);
+
+create table if not exists settings_audit_log (
+  id uuid primary key default gen_random_uuid(),
+  user_id uuid references auth_users(id) on delete set null,
+  user_email text,
+  setting_key text not null,
+  old_value jsonb,
+  new_value jsonb,
+  action text not null default 'update',
+  ip_address text,
+  created_at timestamptz not null default now()
+);
+
 insert into system_settings (key, value, category, description)
 values
   ('setup_completed', 'false'::jsonb, 'system', 'Whether the initial setup wizard has been completed')

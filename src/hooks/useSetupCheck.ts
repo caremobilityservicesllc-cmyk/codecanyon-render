@@ -9,6 +9,28 @@ interface SetupStatus {
 
 const MAX_RETRIES = 3;
 const RETRY_DELAY_MS = 800;
+const SETUP_COMPLETED_OVERRIDE_KEY = 'rideflow-setup-completed';
+
+function readSetupCompletedOverride(): boolean {
+  try {
+    return localStorage.getItem(SETUP_COMPLETED_OVERRIDE_KEY) === 'true';
+  } catch {
+    return false;
+  }
+}
+
+function writeSetupCompletedOverride(value: boolean) {
+  try {
+    if (value) {
+      localStorage.setItem(SETUP_COMPLETED_OVERRIDE_KEY, 'true');
+      return;
+    }
+
+    localStorage.removeItem(SETUP_COMPLETED_OVERRIDE_KEY);
+  } catch {
+    // Ignore localStorage failures in compatibility mode.
+  }
+}
 
 function isSetupCompletedValue(value: unknown): boolean {
   if (value === true || value === 'true') return true;
@@ -21,9 +43,10 @@ function isSetupCompletedValue(value: unknown): boolean {
 }
 
 export function useSetupCheck(): SetupStatus {
+  const hasLocalOverride = readSetupCompletedOverride();
   const [status, setStatus] = useState<SetupStatus>({
-    isLoading: true,
-    isSetupComplete: false,
+    isLoading: !hasLocalOverride,
+    isSetupComplete: hasLocalOverride,
     error: null,
   });
 
@@ -43,9 +66,12 @@ export function useSetupCheck(): SetupStatus {
 
         if (cancelled) return;
 
+        const isSetupComplete = isSetupCompletedValue(setupSetting?.value);
+        writeSetupCompletedOverride(isSetupComplete);
+
         setStatus({
           isLoading: false,
-          isSetupComplete: isSetupCompletedValue(setupSetting?.value),
+          isSetupComplete,
           error: null,
         });
       } catch {
@@ -60,8 +86,8 @@ export function useSetupCheck(): SetupStatus {
 
         setStatus({
           isLoading: false,
-          isSetupComplete: false,
-          error: 'Failed to check setup status',
+          isSetupComplete: readSetupCompletedOverride(),
+          error: readSetupCompletedOverride() ? null : 'Failed to check setup status',
         });
       }
     };

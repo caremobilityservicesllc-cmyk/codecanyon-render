@@ -23,11 +23,56 @@ const ALLOWED_TABLES = new Set([
   'map_api_usage',
   'saved_locations',
   'favorite_vehicles',
+  'loyalty_balances',
+  'loyalty_points',
+  'email_logs',
   'payment_methods',
   'push_subscriptions',
   'recurring_bookings',
   'ride_shares',
+  'settings_audit_log',
 ]);
+
+function buildClause(filter, values = []) {
+  if (!filter?.column) return null;
+
+  const column = `"${String(filter.column).replace(/"/g, '')}"`;
+  if (filter.operator === 'eq') {
+    values.push(filter.value);
+    return `${column} = $${values.length}`;
+  }
+
+  if (filter.operator === 'neq') {
+    values.push(filter.value);
+    return `${column} <> $${values.length}`;
+  }
+
+  if (filter.operator === 'in' && Array.isArray(filter.value)) {
+    values.push(filter.value);
+    return `${column} = any($${values.length})`;
+  }
+
+  if (filter.operator === 'ilike') {
+    values.push(filter.value);
+    return `${column} ilike $${values.length}`;
+  }
+
+  return null;
+}
+
+function matchesFilter(row, filter) {
+  if (!filter?.column) return true;
+  const value = row[filter.column];
+  if (filter.operator === 'eq') return value === filter.value;
+  if (filter.operator === 'neq') return value !== filter.value;
+  if (filter.operator === 'in' && Array.isArray(filter.value)) return filter.value.includes(value);
+  if (filter.operator === 'ilike') {
+    const haystack = String(value ?? '').toLowerCase();
+    const needle = String(filter.value ?? '').toLowerCase().replace(/%/g, '');
+    return haystack.includes(needle);
+  }
+  return true;
+}
 
 function assertTable(table) {
   if (!ALLOWED_TABLES.has(table)) {
@@ -51,18 +96,19 @@ function parseSelect(select) {
 function buildWhere(filters = [], values = []) {
   const clauses = [];
   for (const filter of filters) {
-    if (!filter?.column) continue;
-    const column = `"${String(filter.column).replace(/"/g, '')}"`;
-    if (filter.operator === 'eq') {
-      values.push(filter.value);
-      clauses.push(`${column} = $${values.length}`);
-    } else if (filter.operator === 'neq') {
-      values.push(filter.value);
-      clauses.push(`${column} <> $${values.length}`);
-    } else if (filter.operator === 'in' && Array.isArray(filter.value)) {
-      values.push(filter.value);
-      clauses.push(`${column} = any($${values.length})`);
+    if (filter?.operator === 'or' && Array.isArray(filter.value)) {
+      const orClauses = filter.value
+        .map((entry) => buildClause(entry, values))
+        .filter(Boolean);
+
+      if (orClauses.length) {
+        clauses.push(`(${orClauses.join(' or ')})`);
+      }
+      continue;
     }
+
+    const clause = buildClause(filter, values);
+    if (clause) clauses.push(clause);
   }
   return clauses.length ? ` where ${clauses.join(' and ')}` : '';
 }
@@ -91,12 +137,11 @@ function pickColumns(row, columns) {
 
 function applyFilters(rows, filters = []) {
   return rows.filter((row) => filters.every((filter) => {
-    if (!filter?.column) return true;
-    const value = row[filter.column];
-    if (filter.operator === 'eq') return value === filter.value;
-    if (filter.operator === 'neq') return value !== filter.value;
-    if (filter.operator === 'in' && Array.isArray(filter.value)) return filter.value.includes(value);
-    return true;
+    if (filter?.operator === 'or' && Array.isArray(filter.value)) {
+      return filter.value.some((entry) => matchesFilter(row, entry));
+    }
+
+    return matchesFilter(row, filter);
   }));
 }
 
@@ -125,6 +170,10 @@ function applyWindow(rows, state) {
       ? Math.max(0, state.limit)
       : null;
   return limit == null ? rows.slice(offset) : rows.slice(offset, offset + limit);
+}
+
+function isMissingRelation(error, relation) {
+  return error?.code === '42P01' && (!relation || String(error.message || '').includes(`"${relation}"`));
 }
 
 function mapLegacyDriver(row) {
@@ -296,11 +345,23 @@ export async function executeDbQuery(state) {
   assertTable(state.table);
 
   if (state.table === 'drivers') {
-    return executeLegacyDriversQuery(state);
+    try {
+      return await executeLegacyDriversQuery(state);
+    } catch (error) {
+      if (!isMissingRelation(error, 'admin_drivers')) {
+        throw error;
+      }
+    }
   }
 
   if (state.table === 'bookings') {
-    return executeLegacyBookingsQuery(state);
+    try {
+      return await executeLegacyBookingsQuery(state);
+    } catch (error) {
+      if (!isMissingRelation(error, 'dispatch_trips')) {
+        throw error;
+      }
+    }
   }
 
   if (state.operation === 'select') {

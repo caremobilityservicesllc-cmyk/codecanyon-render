@@ -18,6 +18,8 @@ import {
 } from 'lucide-react';
 import { toast } from 'sonner';
 
+const SETUP_COMPLETED_OVERRIDE_KEY = 'rideflow-setup-completed';
+
 interface StepStatus {
   completed: boolean;
   error?: string;
@@ -210,8 +212,14 @@ export default function Setup() {
 
       if (error) throw error;
 
+      try {
+        localStorage.setItem(SETUP_COMPLETED_OVERRIDE_KEY, 'true');
+      } catch {
+        // Ignore localStorage failures and rely on the persisted DB setting.
+      }
+
       toast.success(t.setup.setupComplete);
-      setTimeout(() => navigate('/admin'), 1500);
+      setTimeout(() => window.location.assign('/admin'), 1500);
     } catch (err: any) {
       toast.error(err.message || t.setup.failedToFinalize);
     }
