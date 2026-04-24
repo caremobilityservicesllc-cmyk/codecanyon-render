@@ -16,9 +16,7 @@ import { useToast } from '@/hooks/use-toast';
 import { useSystemSettings } from '@/contexts/SystemSettingsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
 import { useDynamicPricing } from '@/hooks/useDynamicPricing';
-import { supabase } from '@/integrations/supabase/client';
-import { sendBookingEmail } from '@/hooks/useBookingEmail';
-import { format } from 'date-fns';
+import { useBookingCheckout } from '@/hooks/useBookingCheckout';
 
 const initialBookingDetails: BookingDetails = {
   serviceType: 'flat-rate',
@@ -57,6 +55,7 @@ const BookNow = () => {
   const { bookingPolicies, aiAssistantEnabled, businessInfo } = useSystemSettings();
   const { t } = useLanguage();
   const { priceBreakdown } = useDynamicPricing(bookingDetails, bookingPolicies.depositPercentage, bookingDetails.routeDistanceKm);
+  const { submitBooking } = useBookingCheckout();
 
   const quickFacts = useMemo(() => [
     'Dedicated ride booking page',
@@ -83,170 +82,7 @@ const BookNow = () => {
 
     setIsSubmitting(true);
 
-    const reference = `RF-${Date.now().toString(36).toUpperCase()}`;
-
-    try {
-      const subtotalBeforeDiscount = priceBreakdown?.total || 0;
-
-      let discountAmount = 0;
-      if (bookingDetails.promoCodeId && priceBreakdown) {
-        try {
-          const { data: promoData } = await supabase
-            .from('promo_codes')
-            .select('discount_percentage')
-            .eq('id', bookingDetails.promoCodeId)
-            .single();
-          if (promoData) {
-            discountAmount = Math.round(subtotalBeforeDiscount * (promoData.discount_percentage / 100) * 100) / 100;
-          }
-        } catch (error) {
-          console.error('Error fetching promo discount:', error);
-        }
-      }
-
-      const totalPrice = Math.max(0, subtotalBeforeDiscount - discountAmount);
-
-      const { data, error } = await supabase.from('bookings').insert({
-        user_id: user?.id || null,
-        booking_reference: reference,
-        service_type: bookingDetails.serviceType,
-        transfer_type: bookingDetails.transferType,
-        pickup_location: bookingDetails.pickupLocation,
-        dropoff_location: bookingDetails.dropoffLocation,
-        pickup_date: format(bookingDetails.pickupDate, 'yyyy-MM-dd'),
-        pickup_time: bookingDetails.pickupTime,
-        passengers: bookingDetails.passengers,
-        notes: bookingDetails.notes || null,
-        bank_transfer_details: bookingDetails.paymentMethod === 'bank' ? bookingDetails.bankTransferDetails as any : null,
-        vehicle_id: bookingDetails.selectedVehicle.id,
-        vehicle_name: bookingDetails.selectedVehicle.name,
-        contact_email: (user?.email || bookingDetails.guestEmail || '').trim().toLowerCase(),
-        payment_method: bookingDetails.paymentMethod,
-        status: 'pending',
-        total_price: totalPrice,
-        promo_code_id: bookingDetails.promoCodeId || null,
-        discount_amount: discountAmount,
-      } as any).select('id').single();
-
-      if (error) {
-        console.error('Booking error:', error, 'user_id:', user?.id);
-        toast({
-          title: t.bookingFlow.bookingFailed,
-          description: t.bookingFlow.bookingFailedDesc,
-          variant: 'destructive',
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      if (bookingDetails.promoCodeId && data?.id) {
-        await supabase.rpc('use_promo_code', {
-          p_promo_code_id: bookingDetails.promoCodeId,
-          p_user_id: user?.id || null,
-          p_booking_id: data.id,
-        });
-      }
-
-      const confirmationUrl = `${window.location.origin}/booking-confirmation/${data?.id}`;
-      try {
-        const { data: paymentResult, error: paymentError } = await supabase.functions.invoke('process-payment', {
-          body: {
-            paymentMethod: bookingDetails.paymentMethod,
-            amount: totalPrice,
-            currency: 'USD',
-            bookingReference: reference,
-            customerEmail: user?.email || bookingDetails.guestEmail,
-            returnUrl: confirmationUrl,
-          },
-        });
-
-        if (paymentError) {
-          console.error('Payment processing error:', paymentError);
-          toast({
-            title: t.bookingFlow.paymentIssue,
-            description: t.bookingFlow.paymentIssueDesc,
-            variant: 'destructive',
-          });
-        } else if (paymentResult) {
-          if (paymentResult.redirectUrl) {
-            const gatewayName = paymentResult.gateway === 'stripe' ? 'Stripe' : 'PayPal';
-            toast({
-              title: t.bookingFlow.redirectingTo.replace('{gateway}', gatewayName),
-              description: t.bookingFlow.redirectingToDesc.replace('{gateway}', gatewayName),
-            });
-            window.location.href = paymentResult.redirectUrl;
-            return;
-          }
-
-          if (paymentResult.bankDetails) {
-            toast({
-              title: t.bookingFlow.bankTransferInstructions,
-              description: `Please transfer the amount to ${paymentResult.bankDetails.bankName || 'our bank account'} using reference: ${reference}`,
-              duration: 10000,
-            });
-          }
-
-          if (paymentResult.status === 'succeeded' || paymentResult.isDemo) {
-            await supabase
-              .from('bookings')
-              .update({ status: 'confirmed' })
-              .eq('id', data.id);
-          }
-        }
-      } catch (paymentError) {
-        console.error('Payment processing failed:', paymentError);
-      }
-
-      if (data?.id) {
-        try {
-          const { data: dispatchResult, error: dispatchError } = await supabase.functions.invoke('auto-dispatch', {
-            body: { bookingId: data.id, action: 'confirm_and_dispatch', paymentMethod: bookingDetails.paymentMethod },
-          });
-
-          if (dispatchError) {
-            console.error('Auto-dispatch error:', dispatchError);
-          } else if (dispatchResult?.driver) {
-            toast({
-              title: t.bookingFlow.driverAssigned,
-              description: `${dispatchResult.driver.name} will be your driver. ETA: ${dispatchResult.estimatedArrival}`,
-            });
-          }
-        } catch (dispatchError) {
-          console.error('Auto-dispatch failed:', dispatchError);
-        }
-      }
-
-      toast({
-        title: bookingDetails.paymentMethod === 'bank' ? t.bookingFlow.bookingSubmitted : t.bookingFlow.bookingConfirmed,
-        description: bookingDetails.paymentMethod === 'bank'
-          ? t.bookingFlow.paymentPendingVerification.replace('{ref}', reference)
-          : t.bookingFlow.bookingRefIs.replace('{ref}', reference),
-      });
-
-      const emailToSend = user?.email || bookingDetails.guestEmail;
-      if (emailToSend) {
-        sendBookingEmail({
-          type: 'created',
-          email: emailToSend,
-          bookingReference: reference,
-          pickupLocation: bookingDetails.pickupLocation,
-          dropoffLocation: bookingDetails.dropoffLocation,
-          pickupDate: format(bookingDetails.pickupDate, 'MMMM d, yyyy'),
-          pickupTime: bookingDetails.pickupTime,
-          vehicleName: bookingDetails.selectedVehicle.name,
-          passengers: bookingDetails.passengers,
-        });
-      }
-
-      navigate(`/booking-confirmation/${data?.id}`);
-    } catch (error) {
-      console.error('Booking error:', error);
-      toast({
-        title: t.bookingFlow.bookingFailed,
-        description: t.bookingFlow.bookingFailedDesc,
-        variant: 'destructive',
-      });
-    }
+    await submitBooking({ bookingDetails, priceBreakdown });
 
     setIsSubmitting(false);
   };

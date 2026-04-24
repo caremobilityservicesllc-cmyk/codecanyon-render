@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Footer } from '@/components/Footer';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Mail, Lock, ArrowLeft, Eye, EyeOff, Car, MapPin, Clock, DollarSign, CheckCircle, User, Apple, Twitter, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -454,7 +454,7 @@ export default function DriverAuth() {
         {/* Left Side - Branding & Features */}
         <div className="hidden lg:flex lg:w-1/2 flex-col justify-center px-12 py-12">
           <div className="mb-8">
-            <div className="flex items-center gap-3 mb-6">
+            <Link to="/" className="mb-6 flex items-center gap-3 transition-opacity hover:opacity-90" aria-label="Go to home">
               <img
                 src={logoSrc}
                 alt={`${appName} Logo`}
@@ -466,7 +466,7 @@ export default function DriverAuth() {
                 </span>
                 <p className="text-sm text-muted-foreground">{t.driverAuth.driverPortal}</p>
               </div>
-            </div>
+            </Link>
             <h1 className="text-4xl font-bold text-foreground mb-4">
               {t.driverAuth.welcomeToDriverHub} <span className="text-primary">{t.driverAuth.driverHub}</span>
             </h1>
@@ -501,9 +501,9 @@ export default function DriverAuth() {
           <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-elevated">
             {/* Logo */}
             <div className="mb-6 text-center">
-              <div className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-primary">
+              <Link to="/" className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-xl bg-primary transition-opacity hover:opacity-90" aria-label="Go to home">
                 <Car className="h-8 w-8 text-primary-foreground" />
-              </div>
+              </Link>
               <h2 className="font-display text-xl font-bold text-foreground">
                 {t.driverAuth.driverPortal}
               </h2>

@@ -102,3 +102,12 @@ Tell the next chat this:
 - Development service workers are now unregistered automatically so stale cached UI does not mask current fixes while testing locally.
 - Added `render.yaml` blueprint for one-service Render deployment using `npm install ; npm run build:render`, `npm start`, and `/healthz`.
 - Actual deploy from this workspace is still blocked until a Render deploy hook, connected Git repo, or Render account access is available.
+
+## Latest route and navigation deploy batch
+
+- Route-level guards were added for authenticated, admin, driver, auth-entry, and driver-entry lanes.
+- Shared booking submit logic was extracted into `src/hooks/useBookingCheckout.ts` and applied to `/` and `/book-now`.
+- Account no longer self-redirects during auth resolution; it shows a loading screen while session state settles.
+- Auth, driver auth, setup, install, and homepage branding now link back to `/`.
+- Homepage splash/loading screen now runs once per session instead of blocking every return to home.
+- Local production build passed after these navigation fixes and this batch is ready to push to `origin/main` for Render auto-deploy.

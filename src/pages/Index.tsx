@@ -1,6 +1,6 @@
 import { useMemo, useState, useEffect } from 'react';
 import { ArrowRight, CalendarRange, Car, Clock3, HeartHandshake, Mail, MapPin, PhoneCall, ShieldCheck, Star, UserRound } from 'lucide-react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { StepIndicator } from '@/components/booking/StepIndicator';
 import { Step1Location } from '@/components/booking/Step1Location';
 import { Step2Vehicle } from '@/components/booking/Step2Vehicle';
@@ -17,11 +17,12 @@ import { vehicles } from '@/data/vehicles';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/contexts/AuthContext';
 import { useToast } from '@/hooks/use-toast';
-import { sendBookingEmail } from '@/hooks/useBookingEmail';
 import { useDynamicPricing } from '@/hooks/useDynamicPricing';
 import { useLanguage } from '@/contexts/LanguageContext';
-import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { useBookingCheckout } from '@/hooks/useBookingCheckout';
+
+const HOME_SPLASH_SEEN_KEY = 'rideflow-home-splash-seen';
 
 const initialBookingDetails: BookingDetails = {
   serviceType: 'flat-rate',
@@ -54,19 +55,35 @@ const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [bookingDetails, setBookingDetails] = useState<BookingDetails>(initialBookingDetails);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSplash, setShowSplash] = useState(true);
+  const [showSplash, setShowSplash] = useState(() => {
+    if (typeof window === 'undefined') {
+      return false;
+    }
 
-  // Show splash screen briefly on initial load
+    return sessionStorage.getItem(HOME_SPLASH_SEEN_KEY) !== 'true';
+  });
+
   useEffect(() => {
+    if (!showSplash) {
+      return;
+    }
+
     const timer = setTimeout(() => setShowSplash(false), 1500);
     return () => clearTimeout(timer);
-  }, []);
+  }, [showSplash]);
+
+  useEffect(() => {
+    if (!showSplash && typeof window !== 'undefined') {
+      sessionStorage.setItem(HOME_SPLASH_SEEN_KEY, 'true');
+    }
+  }, [showSplash]);
 
   const { user } = useAuth();
   const { toast } = useToast();
   const { bookingPolicies, aiAssistantEnabled, businessInfo, businessHours, formatPrice } = useSystemSettings();
   const { t } = useLanguage();
   const { priceBreakdown } = useDynamicPricing(bookingDetails, bookingPolicies.depositPercentage, bookingDetails.routeDistanceKm);
+  const { submitBooking } = useBookingCheckout();
   const logoSrc = '/iconnew.png';
 
   const navItems = useMemo(() => [
@@ -127,185 +144,8 @@ const Index = () => {
     }
 
     setIsSubmitting(true);
-    
-    const reference = `RF-${Date.now().toString(36).toUpperCase()}`;
-    
-    try {
-      const subtotalBeforeDiscount = priceBreakdown?.total || 0;
-      
-      // Calculate discount from promo code validation result
-      let discountAmount = 0;
-      if (bookingDetails.promoCodeId && priceBreakdown) {
-        // The promo code percentage was validated earlier; retrieve it from the DB
-        try {
-          const { data: promoData } = await supabase
-            .from('promo_codes')
-            .select('discount_percentage')
-            .eq('id', bookingDetails.promoCodeId)
-            .single();
-          if (promoData) {
-            discountAmount = Math.round(subtotalBeforeDiscount * (promoData.discount_percentage / 100) * 100) / 100;
-          }
-        } catch (e) {
-          console.error('Error fetching promo discount:', e);
-        }
-      }
-      const totalPrice = Math.max(0, subtotalBeforeDiscount - discountAmount);
-      
-      // 1. Create the booking in the database
-      const { data, error } = await supabase.from('bookings').insert({
-        user_id: user?.id || null,
-        booking_reference: reference,
-        service_type: bookingDetails.serviceType,
-        transfer_type: bookingDetails.transferType,
-        pickup_location: bookingDetails.pickupLocation,
-        dropoff_location: bookingDetails.dropoffLocation,
-        pickup_date: format(bookingDetails.pickupDate, 'yyyy-MM-dd'),
-        pickup_time: bookingDetails.pickupTime,
-        passengers: bookingDetails.passengers,
-        notes: bookingDetails.notes || null,
-        bank_transfer_details: bookingDetails.paymentMethod === 'bank' ? bookingDetails.bankTransferDetails as any : null,
-        vehicle_id: bookingDetails.selectedVehicle.id,
-        vehicle_name: bookingDetails.selectedVehicle.name,
-        contact_email: (user?.email || bookingDetails.guestEmail || '').trim().toLowerCase(),
-        payment_method: bookingDetails.paymentMethod,
-        status: 'pending',
-        total_price: totalPrice,
-        promo_code_id: bookingDetails.promoCodeId || null,
-        discount_amount: discountAmount,
-      } as any).select('id').single();
 
-      if (error) {
-        console.error('Booking error:', error, 'user_id:', user?.id, 'auth uid check');
-        toast({
-          title: t.bookingFlow.bookingFailed,
-          description: t.bookingFlow.bookingFailedDesc,
-          variant: 'destructive',
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
-      // 2. Apply promo code if used
-      if (bookingDetails.promoCodeId && data?.id) {
-        await supabase.rpc('use_promo_code', {
-          p_promo_code_id: bookingDetails.promoCodeId,
-          p_user_id: user?.id || null,
-          p_booking_id: data.id,
-        });
-      }
-
-      // 3. Process payment via edge function
-      const confirmationUrl = `${window.location.origin}/booking-confirmation/${data?.id}`;
-      try {
-        const { data: paymentResult, error: paymentError } = await supabase.functions.invoke('process-payment', {
-          body: {
-            paymentMethod: bookingDetails.paymentMethod,
-            amount: totalPrice,
-            currency: 'USD',
-            bookingReference: reference,
-            customerEmail: user?.email || bookingDetails.guestEmail,
-            returnUrl: confirmationUrl,
-          },
-        });
-
-        if (paymentError) {
-          console.error('Payment processing error:', paymentError);
-          // Payment failed but booking was created – still navigate to confirmation
-          toast({
-            title: t.bookingFlow.paymentIssue,
-            description: t.bookingFlow.paymentIssueDesc,
-            variant: 'destructive',
-          });
-        } else if (paymentResult) {
-          console.log('Payment result:', paymentResult);
-
-          // Handle redirect-based payments (Stripe Checkout, PayPal)
-          if (paymentResult.redirectUrl) {
-            const gatewayName = paymentResult.gateway === 'stripe' ? 'Stripe' : 'PayPal';
-            toast({
-              title: t.bookingFlow.redirectingTo.replace('{gateway}', gatewayName),
-              description: t.bookingFlow.redirectingToDesc.replace('{gateway}', gatewayName),
-            });
-            window.location.href = paymentResult.redirectUrl;
-            return; // Don't navigate to confirmation yet
-          }
-
-          // Bank transfer – show success with bank details info
-          if (paymentResult.bankDetails) {
-            toast({
-              title: t.bookingFlow.bankTransferInstructions,
-              description: `Please transfer the amount to ${paymentResult.bankDetails.bankName || 'our bank account'} using reference: ${reference}`,
-              duration: 10000,
-            });
-          }
-
-          // Stripe/PayPal demo mode or direct success
-          if (paymentResult.status === 'succeeded' || paymentResult.isDemo) {
-            await supabase
-              .from('bookings')
-              .update({ status: 'confirmed' })
-              .eq('id', data.id);
-          }
-        }
-      } catch (paymentErr) {
-        console.error('Payment processing failed:', paymentErr);
-        // Don't block the flow – booking is saved
-      }
-
-      // 4. Auto-dispatch driver
-      if (data?.id) {
-        try {
-          const { data: dispatchResult, error: dispatchError } = await supabase.functions.invoke('auto-dispatch', {
-            body: { bookingId: data.id, action: 'confirm_and_dispatch', paymentMethod: bookingDetails.paymentMethod },
-          });
-          
-          if (dispatchError) {
-            console.error('Auto-dispatch error:', dispatchError);
-          } else if (dispatchResult?.driver) {
-            toast({
-              title: t.bookingFlow.driverAssigned,
-              description: `${dispatchResult.driver.name} will be your driver. ETA: ${dispatchResult.estimatedArrival}`,
-            });
-          }
-        } catch (dispatchErr) {
-          console.error('Auto-dispatch failed:', dispatchErr);
-        }
-      }
-
-      toast({
-        title: bookingDetails.paymentMethod === 'bank' ? t.bookingFlow.bookingSubmitted : t.bookingFlow.bookingConfirmed,
-        description: bookingDetails.paymentMethod === 'bank' 
-          ? t.bookingFlow.paymentPendingVerification.replace('{ref}', reference)
-          : t.bookingFlow.bookingRefIs.replace('{ref}', reference),
-      });
-
-      // 5. Send confirmation email
-      const emailToSend = user?.email || bookingDetails.guestEmail;
-      if (emailToSend) {
-        sendBookingEmail({
-          type: 'created',
-          email: emailToSend,
-          bookingReference: reference,
-          pickupLocation: bookingDetails.pickupLocation,
-          dropoffLocation: bookingDetails.dropoffLocation,
-          pickupDate: format(bookingDetails.pickupDate, 'MMMM d, yyyy'),
-          pickupTime: bookingDetails.pickupTime,
-          vehicleName: bookingDetails.selectedVehicle.name,
-          passengers: bookingDetails.passengers,
-        });
-      }
-
-      navigate(`/booking-confirmation/${data?.id}`);
-    } catch (err) {
-      console.error('Booking error:', err);
-      toast({
-        title: t.bookingFlow.bookingFailed,
-        description: t.bookingFlow.bookingFailedDesc,
-        variant: 'destructive',
-      });
-    }
-    
+    await submitBooking({ bookingDetails, priceBreakdown });
     setIsSubmitting(false);
   };
 
@@ -331,7 +171,9 @@ const Index = () => {
             <div className="mx-4 -mb-1 overflow-hidden rounded-t-[38px] border border-b-0 border-emerald-500/15 bg-[#232323] shadow-elevated sm:mx-6 lg:mx-8">
               <header className="grid lg:grid-cols-[220px_1fr_auto]">
                 <div className="flex items-center justify-center border-b border-emerald-500/18 px-6 py-3 lg:border-b-0">
-                  <img src={logoSrc} alt={`${businessInfo.companyName || 'RideFlow'} logo`} className="h-16 w-auto object-contain sm:h-20" />
+                  <Link to="/" className="flex items-center justify-center transition-opacity hover:opacity-90" aria-label="Go to home">
+                    <img src={logoSrc} alt={`${businessInfo.companyName || 'RideFlow'} logo`} className="h-16 w-auto object-contain sm:h-20" />
+                  </Link>
                 </div>
                 <nav className="hidden items-center justify-center gap-2 px-8 lg:flex">
                   {navItems.map((item, index) => (

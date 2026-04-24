@@ -62,6 +62,7 @@ import { DefaultPaymentMethodSelector } from '@/components/account/DefaultPaymen
 import { LoyaltyPointsSection } from '@/components/account/LoyaltyPointsSection';
 import { BecomeDriverDialog } from '@/components/driver/BecomeDriverDialog';
 import { ApplicationProgressTracker } from '@/components/driver/ApplicationProgressTracker';
+import { LoadingScreen } from '@/components/LoadingScreen';
 import { usePushNotifications } from '@/hooks/usePushNotifications';
 import { useVerificationNotifications } from '@/hooks/useVerificationNotifications';
 
@@ -83,7 +84,7 @@ interface Vehicle {
 }
 
 export default function Account() {
-  const { user, signOut } = useAuth();
+  const { user, signOut, loading: authLoading } = useAuth();
   const { businessInfo } = useSystemSettings();
   const appName = businessInfo.companyName || 'RideFlow';
   const navigate = useNavigate();
@@ -127,13 +128,6 @@ export default function Account() {
     smsBookingReminder: false,
     smsDriverUpdates: true,
   });
-
-  // Redirect if not logged in
-  useEffect(() => {
-    if (!user) {
-      navigate('/auth');
-    }
-  }, [user, navigate]);
 
   // Fetch profile
   const { data: profile, isLoading: isLoadingProfile } = useQuery({
@@ -429,6 +423,10 @@ export default function Account() {
     await signOut();
     navigate('/');
   };
+
+  if (authLoading) {
+    return <LoadingScreen />;
+  }
 
   if (!user) {
     return null;

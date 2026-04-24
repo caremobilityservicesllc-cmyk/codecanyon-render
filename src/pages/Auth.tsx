@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Footer } from '@/components/Footer';
 import { useSystemSettings } from '@/contexts/SystemSettingsContext';
-import { useNavigate, useSearchParams } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Mail, Lock, User, ArrowLeft, Eye, EyeOff, Shield, UserCircle, Car, Apple, Twitter, Facebook } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -309,9 +309,9 @@ export default function Auth() {
         <div className="w-full max-w-md rounded-2xl border border-border bg-card p-8 shadow-elevated">
           {/* Logo */}
           <div className="mb-8 text-center">
-            <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl gradient-hero">
+            <Link to="/" className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-xl gradient-hero transition-opacity hover:opacity-90" aria-label="Go to home">
               <span className="text-2xl font-bold text-accent-foreground">{(settings.businessInfo.companyName || 'R')[0]}</span>
-            </div>
+            </Link>
             <h1 className="font-display text-2xl font-bold text-foreground">
               {t.auth.welcomeTo} {settings.businessInfo.companyName || 'RideFlow'}
             </h1>

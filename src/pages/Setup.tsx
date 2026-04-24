@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useSystemSettings } from '@/contexts/SystemSettingsContext';
 import { useLanguage } from '@/contexts/LanguageContext';
@@ -406,8 +406,10 @@ export default function Setup() {
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Shield className="h-8 w-8 text-primary" />
-            <h1 className="text-3xl font-bold text-foreground">{t.setup.title.replace('{appName}', appName)}</h1>
+            <Link to="/" className="flex items-center gap-2 transition-opacity hover:opacity-90" aria-label="Go to home">
+              <Shield className="h-8 w-8 text-primary" />
+              <h1 className="text-3xl font-bold text-foreground">{t.setup.title.replace('{appName}', appName)}</h1>
+            </Link>
           </div>
           <p className="text-muted-foreground">{t.setup.subtitle}</p>
         </div>

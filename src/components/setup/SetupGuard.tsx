@@ -1,49 +1,55 @@
 import { ReactNode } from 'react';
-import { Navigate, useLocation } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import { useSetupCheck } from '@/hooks/useSetupCheck';
 import { LoadingScreen } from '@/components/LoadingScreen';
 
 interface SetupGuardProps {
-  children: ReactNode;
+  children?: ReactNode;
 }
 
-export function SetupGuard({ children }: SetupGuardProps) {
+function renderGuardContent(children?: ReactNode) {
+  return children ? <>{children}</> : <Outlet />;
+}
+
+export function RequireSetupComplete({ children }: SetupGuardProps) {
   const { isLoading, isSetupComplete, error } = useSetupCheck();
   const location = useLocation();
-  const publicPaths = new Set([
-    '/',
-    '/auth',
-    '/book-now',
-    '/contact',
-    '/features',
-    '/terms',
-    '/privacy',
-    '/install',
-    '/track',
-    '/driver/login',
-  ]);
-  const isPublicPath = publicPaths.has(location.pathname) || location.pathname.startsWith('/page/');
 
   if (isLoading) {
     return <LoadingScreen />;
   }
 
-  // Avoid false redirect loops when setup check is temporarily unavailable.
   if (error) {
-    return <>{children}</>;
+    return renderGuardContent(children);
   }
 
-  // If setup is NOT complete and user is NOT on /setup, redirect to /setup.
-  // Preserve auth callback params/hash so email verification can complete.
-  if (!isSetupComplete && location.pathname !== '/setup' && !isPublicPath) {
-    return <Navigate to={`/setup${location.search}${location.hash}`} replace />;
+  if (!isSetupComplete) {
+    const next = `${location.pathname}${location.search}${location.hash}`;
+    return <Navigate to={`/setup?next=${encodeURIComponent(next)}`} replace />;
   }
 
-  // If setup IS complete and user is on /setup, redirect to home.
-  if (isSetupComplete && location.pathname === '/setup') {
+  return renderGuardContent(children);
+}
+
+export function SetupOnlyRoute({ children }: SetupGuardProps) {
+  const { isLoading, isSetupComplete, error } = useSetupCheck();
+
+  if (isLoading) {
+    return <LoadingScreen />;
+  }
+
+  if (error) {
+    return renderGuardContent(children);
+  }
+
+  if (isSetupComplete) {
     return <Navigate to="/" replace />;
   }
 
-  return <>{children}</>;
+  return renderGuardContent(children);
+}
+
+export function SetupGuard({ children }: { children: ReactNode }) {
+  return <RequireSetupComplete>{children}</RequireSetupComplete>;
 }
 

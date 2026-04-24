@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Download, Smartphone, Check, Share, Plus, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Navbar } from '@/components/booking/Navbar';
@@ -48,7 +48,9 @@ export default function InstallPage() {
       <main className="container mx-auto max-w-2xl px-4 py-12">
         <div className="text-center">
           <div className="mb-6 flex justify-center">
-            <img src={logoSrc} alt={`${appName} Logo`} className="h-24 w-24 rounded-2xl shadow-lg object-contain" />
+            <Link to="/" className="transition-opacity hover:opacity-90" aria-label="Go to home">
+              <img src={logoSrc} alt={`${appName} Logo`} className="h-24 w-24 rounded-2xl shadow-lg object-contain" />
+            </Link>
           </div>
           <h1 className="font-display text-3xl font-bold text-foreground">{t.install.title.replace('App', appName)}</h1>
           <p className="mt-2 text-muted-foreground">{t.install.installDescription.replace('our app', appName)}</p>

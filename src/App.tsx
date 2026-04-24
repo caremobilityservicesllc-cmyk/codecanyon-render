@@ -8,9 +8,10 @@ import { LanguageProvider } from "@/contexts/LanguageContext";
 import { SystemSettingsProvider } from "@/contexts/SystemSettingsContext";
 import { ThemeProvider } from "next-themes";
 import { BookingStatusNotifier } from "@/components/BookingStatusNotifier";
-import { SetupGuard } from "@/components/setup/SetupGuard";
+import { RequireSetupComplete, SetupOnlyRoute } from "@/components/setup/SetupGuard";
 import { DemoBanner } from "@/components/DemoBanner";
 import { DemoWatermark } from "@/components/DemoWatermark";
+import { AuthEntryRoute, DriverEntryRoute, RequireAdmin, RequireAuthenticated, RequireDriver } from "@/components/auth/RouteGuards";
 import Index from "./pages/Index";
 import Setup from "./pages/Setup";
 import Auth from "./pages/Auth";
@@ -63,13 +64,13 @@ const App = () => (
             <Toaster />
             <Sonner />
             <BrowserRouter>
-              <SetupGuard>
               <Routes>
-                <Route path="/setup" element={<Setup />} />
+                <Route element={<SetupOnlyRoute />}>
+                  <Route path="/setup" element={<Setup />} />
+                </Route>
+
                 <Route path="/" element={<Index />} />
-                <Route path="/auth" element={<Auth />} />
-                <Route path="/my-bookings" element={<MyBookings />} />
-                <Route path="/account" element={<Account />} />
+                <Route path="/auth" element={<AuthEntryRoute><Auth /></AuthEntryRoute>} />
                 <Route path="/track" element={<TrackBooking />} />
                 <Route path="/booking-confirmation/:id" element={<BookingConfirmationPage />} />
                 <Route path="/install" element={<Install />} />
@@ -80,28 +81,38 @@ const App = () => (
                 <Route path="/privacy" element={<PrivacyPolicy />} />
                 <Route path="/contact" element={<Contact />} />
                 <Route path="/book-now" element={<BookNow />} />
-                {/* Admin Routes */}
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/bookings" element={<AdminBookings />} />
-                <Route path="/admin/customers" element={<AdminCustomers />} />
-                <Route path="/admin/drivers" element={<AdminDrivers />} />
-                <Route path="/admin/document-review" element={<AdminDocumentReview />} />
-                <Route path="/admin/driver-applications" element={<AdminDriverApplications />} />
-                <Route path="/admin/vehicles" element={<AdminVehicles />} />
-                <Route path="/admin/notifications" element={<AdminNotifications />} />
-                <Route path="/admin/zones" element={<AdminZones />} />
-                <Route path="/admin/routes" element={<AdminRoutes />} />
-                <Route path="/admin/pricing" element={<AdminPricing />} />
-                <Route path="/admin/promo-codes" element={<AdminPromoCodes />} />
-                <Route path="/admin/calculator" element={<AdminPriceCalculator />} />
-                <Route path="/admin/settings" element={<AdminSettings />} />
-                <Route path="/admin/scheduling" element={<AdminScheduling />} />
-                <Route path="/admin/revenue" element={<AdminRevenue />} />
-                <Route path="/admin/pages" element={<AdminPages />} />
-                
-                {/* Driver Routes */}
-                <Route path="/driver/login" element={<DriverAuth />} />
-                <Route path="/driver" element={<DriverDashboard />} />
+                <Route path="/driver/login" element={<DriverEntryRoute><DriverAuth /></DriverEntryRoute>} />
+
+                <Route element={<RequireAuthenticated />}>
+                  <Route path="/my-bookings" element={<MyBookings />} />
+                  <Route path="/account" element={<Account />} />
+
+                  <Route element={<RequireSetupComplete />}>
+                    <Route element={<RequireAdmin />}>
+                      <Route path="/admin" element={<AdminDashboard />} />
+                      <Route path="/admin/bookings" element={<AdminBookings />} />
+                      <Route path="/admin/customers" element={<AdminCustomers />} />
+                      <Route path="/admin/drivers" element={<AdminDrivers />} />
+                      <Route path="/admin/document-review" element={<AdminDocumentReview />} />
+                      <Route path="/admin/driver-applications" element={<AdminDriverApplications />} />
+                      <Route path="/admin/vehicles" element={<AdminVehicles />} />
+                      <Route path="/admin/notifications" element={<AdminNotifications />} />
+                      <Route path="/admin/zones" element={<AdminZones />} />
+                      <Route path="/admin/routes" element={<AdminRoutes />} />
+                      <Route path="/admin/pricing" element={<AdminPricing />} />
+                      <Route path="/admin/promo-codes" element={<AdminPromoCodes />} />
+                      <Route path="/admin/calculator" element={<AdminPriceCalculator />} />
+                      <Route path="/admin/settings" element={<AdminSettings />} />
+                      <Route path="/admin/scheduling" element={<AdminScheduling />} />
+                      <Route path="/admin/revenue" element={<AdminRevenue />} />
+                      <Route path="/admin/pages" element={<AdminPages />} />
+                    </Route>
+
+                    <Route element={<RequireDriver />}>
+                      <Route path="/driver" element={<DriverDashboard />} />
+                    </Route>
+                  </Route>
+                </Route>
                 
                 {/* Dynamic CMS Pages */}
                 <Route path="/page/:slug" element={<DynamicPage />} />
@@ -109,7 +120,6 @@ const App = () => (
                 {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
                 <Route path="*" element={<NotFound />} />
               </Routes>
-              </SetupGuard>
             </BrowserRouter>
           </TooltipProvider>
         </LanguageProvider>
