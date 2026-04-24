@@ -1,0 +1,46 @@
+import { en } from './en';
+
+export const hi = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "सहेजें",
+    cancel: "रद्द करें",
+    delete: "हटाएं",
+    edit: "संपादित करें",
+    loading: "लोड हो रहा है...",
+    error: "त्रुटि",
+    success: "सफलता",
+    confirm: "पुष्टि करें",
+    back: "वापस",
+    next: "अगला",
+    submit: "जमा करें",
+    search: "खोजें",
+    close: "बंद करें",
+    yes: "हाँ",
+    no: "नहीं",
+  },
+  nav: {
+    ...en.nav,
+    home: "होम",
+    bookings: "मेरी बुकिंग",
+    account: "खाता",
+    signIn: "साइन इन",
+    signOut: "साइन आउट",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "सर्वाधिकार सुरक्षित",
+    terms: "सेवा की शर्तें",
+    privacy: "गोपनीयता नीति",
+    contact: "संपर्क करें",
+    legal: "कानूनी",
+    quickLinks: "त्वरित लिंक",
+    drivers: "ड्राइवर",
+    driverLogin: "ड्राइवर लॉगिन",
+  },
+  settings: {
+    ...en.settings,
+    language: "भाषा",
+  },
+};

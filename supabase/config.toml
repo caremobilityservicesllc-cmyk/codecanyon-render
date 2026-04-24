@@ -1,0 +1,106 @@
+project_id = "YOUR_SUPABASE_PROJECT_ID"
+
+[functions.send-booking-email]
+verify_jwt = false
+
+[functions.send-booking-reminders]
+verify_jwt = false
+
+[functions.generate-recurring-bookings]
+verify_jwt = false
+
+[functions.send-verification-email]
+verify_jwt = false
+
+[functions.check-expiring-verifications]
+verify_jwt = false
+
+[functions.send-push-notification]
+verify_jwt = false
+
+[functions.ai-booking-chat]
+verify_jwt = false
+
+[functions.auto-dispatch]
+verify_jwt = false
+
+[functions.send-sms]
+verify_jwt = false
+
+[functions.smart-fare-suggestions]
+verify_jwt = false
+
+[functions.get-traffic-data]
+verify_jwt = false
+
+[functions.analyze-surge-pricing]
+verify_jwt = false
+
+[functions.check-traffic-alerts]
+verify_jwt = false
+
+[functions.predict-traffic]
+verify_jwt = false
+
+[functions.predict-driver-deployment]
+verify_jwt = false
+
+[functions.notify-admin-driver-application]
+verify_jwt = false
+
+[functions.send-whatsapp-message]
+verify_jwt = false
+
+[functions.notify-new-shift]
+verify_jwt = false
+
+[functions.process-payment]
+verify_jwt = false
+
+[functions.update-payment-secret]
+verify_jwt = false
+
+[functions.stripe-webhook]
+verify_jwt = false
+
+[functions.process-refund]
+verify_jwt = false
+
+[functions.paypal-webhook]
+verify_jwt = false
+
+[functions.update-sms-secret]
+verify_jwt = false
+
+[functions.ai-booking-features]
+verify_jwt = false
+
+[functions.update-ai-secret]
+verify_jwt = false
+
+[functions.update-email-provider]
+verify_jwt = false
+
+[functions.calculate-eta]
+verify_jwt = false
+
+[functions.check-api-usage-alerts]
+verify_jwt = false
+
+[functions.check-expiring-documents]
+verify_jwt = false
+
+[functions.location-proxy]
+verify_jwt = false
+
+[functions.notify-driver-shifts]
+verify_jwt = false
+
+[functions.notify-ride-completing]
+verify_jwt = false
+
+[functions.send-document-notification]
+verify_jwt = false
+
+[functions.setup-demo-users]
+verify_jwt = false

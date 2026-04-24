@@ -1,0 +1,46 @@
+import { en } from './en';
+
+export const ko = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "저장",
+    cancel: "취소",
+    delete: "삭제",
+    edit: "편집",
+    loading: "로딩 중...",
+    error: "오류",
+    success: "성공",
+    confirm: "확인",
+    back: "뒤로",
+    next: "다음",
+    submit: "제출",
+    search: "검색",
+    close: "닫기",
+    yes: "예",
+    no: "아니오",
+  },
+  nav: {
+    ...en.nav,
+    home: "홈",
+    bookings: "내 예약",
+    account: "계정",
+    signIn: "로그인",
+    signOut: "로그아웃",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "모든 권리 보유",
+    terms: "이용약관",
+    privacy: "개인정보처리방침",
+    contact: "문의하기",
+    legal: "법적 정보",
+    quickLinks: "빠른 링크",
+    drivers: "드라이버",
+    driverLogin: "드라이버 로그인",
+  },
+  settings: {
+    ...en.settings,
+    language: "언어",
+  },
+};

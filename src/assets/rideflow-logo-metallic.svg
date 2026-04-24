@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 760" role="img" aria-labelledby="title desc">
+  <title id="title">RideFlow metallic logo</title>
+  <desc id="desc">Metallic circular R brand mark with motion bars and road detail.</desc>
+  <defs>
+    <linearGradient id="metalDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#1e1f24" />
+      <stop offset="45%" stop-color="#50525a" />
+      <stop offset="70%" stop-color="#2d2f36" />
+      <stop offset="100%" stop-color="#8d8f97" />
+    </linearGradient>
+    <linearGradient id="metalLight" x1="10%" y1="0%" x2="90%" y2="100%">
+      <stop offset="0%" stop-color="#f3f4f6" />
+      <stop offset="45%" stop-color="#b9bcc4" />
+      <stop offset="100%" stop-color="#5d616b" />
+    </linearGradient>
+    <linearGradient id="road" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#7a7d86" />
+      <stop offset="50%" stop-color="#d7d9de" />
+      <stop offset="100%" stop-color="#555861" />
+    </linearGradient>
+    <filter id="softShadow" x="-10%" y="-10%" width="120%" height="120%">
+      <feDropShadow dx="0" dy="8" stdDeviation="10" flood-color="#000" flood-opacity="0.28" />
+    </filter>
+  </defs>
+
+  <g fill="none" fill-rule="evenodd" filter="url(#softShadow)">
+    <path
+      d="M744 72c156 0 295 79 374 206 59 96 84 214 68 332-16 119-73 226-160 301-14 12-33 16-51 11-18-6-31-20-35-39-3-18 3-38 18-50 153-133 191-354 92-530C978 192 866 128 744 128c-36 0-55-20-55-52s22-52 55-52Z"
+      fill="url(#metalDark)"
+      stroke="#d0d2d8"
+      stroke-width="8"
+      stroke-linejoin="round"
+    />
+
+    <path
+      d="M671 560c18 16 40 27 67 34 95 25 198 2 273-63 14-12 34-16 51-10 17 5 31 19 35 38 4 19-3 39-18 52-104 90-248 124-381 89-44-12-84-31-119-58l52-82Z"
+      fill="url(#metalDark)"
+      stroke="#babcc4"
+      stroke-width="8"
+      stroke-linejoin="round"
+    />
+
+    <path
+      d="M610 290h310c25 0 45 21 42 46-7 64-61 114-126 114H660l78-160c14 0 25 0 32 0Z"
+      fill="url(#metalDark)"
+      stroke="#d2d4da"
+      stroke-width="7"
+      stroke-linejoin="round"
+    />
+
+    <path
+      d="M566 420h273c-52 28-87 51-104 69-18 19-38 64-61 137-6 21-25 36-47 37H490l76-213Z"
+      fill="url(#metalDark)"
+      stroke="#a9adb5"
+      stroke-width="7"
+      stroke-linejoin="round"
+    />
+
+    <path
+      d="M762 438c45 0 93-8 144-24 0 2-28 22-83 59-21 14-33 38-31 63l2 18c4 48 27 92 62 126l20 19c-26 4-53 2-79-7-64-22-106-76-113-143-3-34 2-66 16-95l16-34c9-14 24-22 46-22Z"
+      fill="url(#road)"
+      opacity="0.98"
+      stroke="#e8e8eb"
+      stroke-width="5"
+      stroke-linejoin="round"
+    />
+
+    <path
+      d="M288 308h339l-23 36H265l23-36Z"
+      fill="url(#metalDark)"
+      stroke="#c6c8cf"
+      stroke-width="6"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M360 409h255l-20 32H339l21-32Z"
+      fill="url(#metalDark)"
+      stroke="#b9bcc4"
+      stroke-width="6"
+      stroke-linejoin="round"
+    />
+    <path
+      d="M427 495h108l-17 27H409l18-27Z"
+      fill="url(#metalDark)"
+      stroke="#aeb1b8"
+      stroke-width="5"
+      stroke-linejoin="round"
+    />
+
+    <path
+      d="M738 437l16 46"
+      stroke="#f3f4f7"
+      stroke-width="12"
+      stroke-linecap="round"
+    />
+    <path
+      d="M778 432l20 58"
+      stroke="#f3f4f7"
+      stroke-width="12"
+      stroke-linecap="round"
+    />
+    <path
+      d="M834 560l54 45"
+      stroke="#f7f7f8"
+      stroke-width="16"
+      stroke-linecap="round"
+    />
+
+    <path
+      d="M595 405h32"
+      stroke="url(#metalLight)"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+    <path
+      d="M653 405h33"
+      stroke="url(#metalLight)"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+    <path
+      d="M711 405h33"
+      stroke="url(#metalLight)"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+    <path
+      d="M769 403h32"
+      stroke="url(#metalLight)"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+    <path
+      d="M826 398h33"
+      stroke="url(#metalLight)"
+      stroke-width="10"
+      stroke-linecap="round"
+    />
+  </g>
+</svg>

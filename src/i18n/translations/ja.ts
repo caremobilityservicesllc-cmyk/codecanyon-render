@@ -1,0 +1,46 @@
+import { en } from './en';
+
+export const ja = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "保存",
+    cancel: "キャンセル",
+    delete: "削除",
+    edit: "編集",
+    loading: "読み込み中...",
+    error: "エラー",
+    success: "成功",
+    confirm: "確認",
+    back: "戻る",
+    next: "次へ",
+    submit: "送信",
+    search: "検索",
+    close: "閉じる",
+    yes: "はい",
+    no: "いいえ",
+  },
+  nav: {
+    ...en.nav,
+    home: "ホーム",
+    bookings: "予約一覧",
+    account: "アカウント",
+    signIn: "ログイン",
+    signOut: "ログアウト",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "全著作権所有",
+    terms: "利用規約",
+    privacy: "プライバシーポリシー",
+    contact: "お問い合わせ",
+    legal: "法的情報",
+    quickLinks: "クイックリンク",
+    drivers: "ドライバー",
+    driverLogin: "ドライバーログイン",
+  },
+  settings: {
+    ...en.settings,
+    language: "言語",
+  },
+};

@@ -1,0 +1,46 @@
+import { en } from './en';
+
+export const tr = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "Kaydet",
+    cancel: "İptal",
+    delete: "Sil",
+    edit: "Düzenle",
+    loading: "Yükleniyor...",
+    error: "Hata",
+    success: "Başarılı",
+    confirm: "Onayla",
+    back: "Geri",
+    next: "İleri",
+    submit: "Gönder",
+    search: "Ara",
+    close: "Kapat",
+    yes: "Evet",
+    no: "Hayır",
+  },
+  nav: {
+    ...en.nav,
+    home: "Ana Sayfa",
+    bookings: "Rezervasyonlarım",
+    account: "Hesap",
+    signIn: "Giriş Yap",
+    signOut: "Çıkış Yap",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "Tüm hakları saklıdır",
+    terms: "Kullanım Koşulları",
+    privacy: "Gizlilik Politikası",
+    contact: "İletişim",
+    legal: "Yasal",
+    quickLinks: "Hızlı Bağlantılar",
+    drivers: "Sürücüler",
+    driverLogin: "Sürücü Girişi",
+  },
+  settings: {
+    ...en.settings,
+    language: "Dil",
+  },
+};

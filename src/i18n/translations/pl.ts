@@ -1,0 +1,46 @@
+import { en } from './en';
+
+export const pl = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "Zapisz",
+    cancel: "Anuluj",
+    delete: "Usuń",
+    edit: "Edytuj",
+    loading: "Ładowanie...",
+    error: "Błąd",
+    success: "Sukces",
+    confirm: "Potwierdź",
+    back: "Wstecz",
+    next: "Dalej",
+    submit: "Wyślij",
+    search: "Szukaj",
+    close: "Zamknij",
+    yes: "Tak",
+    no: "Nie",
+  },
+  nav: {
+    ...en.nav,
+    home: "Strona główna",
+    bookings: "Moje rezerwacje",
+    account: "Konto",
+    signIn: "Zaloguj się",
+    signOut: "Wyloguj się",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "Wszelkie prawa zastrzeżone",
+    terms: "Regulamin",
+    privacy: "Polityka prywatności",
+    contact: "Kontakt",
+    legal: "Informacje prawne",
+    quickLinks: "Szybkie linki",
+    drivers: "Kierowcy",
+    driverLogin: "Logowanie kierowcy",
+  },
+  settings: {
+    ...en.settings,
+    language: "Język",
+  },
+};

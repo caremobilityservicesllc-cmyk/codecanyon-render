@@ -1,0 +1,676 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap');
+
+@tailwind base;
+
+/* Safe area utilities for mobile */
+@supports (padding-bottom: env(safe-area-inset-bottom)) {
+  .pb-safe {
+    padding-bottom: max(1rem, env(safe-area-inset-bottom));
+  }
+}
+@tailwind components;
+@tailwind utilities;
+
+/* RideFlow Design System - Professional Ride Booking */
+
+@layer base {
+  :root {
+    /* Core Brand Colors - Light Mode */
+    --background: 0 0% 98%;
+    --foreground: 0 0% 7%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 0 0% 7%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 7%;
+
+    /* Primary - Dark Brand Color #121212 */
+    --primary: 0 0% 7%;
+    --primary-foreground: 0 0% 98%;
+
+    /* Secondary */
+    --secondary: 0 0% 96%;
+    --secondary-foreground: 0 0% 7%;
+
+    /* Muted Tones */
+    --muted: 0 0% 96%;
+    --muted-foreground: 0 0% 45%;
+
+    /* Accent - Matches Primary for consistency */
+    --accent: 0 0% 7%;
+    --accent-foreground: 0 0% 98%;
+
+    /* Destructive */
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 98%;
+
+    /* Borders & Inputs */
+    --border: 0 0% 90%;
+    --input: 0 0% 90%;
+    --ring: 0 0% 7%;
+
+    --radius: 0.75rem;
+
+    /* Custom RideFlow Variables */
+    --brand-primary: 0 0% 7%;
+    --brand-accent: 0 0% 7%;
+    --gradient-hero: linear-gradient(135deg, hsl(var(--brand-primary)) 0%, hsl(0 0% 20%) 50%, hsl(0 0% 40%) 100%);
+    --gradient-card: linear-gradient(180deg, hsl(0 0% 100%) 0%, hsl(0 0% 98%) 100%);
+    --gradient-accent: linear-gradient(135deg, hsl(var(--brand-accent)) 0%, hsl(0 0% 85%) 100%);
+    
+    --shadow-soft: 0 2px 8px -2px hsl(0 0% 7% / 0.08);
+    --shadow-medium: 0 4px 16px -4px hsl(0 0% 7% / 0.12);
+    --shadow-elevated: 0 8px 32px -8px hsl(0 0% 7% / 0.16);
+    --shadow-glow: 0 0 24px hsl(var(--brand-primary) / 0.15);
+
+    /* Sidebar */
+    --sidebar-background: 0 0% 98%;
+    --sidebar-foreground: 0 0% 20%;
+    --sidebar-primary: 0 0% 7%;
+    --sidebar-primary-foreground: 0 0% 98%;
+    --sidebar-accent: 0 0% 85%;
+    --sidebar-accent-foreground: 0 0% 7%;
+    --sidebar-border: 0 0% 90%;
+    --sidebar-ring: 0 0% 7%;
+
+    /* Step Colors */
+    --step-active: 0 0% 7%;
+    --step-complete: 0 0% 7%;
+    --step-inactive: 0 0% 75%;
+
+    /* Vehicle Card States */
+    --vehicle-selected: 0 0% 7%;
+    --vehicle-hover: 0 0% 96%;
+  }
+
+  .dark {
+    /* Dark Mode - Primary #121212 as background */
+    --background: 0 0% 7%;
+    --foreground: 0 0% 98%;
+
+    --card: 0 0% 10%;
+    --card-foreground: 0 0% 98%;
+
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 98%;
+
+    --primary: 0 0% 98%;
+    --primary-foreground: 0 0% 7%;
+
+    --secondary: 0 0% 15%;
+    --secondary-foreground: 0 0% 98%;
+
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
+
+    /* Accent - Matches Primary for consistency */
+    --accent: 0 0% 98%;
+    --accent-foreground: 0 0% 7%;
+
+    --destructive: 0 63% 50%;
+    --destructive-foreground: 0 0% 98%;
+
+    --border: 0 0% 22%;
+    --input: 0 0% 22%;
+    --ring: 0 0% 98%;
+
+    /* Sidebar Dark */
+    --sidebar-background: 0 0% 7%;
+    --sidebar-foreground: 0 0% 90%;
+    --sidebar-primary: 0 0% 98%;
+    --sidebar-primary-foreground: 0 0% 7%;
+    --sidebar-accent: 0 0% 30%;
+    --sidebar-accent-foreground: 0 0% 98%;
+    --sidebar-border: 0 0% 22%;
+    --sidebar-ring: 0 0% 98%;
+
+    /* Step Colors Dark */
+    --step-active: 0 0% 98%;
+    --step-complete: 0 0% 98%;
+    --step-inactive: 0 0% 45%;
+
+    /* Vehicle Card States Dark */
+    --vehicle-selected: 0 0% 98%;
+    --vehicle-hover: 0 0% 15%;
+
+    /* Brand colors inherit from JS-set values or use dark defaults */
+    --gradient-hero: linear-gradient(135deg, hsl(var(--brand-primary)) 0%, hsl(0 0% 15%) 50%, hsl(0 0% 25%) 100%);
+    --shadow-glow: 0 0 24px hsl(var(--brand-primary) / 0.2);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Plus Jakarta Sans', system-ui, sans-serif;
+  }
+}
+
+@layer components {
+  .gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  .gradient-card {
+    background: var(--gradient-card);
+  }
+
+  .gradient-accent {
+    background: var(--gradient-accent);
+  }
+
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-medium {
+    box-shadow: var(--shadow-medium);
+  }
+
+  .shadow-elevated {
+    box-shadow: var(--shadow-elevated);
+  }
+
+  .shadow-glow {
+    box-shadow: var(--shadow-glow);
+  }
+
+  /* Brand color utilities - applied dynamically from admin Appearance settings */
+  .bg-brand-primary {
+    background-color: hsl(var(--brand-primary));
+  }
+  .text-brand-primary {
+    color: hsl(var(--brand-primary));
+  }
+  .bg-brand-accent {
+    background-color: hsl(var(--brand-accent));
+  }
+  .text-brand-accent {
+    color: hsl(var(--brand-accent));
+  }
+  .border-brand-primary {
+    border-color: hsl(var(--brand-primary));
+  }
+  .ring-brand-primary {
+    --tw-ring-color: hsl(var(--brand-primary));
+  }
+
+  /* Step Connector Styles */
+  .step-connector {
+    @apply h-0.5 flex-1 transition-all duration-300;
+  }
+
+  .step-connector-active {
+    @apply bg-primary;
+  }
+
+  .step-connector-inactive {
+    @apply bg-muted;
+  }
+
+  /* Vehicle Card Styles */
+  .vehicle-card {
+    @apply relative p-4 rounded-xl border-2 border-border bg-card transition-all duration-200 cursor-pointer;
+  }
+
+  .vehicle-card:hover {
+    @apply border-muted-foreground/30 shadow-medium;
+  }
+
+  .vehicle-card.selected {
+    @apply border-primary bg-primary/5 shadow-elevated ring-2 ring-primary/20;
+  }
+
+  /* Booking Input Styles */
+  .booking-input {
+    @apply h-12 text-base transition-all duration-200;
+  }
+
+  .booking-input:focus {
+    @apply ring-2 ring-primary/20;
+  }
+
+  /* Payment Option Styles */
+  .payment-option {
+    @apply border-2 border-transparent p-4 rounded-lg cursor-pointer transition-all duration-200;
+  }
+
+  .payment-option:hover {
+    @apply bg-muted;
+  }
+
+  .payment-option-selected {
+    @apply border-primary bg-accent/10;
+  }
+}
+
+@layer utilities {
+  .text-gradient {
+    @apply bg-gradient-to-r from-foreground to-muted-foreground bg-clip-text text-transparent;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+  
+  .animate-slide-up {
+    animation: slideUp 0.4s ease-out forwards;
+  }
+  
+  .animate-scale-in {
+    animation: scaleIn 0.2s ease-out forwards;
+  }
+
+  .animate-pulse-subtle {
+    animation: pulseSuble 2s ease-in-out infinite;
+  }
+
+  @keyframes pulseSuble {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.85;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideUp {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes scaleIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+/* ============================================
+   RTL Support — Comprehensive Overrides
+   ============================================ */
+[dir="rtl"] {
+  direction: rtl;
+  text-align: right;
+}
+
+/* --- Margin flipping (mr ↔ ml) --- */
+[dir="rtl"] .mr-0\.5 { margin-right: 0; margin-left: 0.125rem; }
+[dir="rtl"] .mr-1 { margin-right: 0; margin-left: 0.25rem; }
+[dir="rtl"] .mr-1\.5 { margin-right: 0; margin-left: 0.375rem; }
+[dir="rtl"] .mr-2 { margin-right: 0; margin-left: 0.5rem; }
+[dir="rtl"] .mr-3 { margin-right: 0; margin-left: 0.75rem; }
+[dir="rtl"] .mr-4 { margin-right: 0; margin-left: 1rem; }
+[dir="rtl"] .mr-5 { margin-right: 0; margin-left: 1.25rem; }
+[dir="rtl"] .mr-6 { margin-right: 0; margin-left: 1.5rem; }
+[dir="rtl"] .mr-8 { margin-right: 0; margin-left: 2rem; }
+[dir="rtl"] .mr-10 { margin-right: 0; margin-left: 2.5rem; }
+[dir="rtl"] .mr-12 { margin-right: 0; margin-left: 3rem; }
+[dir="rtl"] .mr-auto { margin-right: 0; margin-left: auto; }
+
+[dir="rtl"] .ml-0\.5 { margin-left: 0; margin-right: 0.125rem; }
+[dir="rtl"] .ml-1 { margin-left: 0; margin-right: 0.25rem; }
+[dir="rtl"] .ml-1\.5 { margin-left: 0; margin-right: 0.375rem; }
+[dir="rtl"] .ml-2 { margin-left: 0; margin-right: 0.5rem; }
+[dir="rtl"] .ml-3 { margin-left: 0; margin-right: 0.75rem; }
+[dir="rtl"] .ml-4 { margin-left: 0; margin-right: 1rem; }
+[dir="rtl"] .ml-5 { margin-left: 0; margin-right: 1.25rem; }
+[dir="rtl"] .ml-6 { margin-left: 0; margin-right: 1.5rem; }
+[dir="rtl"] .ml-8 { margin-left: 0; margin-right: 2rem; }
+[dir="rtl"] .ml-10 { margin-left: 0; margin-right: 2.5rem; }
+[dir="rtl"] .ml-12 { margin-left: 0; margin-right: 3rem; }
+[dir="rtl"] .ml-auto { margin-left: 0; margin-right: auto; }
+
+/* Negative margins */
+[dir="rtl"] .-mr-1 { margin-right: 0; margin-left: -0.25rem; }
+[dir="rtl"] .-mr-2 { margin-right: 0; margin-left: -0.5rem; }
+[dir="rtl"] .-ml-1 { margin-left: 0; margin-right: -0.25rem; }
+[dir="rtl"] .-ml-2 { margin-left: 0; margin-right: -0.5rem; }
+
+/* --- Padding flipping (pr ↔ pl) --- */
+[dir="rtl"] .pl-1 { padding-left: 0; padding-right: 0.25rem; }
+[dir="rtl"] .pl-1\.5 { padding-left: 0; padding-right: 0.375rem; }
+[dir="rtl"] .pl-2 { padding-left: 0; padding-right: 0.5rem; }
+[dir="rtl"] .pl-3 { padding-left: 0; padding-right: 0.75rem; }
+[dir="rtl"] .pl-4 { padding-left: 0; padding-right: 1rem; }
+[dir="rtl"] .pl-5 { padding-left: 0; padding-right: 1.25rem; }
+[dir="rtl"] .pl-6 { padding-left: 0; padding-right: 1.5rem; }
+[dir="rtl"] .pl-8 { padding-left: 0; padding-right: 2rem; }
+[dir="rtl"] .pl-10 { padding-left: 0; padding-right: 2.5rem; }
+[dir="rtl"] .pl-12 { padding-left: 0; padding-right: 3rem; }
+
+[dir="rtl"] .pr-1 { padding-right: 0; padding-left: 0.25rem; }
+[dir="rtl"] .pr-1\.5 { padding-right: 0; padding-left: 0.375rem; }
+[dir="rtl"] .pr-2 { padding-right: 0; padding-left: 0.5rem; }
+[dir="rtl"] .pr-3 { padding-right: 0; padding-left: 0.75rem; }
+[dir="rtl"] .pr-4 { padding-right: 0; padding-left: 1rem; }
+[dir="rtl"] .pr-5 { padding-right: 0; padding-left: 1.25rem; }
+[dir="rtl"] .pr-6 { padding-right: 0; padding-left: 1.5rem; }
+[dir="rtl"] .pr-8 { padding-right: 0; padding-left: 2rem; }
+[dir="rtl"] .pr-10 { padding-right: 0; padding-left: 2.5rem; }
+[dir="rtl"] .pr-12 { padding-right: 0; padding-left: 3rem; }
+
+/* --- Text alignment flipping --- */
+[dir="rtl"] .text-left { text-align: right; }
+[dir="rtl"] .text-right { text-align: left; }
+
+/* --- Positioning flipping (left ↔ right) --- */
+[dir="rtl"] .left-0 { left: auto; right: 0; }
+[dir="rtl"] .left-1 { left: auto; right: 0.25rem; }
+[dir="rtl"] .left-1\.5 { left: auto; right: 0.375rem; }
+[dir="rtl"] .left-2 { left: auto; right: 0.5rem; }
+[dir="rtl"] .left-3 { left: auto; right: 0.75rem; }
+[dir="rtl"] .left-4 { left: auto; right: 1rem; }
+[dir="rtl"] .left-5 { left: auto; right: 1.25rem; }
+[dir="rtl"] .left-6 { left: auto; right: 1.5rem; }
+[dir="rtl"] .left-8 { left: auto; right: 2rem; }
+[dir="rtl"] .left-10 { left: auto; right: 2.5rem; }
+[dir="rtl"] .left-12 { left: auto; right: 3rem; }
+[dir="rtl"] .left-16 { left: auto; right: 4rem; }
+[dir="rtl"] .left-auto { left: auto; right: auto; }
+
+[dir="rtl"] .right-0 { right: auto; left: 0; }
+[dir="rtl"] .right-1 { right: auto; left: 0.25rem; }
+[dir="rtl"] .right-1\.5 { right: auto; left: 0.375rem; }
+[dir="rtl"] .right-2 { right: auto; left: 0.5rem; }
+[dir="rtl"] .right-3 { right: auto; left: 0.75rem; }
+[dir="rtl"] .right-4 { right: auto; left: 1rem; }
+[dir="rtl"] .right-5 { right: auto; left: 1.25rem; }
+[dir="rtl"] .right-6 { right: auto; left: 1.5rem; }
+[dir="rtl"] .right-8 { right: auto; left: 2rem; }
+[dir="rtl"] .right-10 { right: auto; left: 2.5rem; }
+[dir="rtl"] .right-12 { right: auto; left: 3rem; }
+[dir="rtl"] .right-16 { right: auto; left: 4rem; }
+
+/* Negative positioning */
+[dir="rtl"] .-left-1 { left: auto; right: -0.25rem; }
+[dir="rtl"] .-left-2 { left: auto; right: -0.5rem; }
+[dir="rtl"] .-right-1 { right: auto; left: -0.25rem; }
+[dir="rtl"] .-right-2 { right: auto; left: -0.5rem; }
+
+/* Custom positioning values (used in components like timeline) */
+[dir="rtl"] .left-\[19px\] { left: auto; right: 19px; }
+[dir="rtl"] .left-\[50\%\] { left: auto; right: 50%; }
+[dir="rtl"] .right-\[50\%\] { right: auto; left: 50%; }
+
+/* --- Border flipping --- */
+[dir="rtl"] .border-l { border-left: 0; border-right: 1px solid hsl(var(--border)); }
+[dir="rtl"] .border-r { border-right: 0; border-left: 1px solid hsl(var(--border)); }
+[dir="rtl"] .border-l-2 { border-left: 0; border-right: 2px solid hsl(var(--border)); }
+[dir="rtl"] .border-r-2 { border-right: 0; border-left: 2px solid hsl(var(--border)); }
+[dir="rtl"] .border-l-4 { border-left: 0; border-right: 4px solid; border-right-color: inherit; }
+[dir="rtl"] .border-r-4 { border-right: 0; border-left: 4px solid; border-left-color: inherit; }
+
+/* --- Border radius flipping --- */
+[dir="rtl"] .rounded-l { border-radius: 0 var(--radius) var(--radius) 0; }
+[dir="rtl"] .rounded-r { border-radius: var(--radius) 0 0 var(--radius); }
+[dir="rtl"] .rounded-l-sm { border-radius: 0 calc(var(--radius) - 4px) calc(var(--radius) - 4px) 0; }
+[dir="rtl"] .rounded-r-sm { border-radius: calc(var(--radius) - 4px) 0 0 calc(var(--radius) - 4px); }
+[dir="rtl"] .rounded-l-md { border-radius: 0 calc(var(--radius) - 2px) calc(var(--radius) - 2px) 0; }
+[dir="rtl"] .rounded-r-md { border-radius: calc(var(--radius) - 2px) 0 0 calc(var(--radius) - 2px); }
+[dir="rtl"] .rounded-l-lg { border-radius: 0 var(--radius) var(--radius) 0; }
+[dir="rtl"] .rounded-r-lg { border-radius: var(--radius) 0 0 var(--radius); }
+[dir="rtl"] .rounded-l-xl { border-radius: 0 0.75rem 0.75rem 0; }
+[dir="rtl"] .rounded-r-xl { border-radius: 0.75rem 0 0 0.75rem; }
+[dir="rtl"] .rounded-l-none { border-top-left-radius: 0; border-bottom-left-radius: 0; border-top-right-radius: 0; border-bottom-right-radius: 0; }
+[dir="rtl"] .rounded-r-none { border-top-right-radius: 0; border-bottom-right-radius: 0; border-top-left-radius: 0; border-bottom-left-radius: 0; }
+
+/* Calendar-specific rounded corners - handled by Tailwind's built-in RTL via the CSS overrides above */
+
+/* --- Space-x flipping --- */
+[dir="rtl"] .space-x-0\.5 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-1 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-1\.5 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-2 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-3 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-4 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-6 > :not([hidden]) ~ :not([hidden]),
+[dir="rtl"] .space-x-8 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-x-reverse: 1;
+}
+
+/* --- Translate-x flipping --- */
+[dir="rtl"] .translate-x-0 { --tw-translate-x: 0; }
+[dir="rtl"] .translate-x-5 { --tw-translate-x: -1.25rem; }
+[dir="rtl"] .-translate-x-1\/2 { --tw-translate-x: 50%; }
+[dir="rtl"] .translate-x-\[-50\%\] { --tw-translate-x: 50%; }
+[dir="rtl"] .translate-x-1 { --tw-translate-x: -0.25rem; }
+[dir="rtl"] .-translate-x-1 { --tw-translate-x: 0.25rem; }
+
+/* --- Float flipping --- */
+[dir="rtl"] .float-left { float: right; }
+[dir="rtl"] .float-right { float: left; }
+
+/* --- Inset flipping --- */
+[dir="rtl"] .inset-x-0 { left: 0; right: 0; }
+
+/* --- Gradient direction flipping --- */
+[dir="rtl"] .bg-gradient-to-r { background-image: linear-gradient(to left, var(--tw-gradient-stops)); }
+[dir="rtl"] .bg-gradient-to-l { background-image: linear-gradient(to right, var(--tw-gradient-stops)); }
+
+/* --- Scroll & overflow --- */
+[dir="rtl"] .overflow-x-auto { direction: rtl; }
+
+/* --- Dialog & Popover centering (left-[50%] translate-x-[-50%]) --- */
+[dir="rtl"] .fixed.left-\[50\%\].translate-x-\[-50\%\] {
+  left: auto;
+  right: 50%;
+  --tw-translate-x: 50%;
+}
+
+/* --- Dropdown menu alignment --- */
+[dir="rtl"] [data-radix-popper-content-wrapper] {
+  /* Radix handles this, but ensure no conflict */
+}
+
+/* --- Slide animations for RTL --- */
+[dir="rtl"] .data-\[state\=closed\]\:slide-out-to-left-1\/2[data-state="closed"] {
+  --tw-exit-translate-x: 50%;
+}
+[dir="rtl"] .data-\[state\=open\]\:slide-in-from-left-1\/2[data-state="open"] {
+  --tw-enter-translate-x: 50%;
+}
+
+/* --- Admin sidebar RTL positioning --- */
+[dir="rtl"] .md\:ms-16 { margin-inline-start: 4rem; }
+[dir="rtl"] .lg\:ms-64 { margin-inline-start: 16rem; }
+[dir="rtl"] .lg\:ms-16 { margin-inline-start: 4rem; }
+
+/* --- Fix icon alignment in inputs for RTL --- */
+[dir="rtl"] input.pl-10,
+[dir="rtl"] input.pl-12,
+[dir="rtl"] textarea.pl-12 {
+  padding-left: 0;
+}
+
+/* --- Toast RTL --- */
+[dir="rtl"] [data-sonner-toaster] {
+  direction: rtl;
+}
+
+/* --- RTL Flex direction fixes --- */
+[dir="rtl"] .flex-row { flex-direction: row; }
+[dir="rtl"] .flex-row-reverse { flex-direction: row-reverse; }
+
+/* Card/section titles: icon should follow RTL reading flow */
+[dir="rtl"] .rtl-card-title.flex.items-center {
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  text-align: right;
+}
+
+/* Reusable helper for icon + text inline rows */
+[dir="rtl"] .rtl-inline-icon.flex.items-center,
+[dir="rtl"] .rtl-inline-icon.inline-flex.items-center {
+  flex-direction: row-reverse;
+}
+
+/* Keep split rows stable in RTL */
+[dir="rtl"] .flex.items-center.justify-between {
+  flex-direction: row;
+}
+
+/* --- Responsive margin overrides for RTL --- */
+@media (min-width: 640px) {
+  [dir="rtl"] .sm\:ml-2 { margin-left: 0; margin-right: 0.5rem; }
+  [dir="rtl"] .sm\:mr-2 { margin-right: 0; margin-left: 0.5rem; }
+  [dir="rtl"] .sm\:pl-4 { padding-left: 0; padding-right: 1rem; }
+  [dir="rtl"] .sm\:pr-4 { padding-right: 0; padding-left: 1rem; }
+  [dir="rtl"] .sm\:text-left { text-align: right; }
+  [dir="rtl"] .sm\:text-right { text-align: left; }
+}
+
+@media (min-width: 768px) {
+  [dir="rtl"] .md\:ml-2 { margin-left: 0; margin-right: 0.5rem; }
+  [dir="rtl"] .md\:mr-2 { margin-right: 0; margin-left: 0.5rem; }
+  [dir="rtl"] .md\:pl-4 { padding-left: 0; padding-right: 1rem; }
+  [dir="rtl"] .md\:pr-4 { padding-right: 0; padding-left: 1rem; }
+  [dir="rtl"] .md\:text-left { text-align: right; }
+  [dir="rtl"] .md\:text-right { text-align: left; }
+  [dir="rtl"] .md\:left-0 { left: auto; right: 0; }
+  [dir="rtl"] .md\:right-0 { right: auto; left: 0; }
+}
+
+@media (min-width: 1024px) {
+  [dir="rtl"] .lg\:ml-4 { margin-left: 0; margin-right: 1rem; }
+  [dir="rtl"] .lg\:mr-4 { margin-right: 0; margin-left: 1rem; }
+  [dir="rtl"] .lg\:pl-6 { padding-left: 0; padding-right: 1.5rem; }
+  [dir="rtl"] .lg\:pr-6 { padding-right: 0; padding-left: 1.5rem; }
+  [dir="rtl"] .lg\:text-left { text-align: right; }
+  [dir="rtl"] .lg\:text-right { text-align: left; }
+}
+
+/* --- Directional icon flipping for RTL --- */
+/* These icons should mirror horizontally in RTL mode. 
+   Uses !important to override any Tailwind-generated transforms. */
+[dir="rtl"] .lucide-arrow-left,
+[dir="rtl"] .lucide-arrow-right,
+[dir="rtl"] .lucide-chevron-left,
+[dir="rtl"] .lucide-chevron-right,
+[dir="rtl"] .lucide-chevrons-left,
+[dir="rtl"] .lucide-chevrons-right,
+[dir="rtl"] .lucide-arrow-left-right,
+[dir="rtl"] .lucide-external-link,
+[dir="rtl"] .lucide-log-out,
+[dir="rtl"] .lucide-log-in,
+[dir="rtl"] .lucide-panel-left,
+[dir="rtl"] .lucide-panel-left-close,
+[dir="rtl"] .lucide-send,
+[dir="rtl"] .lucide-send-horizontal,
+[dir="rtl"] .lucide-undo,
+[dir="rtl"] .lucide-redo,
+[dir="rtl"] .lucide-corner-down-left,
+[dir="rtl"] .lucide-corner-down-right,
+[dir="rtl"] .lucide-corner-up-left,
+[dir="rtl"] .lucide-corner-up-right,
+[dir="rtl"] .lucide-move-left,
+[dir="rtl"] .lucide-move-right,
+[dir="rtl"] .lucide-arrow-up-right,
+[dir="rtl"] .lucide-arrow-up-left,
+[dir="rtl"] .lucide-arrow-down-right,
+[dir="rtl"] .lucide-arrow-down-left {
+  --tw-scale-x: -1 !important;
+  transform: translate(var(--tw-translate-x, 0), var(--tw-translate-y, 0)) rotate(var(--tw-rotate, 0)) skewX(var(--tw-skew-x, 0)) skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1)) scaleY(var(--tw-scale-y, 1)) !important;
+}
+
+/* --- Non-directional icons: prevent RTL mirroring --- */
+/* These icons should NEVER flip regardless of text direction */
+[dir="rtl"] .lucide-map-pin,
+[dir="rtl"] .lucide-star,
+[dir="rtl"] .lucide-navigation,
+[dir="rtl"] .lucide-navigation-2,
+[dir="rtl"] .lucide-map,
+[dir="rtl"] .lucide-locate,
+[dir="rtl"] .lucide-compass,
+[dir="rtl"] .lucide-calendar,
+[dir="rtl"] .lucide-clock,
+[dir="rtl"] .lucide-users,
+[dir="rtl"] .lucide-phone,
+[dir="rtl"] .lucide-mail,
+[dir="rtl"] .lucide-search,
+[dir="rtl"] .lucide-bell,
+[dir="rtl"] .lucide-settings,
+[dir="rtl"] .lucide-heart,
+[dir="rtl"] .lucide-home,
+[dir="rtl"] .lucide-plus,
+[dir="rtl"] .lucide-minus,
+[dir="rtl"] .lucide-x,
+[dir="rtl"] .lucide-check {
+  --tw-scale-x: 1 !important;
+  transform: translate(var(--tw-translate-x, 0), var(--tw-translate-y, 0)) rotate(var(--tw-rotate, 0)) skewX(var(--tw-skew-x, 0)) skewY(var(--tw-skew-y, 0)) scaleX(var(--tw-scale-x, 1)) scaleY(var(--tw-scale-y, 1)) !important;
+}
+
+/* --- Leaflet map markers: prevent RTL mirroring --- */
+[dir="rtl"] .leaflet-marker-icon,
+[dir="rtl"] .leaflet-marker-shadow,
+[dir="rtl"] .leaflet-popup,
+[dir="rtl"] .leaflet-control,
+[dir="rtl"] .leaflet-pane {
+  direction: ltr;
+}
+[dir="rtl"] .leaflet-marker-icon img,
+[dir="rtl"] .leaflet-marker-shadow img {
+  transform: none !important;
+}
+[dir="rtl"] .leaflet-container {
+  direction: ltr;
+}
+
+/* --- Additional missing padding/margin sizes for responsive --- */
+@media (min-width: 640px) {
+  [dir="rtl"] .sm\:pl-6 { padding-left: 0; padding-right: 1.5rem; }
+  [dir="rtl"] .sm\:pr-6 { padding-right: 0; padding-left: 1.5rem; }
+  [dir="rtl"] .sm\:ml-4 { margin-left: 0; margin-right: 1rem; }
+  [dir="rtl"] .sm\:mr-4 { margin-right: 0; margin-left: 1rem; }
+}
+
+@media print {
+  body {
+    background: white !important;
+    color: black !important;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+  .print\:hidden {
+    display: none !important;
+  }
+  .print\:max-w-none {
+    max-width: none !important;
+  }
+  .print\:px-8 {
+    padding-left: 2rem !important;
+    padding-right: 2rem !important;
+  }
+  .break-inside-avoid {
+    break-inside: avoid;
+  }
+}

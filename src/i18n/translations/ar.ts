@@ -1,0 +1,53 @@
+import { en } from './en';
+
+export const ar = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "حفظ",
+    cancel: "إلغاء",
+    delete: "حذف",
+    edit: "تعديل",
+    loading: "جاري التحميل...",
+    error: "خطأ",
+    success: "نجاح",
+    confirm: "تأكيد",
+    back: "رجوع",
+    next: "التالي",
+    submit: "إرسال",
+    search: "بحث",
+    close: "إغلاق",
+    yes: "نعم",
+    no: "لا",
+  },
+  nav: {
+    ...en.nav,
+    home: "الرئيسية",
+    bookings: "حجوزاتي",
+    account: "الحساب",
+    signIn: "تسجيل الدخول",
+    signOut: "تسجيل الخروج",
+  },
+  auth: {
+    ...en.auth,
+    signIn: "تسجيل الدخول",
+    signUp: "إنشاء حساب",
+    email: "البريد الإلكتروني",
+    password: "كلمة المرور",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "جميع الحقوق محفوظة",
+    terms: "شروط الخدمة",
+    privacy: "سياسة الخصوصية",
+    contact: "اتصل بنا",
+    legal: "قانوني",
+    quickLinks: "روابط سريعة",
+    drivers: "السائقون",
+    driverLogin: "دخول السائق",
+  },
+  settings: {
+    ...en.settings,
+    language: "اللغة",
+  },
+};

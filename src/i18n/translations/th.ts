@@ -1,0 +1,46 @@
+import { en } from './en';
+
+export const th = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "บันทึก",
+    cancel: "ยกเลิก",
+    delete: "ลบ",
+    edit: "แก้ไข",
+    loading: "กำลังโหลด...",
+    error: "ข้อผิดพลาด",
+    success: "สำเร็จ",
+    confirm: "ยืนยัน",
+    back: "กลับ",
+    next: "ถัดไป",
+    submit: "ส่ง",
+    search: "ค้นหา",
+    close: "ปิด",
+    yes: "ใช่",
+    no: "ไม่",
+  },
+  nav: {
+    ...en.nav,
+    home: "หน้าแรก",
+    bookings: "การจองของฉัน",
+    account: "บัญชี",
+    signIn: "เข้าสู่ระบบ",
+    signOut: "ออกจากระบบ",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "สงวนลิขสิทธิ์",
+    terms: "ข้อกำหนดการใช้งาน",
+    privacy: "นโยบายความเป็นส่วนตัว",
+    contact: "ติดต่อเรา",
+    legal: "กฎหมาย",
+    quickLinks: "ลิงก์ด่วน",
+    drivers: "คนขับ",
+    driverLogin: "เข้าสู่ระบบคนขับ",
+  },
+  settings: {
+    ...en.settings,
+    language: "ภาษา",
+  },
+};

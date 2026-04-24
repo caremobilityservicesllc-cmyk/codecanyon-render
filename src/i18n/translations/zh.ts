@@ -1,0 +1,53 @@
+import { en } from './en';
+
+export const zh = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "保存",
+    cancel: "取消",
+    delete: "删除",
+    edit: "编辑",
+    loading: "加载中...",
+    error: "错误",
+    success: "成功",
+    confirm: "确认",
+    back: "返回",
+    next: "下一步",
+    submit: "提交",
+    search: "搜索",
+    close: "关闭",
+    yes: "是",
+    no: "否",
+  },
+  nav: {
+    ...en.nav,
+    home: "首页",
+    bookings: "我的预订",
+    account: "账户",
+    signIn: "登录",
+    signOut: "退出",
+  },
+  auth: {
+    ...en.auth,
+    signIn: "登录",
+    signUp: "注册",
+    email: "电子邮箱",
+    password: "密码",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "版权所有",
+    terms: "服务条款",
+    privacy: "隐私政策",
+    contact: "联系我们",
+    legal: "法律信息",
+    quickLinks: "快速链接",
+    drivers: "司机",
+    driverLogin: "司机登录",
+  },
+  settings: {
+    ...en.settings,
+    language: "语言",
+  },
+};

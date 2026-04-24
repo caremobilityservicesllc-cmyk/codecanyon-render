@@ -1,0 +1,79 @@
+import { useState, useEffect } from 'react';
+import { supabase } from '@/integrations/supabase/client';
+
+interface SetupStatus {
+  isLoading: boolean;
+  isSetupComplete: boolean;
+  error: string | null;
+}
+
+const MAX_RETRIES = 3;
+const RETRY_DELAY_MS = 800;
+
+function isSetupCompletedValue(value: unknown): boolean {
+  if (value === true || value === 'true') return true;
+
+  if (typeof value === 'object' && value !== null && 'completed' in value) {
+    return (value as { completed?: unknown }).completed === true;
+  }
+
+  return false;
+}
+
+export function useSetupCheck(): SetupStatus {
+  const [status, setStatus] = useState<SetupStatus>({
+    isLoading: true,
+    isSetupComplete: false,
+    error: null,
+  });
+
+  useEffect(() => {
+    let cancelled = false;
+    let retryTimeout: ReturnType<typeof setTimeout> | null = null;
+
+    const checkSetupStatus = async (retryCount = 0) => {
+      try {
+        const { data: setupSetting, error } = await supabase
+          .from('system_settings')
+          .select('value')
+          .eq('key', 'setup_completed')
+          .maybeSingle();
+
+        if (error) throw error;
+
+        if (cancelled) return;
+
+        setStatus({
+          isLoading: false,
+          isSetupComplete: isSetupCompletedValue(setupSetting?.value),
+          error: null,
+        });
+      } catch {
+        if (cancelled) return;
+
+        if (retryCount < MAX_RETRIES) {
+          retryTimeout = setTimeout(() => {
+            void checkSetupStatus(retryCount + 1);
+          }, RETRY_DELAY_MS * (retryCount + 1));
+          return;
+        }
+
+        setStatus({
+          isLoading: false,
+          isSetupComplete: false,
+          error: 'Failed to check setup status',
+        });
+      }
+    };
+
+    void checkSetupStatus();
+
+    return () => {
+      cancelled = true;
+      if (retryTimeout) clearTimeout(retryTimeout);
+    };
+  }, []);
+
+  return status;
+}
+

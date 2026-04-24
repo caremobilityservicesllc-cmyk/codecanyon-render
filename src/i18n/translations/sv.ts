@@ -1,0 +1,46 @@
+import { en } from './en';
+
+export const sv = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "Spara",
+    cancel: "Avbryt",
+    delete: "Radera",
+    edit: "Redigera",
+    loading: "Laddar...",
+    error: "Fel",
+    success: "Lyckades",
+    confirm: "Bekräfta",
+    back: "Tillbaka",
+    next: "Nästa",
+    submit: "Skicka",
+    search: "Sök",
+    close: "Stäng",
+    yes: "Ja",
+    no: "Nej",
+  },
+  nav: {
+    ...en.nav,
+    home: "Hem",
+    bookings: "Mina bokningar",
+    account: "Konto",
+    signIn: "Logga in",
+    signOut: "Logga ut",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "Alla rättigheter förbehållna",
+    terms: "Användarvillkor",
+    privacy: "Integritetspolicy",
+    contact: "Kontakt",
+    legal: "Juridisk information",
+    quickLinks: "Snabblänkar",
+    drivers: "Förare",
+    driverLogin: "Förare inloggning",
+  },
+  settings: {
+    ...en.settings,
+    language: "Språk",
+  },
+};

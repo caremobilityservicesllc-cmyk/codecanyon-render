@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: codecanyon-render
+    runtime: node
+    plan: starter
+    autoDeploy: true
+    buildCommand: npm install ; npm run build:render
+    startCommand: npm start
+    healthCheckPath: /healthz
+    envVars:
+      - key: NODE_VERSION
+        value: 22
+      - key: APP_URL
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: RENDER_JWT_SECRET
+        sync: false
+      - key: RENDER_AUTO_APPLY_SCHEMA
+        value: "false"
+      - key: VITE_RENDER_API_URL
+        sync: false
+      - key: VITE_RENDER_STORAGE_URL
+        sync: false
+      - key: VITE_RENDER_AUTH_STORAGE_KEY
+        value: rideflow-render-session
+      - key: VITE_DEMO_MODE
+        value: "false"

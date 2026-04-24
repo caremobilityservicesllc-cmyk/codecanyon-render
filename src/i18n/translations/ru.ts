@@ -1,0 +1,46 @@
+import { en } from './en';
+
+export const ru = {
+  ...en,
+  common: {
+    ...en.common,
+    save: "Сохранить",
+    cancel: "Отмена",
+    delete: "Удалить",
+    edit: "Редактировать",
+    loading: "Загрузка...",
+    error: "Ошибка",
+    success: "Успех",
+    confirm: "Подтвердить",
+    back: "Назад",
+    next: "Далее",
+    submit: "Отправить",
+    search: "Поиск",
+    close: "Закрыть",
+    yes: "Да",
+    no: "Нет",
+  },
+  nav: {
+    ...en.nav,
+    home: "Главная",
+    bookings: "Мои бронирования",
+    account: "Аккаунт",
+    signIn: "Войти",
+    signOut: "Выйти",
+  },
+  footer: {
+    ...en.footer,
+    copyright: "Все права защищены",
+    terms: "Условия использования",
+    privacy: "Политика конфиденциальности",
+    contact: "Контакты",
+    legal: "Правовая информация",
+    quickLinks: "Быстрые ссылки",
+    drivers: "Водители",
+    driverLogin: "Вход для водителей",
+  },
+  settings: {
+    ...en.settings,
+    language: "Язык",
+  },
+};

@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RideFlow Documentation</title>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+  <nav class="sidebar">
+    <div class="sidebar-header">
+      <div class="logo">
+        <img src="../src/assets/rideflow-logo-light.png" alt="RideFlow" class="logo-img" style="height: 28px; width: auto;">
+        <span>RideFlow Docs</span>
+      </div>
+    </div>
+    
+    <div class="sidebar-content">
+      <!-- PART 1: GETTING STARTED -->
+      <div class="nav-section">
+        <div class="nav-section-title">1 · Getting Started</div>
+        <a href="#overview" class="nav-link active">Overview</a>
+        <a href="#prerequisites" class="nav-link">Prerequisites</a>
+        <a href="#installation" class="nav-link">Install &amp; Run</a>
+        <a href="#project-structure" class="nav-link">Project Structure</a>
+        <a href="#setup-wizard" class="nav-link">Setup Wizard</a>
+        <a href="#build-deploy" class="nav-link">Build &amp; Deploy</a>
+      </div>
+
+      <!-- PART 2: CONFIGURATION -->
+      <div class="nav-section">
+        <div class="nav-section-title">2 · Configuration</div>
+        <a href="#env-vars" class="nav-link">Environment Variables</a>
+        <a href="#backend-secrets" class="nav-link">Backend Secrets</a>
+        <a href="#integrations" class="nav-link">Integrations</a>
+        <a href="#demo-mode" class="nav-link">Demo / Test Mode</a>
+      </div>
+
+      <!-- PART 3: USER GUIDE -->
+      <div class="nav-section">
+        <div class="nav-section-title">3 · Rider Experience</div>
+        <a href="#booking-flow" class="nav-link">Booking Flow</a>
+        <a href="#guest-bookings" class="nav-link">Guest Bookings</a>
+        <a href="#vehicle-selection" class="nav-link">Vehicle Selection</a>
+        <a href="#payment-methods" class="nav-link">Payment Methods</a>
+        <a href="#booking-fees" class="nav-link">Fees &amp; Surcharges</a>
+        <a href="#promo-codes" class="nav-link">Promo Codes</a>
+        <a href="#recurring-bookings" class="nav-link">Recurring Bookings</a>
+        <a href="#ride-sharing" class="nav-link">Ride Sharing</a>
+        <a href="#real-time-tracking" class="nav-link">Real-time Tracking</a>
+        <a href="#notifications" class="nav-link">Notifications</a>
+        <a href="#user-account" class="nav-link">User Account</a>
+        <a href="#loyalty-rewards" class="nav-link">Loyalty &amp; Rewards</a>
+        <a href="#ai-chatbot" class="nav-link">AI Booking Chatbot</a>
+      </div>
+
+      <!-- PART 4: DRIVER PORTAL -->
+      <div class="nav-section">
+        <div class="nav-section-title">4 · Driver Portal</div>
+        <a href="#driver-onboarding" class="nav-link">Driver Onboarding</a>
+        <a href="#driver-dashboard" class="nav-link">Driver Dashboard</a>
+        <a href="#shift-management" class="nav-link">Shift Management</a>
+        <a href="#earnings-tracking" class="nav-link">Earnings &amp; Commission</a>
+        <a href="#driver-bonuses" class="nav-link">Driver Bonuses</a>
+        <a href="#document-management" class="nav-link">Document Management</a>
+        <a href="#location-tracking" class="nav-link">Location Tracking</a>
+        <a href="#driver-navigation" class="nav-link">Navigation Integration</a>
+      </div>
+
+      <!-- PART 5: ADMIN PANEL -->
+      <div class="nav-section">
+        <div class="nav-section-title">5 · Admin Panel</div>
+        <a href="#admin-dashboard" class="nav-link">Dashboard</a>
+        <a href="#admin-bookings" class="nav-link">Bookings Management</a>
+        <a href="#admin-drivers" class="nav-link">Driver Management</a>
+        <a href="#admin-vehicles" class="nav-link">Vehicle Management</a>
+        <a href="#admin-pricing" class="nav-link">Pricing Rules</a>
+        <a href="#admin-commission" class="nav-link">Commission Settings</a>
+        <a href="#admin-zones-routes" class="nav-link">Zones &amp; Routes</a>
+        <a href="#admin-revenue" class="nav-link">Revenue &amp; Analytics</a>
+        <a href="#admin-settings" class="nav-link">Settings (8 Tabs)</a>
+      </div>
+
+      <!-- PART 6: TECHNICAL REFERENCE -->
+      <div class="nav-section">
+        <div class="nav-section-title">6 · Technical Reference</div>
+        <a href="#architecture" class="nav-link">Architecture</a>
+        <a href="#tech-stack" class="nav-link">Tech Stack</a>
+        <a href="#database-schema" class="nav-link">Database Schema</a>
+        <a href="#edge-functions" class="nav-link">Edge Functions</a>
+        <a href="#api-rpc-functions" class="nav-link">RPC Functions</a>
+        <a href="#api-realtime" class="nav-link">Realtime Channels</a>
+        <a href="#authentication" class="nav-link">Authentication</a>
+        <a href="#rls-policies" class="nav-link">RLS &amp; Security</a>
+        <a href="#pwa" class="nav-link">PWA Support</a>
+        <a href="#i18n" class="nav-link">Multi-language</a>
+        <a href="#theming" class="nav-link">Theming &amp; Branding</a>
+      </div>
+
+      <!-- PART 7: SELF-HOSTING -->
+      <div class="nav-section">
+        <div class="nav-section-title">7 · Self-Hosting Guide</div>
+        <a href="#self-hosting-overview" class="nav-link">Overview</a>
+        <a href="#self-hosting-oauth" class="nav-link">Authentication &amp; OAuth</a>
+        <a href="#self-hosting-supabase" class="nav-link">Supabase Setup</a>
+        <a href="#self-hosting-deployment" class="nav-link">Deploy Options</a>
+        <a href="#self-hosting-migrations" class="nav-link">Database Migration</a>
+        <a href="#self-hosting-edge-functions" class="nav-link">Edge Functions</a>
+        <a href="#self-hosting-storage" class="nav-link">Storage Setup</a>
+        <a href="#self-hosting-security" class="nav-link">Security Hardening</a>
+        <a href="#self-hosting-troubleshooting" class="nav-link">Troubleshooting</a>
+      </div>
+
+      <!-- PART 8: UPGRADE GUIDE -->
+      <div class="nav-section">
+        <div class="nav-section-title">8 · Upgrade Guide</div>
+        <a href="#upgrade-guide" class="nav-link">How to Upgrade</a>
+      </div>
+
+      <!-- PART 9: CHANGELOG -->
+      <div class="nav-section">
+        <div class="nav-section-title">9 · Changelog</div>
+        <a href="#changelog" class="nav-link">Version History</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="content">
+    <div class="content-wrapper">
+
+      <!-- ════════════════════════════════════════════════════════════
+           PART 1: GETTING STARTED
+           ════════════════════════════════════════════════════════════ -->
+
+      <section id="overview" class="doc-section">
+        <h1>RideFlow Documentation</h1>
+        <p class="lead">RideFlow is a full-featured ride booking platform built with React, TypeScript, and Supabase. This guide walks you through installation, configuration, deployment, and day-to-day operation — in that order.</p>
+        
+        <div class="info-box">
+          <h4>📖 How to Use This Documentation</h4>
+          <p>Follow the sections in order for a fresh installation. Each part builds on the previous one:</p>
+          <ol>
+            <li><strong>Getting Started</strong> — Install, run, and deploy the app</li>
+            <li><strong>Configuration</strong> — Environment variables, secrets, integrations</li>
+            <li><strong>Rider Experience</strong> — Features your customers see</li>
+            <li><strong>Driver Portal</strong> — Features drivers use daily</li>
+            <li><strong>Admin Panel</strong> — Back-office management</li>
+            <li><strong>Technical Reference</strong> — Architecture, database, APIs</li>
+            <li><strong>Self-Hosting Guide</strong> — Advanced deployment on your own infrastructure</li>
+          </ol>
+        </div>
+
+        <h2>Key Capabilities</h2>
+        <div class="tech-grid">
+          <div class="tech-card"><h3>🚗 3-Step Booking</h3><p>Location → Vehicle → Payment with guest support</p></div>
+          <div class="tech-card"><h3>📍 Live Tracking</h3><p>Real-time driver GPS via WebSockets + Leaflet maps</p></div>
+          <div class="tech-card"><h3>👨‍✈️ Driver Portal</h3><p>Onboarding, shifts, earnings, commission tracking</p></div>
+          <div class="tech-card"><h3>⚙️ Admin Dashboard</h3><p>Bookings, pricing, zones, routes, revenue analytics</p></div>
+          <div class="tech-card"><h3>💳 3 Payment Gateways</h3><p>Stripe, PayPal, Bank Transfer with webhooks</p></div>
+          <div class="tech-card"><h3>🤖 AI Chatbot</h3><p>Natural language booking assistant</p></div>
+          <div class="tech-card"><h3>🌍 18 Languages</h3><p>EN, ES, FR, DE, AR, HI, IT, JA, KO, NL, PL, PT, RU, SV, TH, TR, ZH + more</p></div>
+          <div class="tech-card"><h3>🎨 White-Label</h3><p>Dynamic branding, colors, logos from admin panel</p></div>
+          <div class="tech-card"><h3>⭐ Loyalty System</h3><p>Rider points (Bronze→Platinum) + Driver bonuses</p></div>
+          <div class="tech-card"><h3>📱 PWA</h3><p>Installable app with offline capabilities</p></div>
+          <div class="tech-card"><h3>🔔 4 Notification Channels</h3><p>In-app, email, SMS, browser push</p></div>
+          <div class="tech-card"><h3>🔒 Role-Based Access</h3><p>Admin, moderator, user, driver with RLS</p></div>
+        </div>
+
+        <h2>Application Routes</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Route</th><th>Description</th><th>Access</th></tr></thead>
+            <tbody>
+              <tr><td><code>/</code></td><td>Main booking page (3-step flow)</td><td>Public</td></tr>
+              <tr><td><code>/auth</code></td><td>Login / Register</td><td>Public</td></tr>
+              <tr><td><code>/setup</code></td><td>Setup wizard (first-time only)</td><td>Public</td></tr>
+              <tr><td><code>/features</code></td><td>Printable feature summary page</td><td>Public</td></tr>
+              <tr><td><code>/my-bookings</code></td><td>User's booking history</td><td>Authenticated</td></tr>
+              <tr><td><code>/account</code></td><td>User profile &amp; settings</td><td>Authenticated</td></tr>
+              <tr><td><code>/track</code></td><td>Live ride tracking with map</td><td>Public (with reference)</td></tr>
+              <tr><td><code>/booking-confirmation/:id</code></td><td>Booking confirmation details</td><td>Public</td></tr>
+              <tr><td><code>/share/:token</code></td><td>Accept ride share invitation</td><td>Public</td></tr>
+              <tr><td><code>/privacy-policy</code></td><td>Privacy policy (CMS-backed)</td><td>Public</td></tr>
+              <tr><td><code>/terms-of-service</code></td><td>Terms of service (CMS-backed)</td><td>Public</td></tr>
+              <tr><td><code>/install</code></td><td>PWA installation instructions</td><td>Public</td></tr>
+              <tr><td><code>/driver/login</code></td><td>Driver authentication</td><td>Public</td></tr>
+              <tr><td><code>/driver</code></td><td>Driver dashboard</td><td>Driver role</td></tr>
+              <tr><td><code>/admin/*</code></td><td>Admin panel (16 pages)</td><td>Admin role</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- PREREQUISITES -->
+      <section id="prerequisites" class="doc-section">
+        <h1>Prerequisites</h1>
+        <p class="lead">Before you begin, make sure you have the following installed on your system.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Requirement</th><th>Minimum</th><th>Recommended</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Node.js</strong></td><td>18+</td><td>20 LTS</td></tr>
+              <tr><td><strong>Package Manager</strong></td><td>npm (bundled)</td><td>Bun (faster)</td></tr>
+              <tr><td><strong>Supabase Project</strong></td><td>Cloud account</td><td>Cloud or self-hosted</td></tr>
+              <tr><td><strong>Git</strong></td><td>Any recent version</td><td>Latest</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box">
+          <h4>💡 No Supabase Account Yet?</h4>
+          <p>Create a free account at <a href="https://supabase.com" target="_blank">supabase.com</a>. You'll need the project URL and anon key from your dashboard. Alternatively, see <a href="#self-hosting-supabase">Self-Hosting: Supabase Setup</a> for running Supabase locally.</p>
+        </div>
+      </section>
+
+      <!-- INSTALLATION -->
+      <section id="installation" class="doc-section">
+        <h1>Install &amp; Run</h1>
+        <p class="lead">Get RideFlow running locally in under 5 minutes.</p>
+
+        <h2>Step 1: Clone &amp; Install</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code class="language-bash"># Clone the repository
+git clone &lt;YOUR_GIT_URL&gt;
+cd &lt;YOUR_PROJECT_NAME&gt;
+
+# Install dependencies
+npm install</code></pre>
+        </div>
+
+        <h2>Step 2: Configure Environment</h2>
+        <p>Create a <code>.env</code> file in the project root with your Supabase credentials:</p>
+        <div class="code-block">
+          <div class="code-header"><span>.env (minimum required)</span></div>
+          <pre><code class="language-bash"># Required — Supabase connection
+VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=your-anon-key
+VITE_SUPABASE_PROJECT_ID=your-project-id</code></pre>
+        </div>
+        <p>See <a href="#env-vars">Environment Variables</a> for the full list including demo mode toggles.</p>
+
+        <h2>Step 3: Start the Dev Server</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code class="language-bash">npm run dev
+
+# App is now running at http://localhost:5173</code></pre>
+        </div>
+
+        <h2>Step 4: Run the Setup Wizard</h2>
+        <p>On first launch, RideFlow automatically redirects to <code>/setup</code>. Complete the 7-step wizard to create your admin account and configure the platform. See <a href="#setup-wizard">Setup Wizard</a> for details.</p>
+
+        <div class="warning-box">
+          <h4>⚠️ Database Must Be Ready</h4>
+          <p>Before the app can start, your Supabase project must have the migrations applied. If you cloned the repo, run <code>npx supabase db push</code> after linking your project. See <a href="#self-hosting-migrations">Database Migration</a>.</p>
+        </div>
+      </section>
+
+      <!-- PROJECT STRUCTURE -->
+      <section id="project-structure" class="doc-section">
+        <h1>Project Structure</h1>
+        <pre><code class="language-text">src/
+├── components/
+│   ├── admin/          # Admin panel components
+│   │   ├── drivers/    # Driver management sub-components
+│   │   └── settings/   # Settings tabs (8 tabs)
+│   ├── booking/        # Booking flow components (40+ files)
+│   ├── driver/         # Driver portal components
+│   │   └── onboarding/ # Driver onboarding wizard
+│   ├── setup/          # Setup wizard guard
+│   ├── auth/           # Authentication components
+│   ├── account/        # User account components (loyalty, payments)
+│   └── ui/             # Shared UI components (shadcn/ui)
+├── contexts/           # React contexts (Auth, Language, SystemSettings)
+├── hooks/              # Custom React hooks (30+ hooks)
+├── i18n/               # Internationalization (en, es, fr, de)
+├── integrations/       # Supabase client &amp; auto-generated types
+├── pages/              # Page components
+│   └── admin/          # 16 admin pages
+├── types/              # TypeScript type definitions
+└── utils/              # Utility functions (demo, calendar, receipt, nav)
+
+supabase/
+├── functions/          # 25+ Edge functions
+├── migrations/         # Database migration files
+└── config.toml         # Supabase configuration
+
+docs/                   # This documentation</code></pre>
+      </section>
+
+      <!-- SETUP WIZARD -->
+      <section id="setup-wizard" class="doc-section">
+        <h1>Setup Wizard</h1>
+        <p class="lead">On first launch, RideFlow redirects all routes to a 7-step setup wizard at <code>/setup</code>. This ensures every installation is properly configured before going live.</p>
+
+        <h2>How It Works</h2>
+        <ol>
+          <li>The <code>SetupGuard</code> component wraps all routes in <code>App.tsx</code></li>
+          <li>The <code>useSetupCheck</code> hook queries the <code>setup_completed</code> flag from <code>system_settings</code></li>
+          <li>If setup is NOT complete, all routes redirect to <code>/setup</code></li>
+          <li>Once complete, <code>/setup</code> redirects to <code>/auth</code></li>
+        </ol>
+
+        <h2>Setup Steps</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>#</th><th>Step</th><th>Required</th><th>What It Does</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><strong>Environment Check</strong></td><td><span class="badge badge-red">Required</span></td><td>Validates database, auth, storage, and system settings connectivity</td></tr>
+              <tr><td>2</td><td><strong>Super Admin</strong></td><td><span class="badge badge-red">Required</span></td><td>Creates the primary admin account via signup + <code>make_user_admin</code> RPC</td></tr>
+              <tr><td>3</td><td><strong>App Identity</strong></td><td><span class="badge badge-gray">Optional</span></td><td>Company name, support email, website URL, tagline</td></tr>
+              <tr><td>4</td><td><strong>System Settings</strong></td><td><span class="badge badge-gray">Optional</span></td><td>Default currency, timezone, language, booking advance hours</td></tr>
+              <tr><td>5</td><td><strong>Email Config</strong></td><td><span class="badge badge-gray">Optional</span></td><td>Sender name/email, toggle booking confirmations and ride updates</td></tr>
+              <tr><td>6</td><td><strong>Security</strong></td><td><span class="badge badge-gray">Optional</span></td><td>Email verification toggle, session timeout, max login attempts</td></tr>
+              <tr><td>7</td><td><strong>Launch</strong></td><td><span class="badge badge-red">Required</span></td><td>Reviews all steps, blocks if required steps incomplete, sets <code>setup_completed = true</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="info-box">
+          <h4>💡 RLS Onboarding Exception</h4>
+          <p>The <code>system_settings</code> table has special RLS policies that allow authenticated users to INSERT/UPDATE when no admin exists yet. Once an admin is created, these policies automatically become inactive.</p>
+        </div>
+
+        <h2>Re-Running Setup</h2>
+        <div class="code-block">
+          <div class="code-header"><span>SQL: Reset Setup Status</span></div>
+          <pre><code class="language-sql">DELETE FROM system_settings WHERE key = 'setup_completed';
+-- Optionally remove all admin roles to re-trigger wizard
+DELETE FROM user_roles WHERE role = 'admin';</code></pre>
+        </div>
+      </section>
+
+      <!-- BUILD & DEPLOY -->
+      <section id="build-deploy" class="doc-section">
+        <h1>Build &amp; Deploy</h1>
+        <p class="lead">Create a production build and deploy it to your hosting provider.</p>
+
+        <h2>Step 1: Build for Production</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code class="language-bash"># Build the app (output goes to /dist)
+npm run build
+
+# Preview the production build locally
+npm run preview</code></pre>
+        </div>
+        <p>The <code>dist/</code> folder contains static files that can be served from any hosting provider.</p>
+
+        <h2>Step 2: Choose a Hosting Provider</h2>
+        <div class="tech-grid">
+          <div class="tech-card"><h3>Vercel</h3><p>Zero-config. Connect your Git repo and deploy.</p></div>
+          <div class="tech-card"><h3>Netlify</h3><p>Drag-and-drop the <code>dist</code> folder or connect Git.</p></div>
+          <div class="tech-card"><h3>Docker</h3><p>Use nginx to serve static files. See <a href="#self-hosting-deployment">Deploy Options</a>.</p></div>
+          <div class="tech-card"><h3>AWS S3 + CloudFront</h3><p>Upload to S3, serve via CDN.</p></div>
+        </div>
+
+        <h2>Step 3: Set Environment Variables</h2>
+        <p>Configure the same <code>VITE_*</code> variables from your <code>.env</code> in your hosting provider's dashboard. These are baked into the build at compile time.</p>
+
+        <h2>Step 4: Deploy Backend</h2>
+        <p>If self-hosting, deploy the database migrations and edge functions:</p>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code class="language-bash"># Link to your Supabase project
+npx supabase login
+npx supabase link --project-ref YOUR_PROJECT_REF
+
+# Apply database schema
+npx supabase db push
+
+# Deploy all edge functions
+supabase functions deploy</code></pre>
+        </div>
+        <p>See <a href="#self-hosting-overview">Self-Hosting Guide</a> for detailed infrastructure setup.</p>
+
+        <div class="warning-box">
+          <h4>⚠️ Production Checklist</h4>
+          <ul>
+            <li>Set <code>VITE_DEMO_MODE=false</code> (or remove the variable entirely)</li>
+            <li>Delete demo user accounts from the database</li>
+            <li>Complete the Setup Wizard to create a real Super Admin</li>
+            <li>Configure all required backend secrets (see <a href="#backend-secrets">Backend Secrets</a>)</li>
+            <li>Review all RLS policies (see <a href="#self-hosting-security">Security Hardening</a>)</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           PART 2: CONFIGURATION
+           ════════════════════════════════════════════════════════════ -->
+
+      <section id="env-vars" class="doc-section">
+        <h1>Environment Variables</h1>
+        <p class="lead">All frontend configuration is done via <code>.env</code> variables prefixed with <code>VITE_</code>. These are embedded at build time.</p>
+
+        <h2>Required Variables</h2>
+        <div class="code-block">
+          <div class="code-header"><span>.env — Required</span></div>
+          <pre><code class="language-bash">VITE_SUPABASE_URL=https://your-project.supabase.co
+VITE_SUPABASE_PUBLISHABLE_KEY=your-anon-key
+VITE_SUPABASE_PROJECT_ID=your-project-id</code></pre>
+        </div>
+
+        <h2>Demo Mode Variables (All Optional)</h2>
+        <div class="code-block">
+          <div class="code-header"><span>.env — Demo Controls</span></div>
+          <pre><code class="language-bash">VITE_DEMO_MODE=false          # Master toggle (must be true for any demo feature)
+VITE_DEMO_BANNER=true         # Show "Demo Mode Active" banner
+VITE_DEMO_SEED_DATA=true      # Auto-seed demo accounts on quick login
+VITE_DEMO_WATERMARK=false     # Overlay translucent "DEMO" text
+VITE_DEMO_QUICK_LOGIN=true    # Show quick-access demo login buttons
+VITE_DEMO_MOCK_PAYMENTS=false # Simulate payments without real gateways
+VITE_DEMO_MOCK_MAPS=false     # Use mock map data (no API key needed)
+VITE_DEMO_NOTIFICATIONS=false # Show demo notification toasts
+VITE_DEMO_AI_CHATBOT=true     # Enable AI chatbot in demo mode
+VITE_DEMO_ANALYTICS=false     # Populate admin dashboard with sample data</code></pre>
+        </div>
+        <p>See <a href="#demo-mode">Demo / Test Mode</a> for detailed descriptions and recommended configurations.</p>
+      </section>
+
+      <!-- BACKEND SECRETS -->
+      <section id="backend-secrets" class="doc-section">
+        <h1>Backend Secrets</h1>
+        <p class="lead">Edge functions require API keys stored securely as Supabase secrets. These are <strong>never</strong> exposed to the browser.</p>
+
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Secret</th><th>Required For</th><th>How to Get It</th></tr></thead>
+            <tbody>
+              <tr><td><code>GOOGLE_MAPS_API_KEY</code></td><td>Maps, directions, geocoding, ETA</td><td><a href="https://console.cloud.google.com" target="_blank">Google Cloud Console</a></td></tr>
+              <tr><td><code>RESEND_API_KEY</code></td><td>Transactional emails</td><td><a href="https://resend.com" target="_blank">Resend.com</a></td></tr>
+              <tr><td><code>VAPID_PUBLIC_KEY</code></td><td>Browser push notifications</td><td>Generate with <code>web-push generate-vapid-keys</code></td></tr>
+              <tr><td><code>VAPID_PRIVATE_KEY</code></td><td>Browser push notifications</td><td>(Same as above)</td></tr>
+              <tr><td><code>VAPID_SUBJECT</code></td><td>Browser push notifications</td><td><code>mailto:your@email.com</code></td></tr>
+              <tr><td><code>ELEVENLABS_API_KEY</code></td><td>Voice announcements (drivers)</td><td><a href="https://elevenlabs.io" target="_blank">ElevenLabs.io</a></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Setting Secrets</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal — Supabase CLI</span></div>
+          <pre><code class="language-bash">supabase secrets set GOOGLE_MAPS_API_KEY=your-key
+supabase secrets set RESEND_API_KEY=your-key
+supabase secrets set VAPID_PUBLIC_KEY=your-key
+supabase secrets set VAPID_PRIVATE_KEY=your-key
+supabase secrets set VAPID_SUBJECT=mailto:your@email.com</code></pre>
+        </div>
+
+        <div class="warning-box">
+          <h4>⚠️ Security</h4>
+          <p>Never expose the <code>service_role</code> key in frontend code. Only the anon (publishable) key should be used in the browser. Payment gateway keys (Stripe, PayPal) are stored in <code>system_settings</code> and managed via Admin → Settings → Integrations.</p>
+        </div>
+      </section>
+
+      <!-- INTEGRATIONS -->
+      <section id="integrations" class="doc-section">
+        <h1>Integrations</h1>
+        <p class="lead">RideFlow integrates with several third-party services. All are optional — the app functions in demo mode without any API keys.</p>
+
+        <h2>Maps: Google Maps</h2>
+        <p>Required APIs: Maps JavaScript, Places, Directions, Geocoding, Distance Matrix. API key stored as a secret, loaded via <code>get-maps-config</code> edge function. Usage tracked in <code>map_api_usage</code> table with quota alerts.</p>
+        <p>When <code>VITE_DEMO_MOCK_MAPS=true</code>, mock route data is used instead — no API key needed.</p>
+
+        <h2>Maps: Mapbox</h2>
+        <p>Alternative/fallback to Google Maps. Used for driver dashboard map and route visualization. Required scopes: Styles, Geocoding, Directions, Fonts, Tilesets.</p>
+
+        <h2>Email: Resend</h2>
+        <p>Store <code>RESEND_API_KEY</code> as a backend secret. HTML email templates include responsive design, brand colors (from system_settings), dynamic company name, and CTAs. Used by: booking emails, reminders, document notifications, driver application alerts.</p>
+
+        <h2>Voice: ElevenLabs</h2>
+        <p>Voice announcements for driver notifications. Store <code>ELEVENLABS_API_KEY</code> as a backend secret. Used via <code>useVoiceAnnouncements</code> hook.</p>
+
+        <h2>Payments: Stripe</h2>
+        <ol>
+          <li>Configure in Admin → Settings → Integrations (test/live mode toggle)</li>
+          <li>Add webhook endpoint: <code>/functions/v1/stripe-webhook</code></li>
+          <li>Events: <code>payment_intent.succeeded</code>, <code>payment_intent.payment_failed</code>, <code>charge.refunded</code></li>
+        </ol>
+
+        <h2>Payments: PayPal</h2>
+        <ol>
+          <li>Configure in Admin → Settings → Integrations</li>
+          <li>Set IPN URL: <code>/functions/v1/paypal-webhook</code></li>
+          <li>Handles: Completed, Pending, Failed/Denied, Refunded/Reversed</li>
+        </ol>
+      </section>
+
+      <!-- DEMO / TEST MODE -->
+      <section id="demo-mode" class="doc-section">
+        <h1>Demo / Test Mode</h1>
+        <p class="lead">RideFlow supports a comprehensive demo/test mode controlled by 10 environment variables. The master toggle <code>VITE_DEMO_MODE</code> must be <code>true</code> for any demo feature to activate.</p>
+
+        <h2>What Each Toggle Controls</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Feature</th><th>Demo ON</th><th>Demo OFF</th><th>Variable</th></tr></thead>
+            <tbody>
+              <tr><td>Quick Demo Access buttons</td><td><span class="badge badge-green">Visible</span></td><td><span class="badge badge-gray">Hidden</span></td><td><code>QUICK_LOGIN</code></td></tr>
+              <tr><td>"Demo Mode Active" banner</td><td><span class="badge badge-green">Visible</span></td><td><span class="badge badge-gray">Hidden</span></td><td><code>BANNER</code></td></tr>
+              <tr><td>DEMO watermark overlay</td><td><span class="badge badge-yellow">Opt-in</span></td><td><span class="badge badge-gray">Hidden</span></td><td><code>WATERMARK</code></td></tr>
+              <tr><td>Auto-seed demo data</td><td><span class="badge badge-green">Active</span></td><td><span class="badge badge-gray">Not triggered</span></td><td><code>SEED_DATA</code></td></tr>
+              <tr><td>Mock payment processing</td><td><span class="badge badge-yellow">Opt-in</span></td><td><span class="badge badge-gray">Real gateways</span></td><td><code>MOCK_PAYMENTS</code></td></tr>
+              <tr><td>Mock map/route data</td><td><span class="badge badge-yellow">Opt-in</span></td><td><span class="badge badge-gray">Real APIs</span></td><td><code>MOCK_MAPS</code></td></tr>
+              <tr><td>Demo notification toasts</td><td><span class="badge badge-yellow">Opt-in</span></td><td><span class="badge badge-gray">Real triggers</span></td><td><code>NOTIFICATIONS</code></td></tr>
+              <tr><td>AI chatbot widget</td><td><span class="badge badge-green">Visible</span></td><td><span class="badge badge-gray">Hidden</span></td><td><code>AI_CHATBOT</code></td></tr>
+              <tr><td>Sample analytics data</td><td><span class="badge badge-yellow">Opt-in</span></td><td><span class="badge badge-gray">Real data</span></td><td><code>ANALYTICS</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Recommended Configurations</h2>
+        <h3>Full Demo (trade shows, client demos)</h3>
+        <div class="code-block">
+          <div class="code-header"><span>.env — Full Demo</span></div>
+          <pre><code class="language-bash">VITE_DEMO_MODE=true
+VITE_DEMO_BANNER=true
+VITE_DEMO_WATERMARK=true
+VITE_DEMO_QUICK_LOGIN=true
+VITE_DEMO_SEED_DATA=true
+VITE_DEMO_MOCK_PAYMENTS=true
+VITE_DEMO_MOCK_MAPS=true
+VITE_DEMO_NOTIFICATIONS=true
+VITE_DEMO_AI_CHATBOT=true
+VITE_DEMO_ANALYTICS=true</code></pre>
+        </div>
+
+        <h3>Testing Mode (developer testing with real APIs)</h3>
+        <div class="code-block">
+          <div class="code-header"><span>.env — Testing</span></div>
+          <pre><code class="language-bash">VITE_DEMO_MODE=true
+VITE_DEMO_BANNER=true
+VITE_DEMO_QUICK_LOGIN=true
+VITE_DEMO_SEED_DATA=true
+VITE_DEMO_MOCK_PAYMENTS=false
+VITE_DEMO_MOCK_MAPS=false</code></pre>
+        </div>
+
+        <h3>Production</h3>
+        <div class="code-block">
+          <div class="code-header"><span>.env — Production</span></div>
+          <pre><code class="language-bash">VITE_DEMO_MODE=false
+# All other demo vars are ignored when master toggle is off</code></pre>
+        </div>
+
+        <h2>Demo Accounts</h2>
+        <p>Available when <code>VITE_DEMO_MODE=true</code>:</p>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Role</th><th>Email</th><th>Password</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge badge-blue">User</span></td><td><code>user@demo.com</code></td><td><code>User123!</code></td></tr>
+              <tr><td><span class="badge badge-purple">Admin</span></td><td><code>admin@demo.com</code></td><td><code>Admin123!</code></td></tr>
+              <tr><td><span class="badge badge-green">Driver</span></td><td><code>driver@demo.com</code></td><td><code>Driver123!</code></td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Demo Data Seeding</h2>
+        <p>The <code>setup-demo-users</code> edge function is idempotent and creates: 3 user accounts with profiles, admin role assignment, a driver record with 4.8★ rating, 5 shifts, 3 demo bookings, 4 earnings records, and 1 zone.</p>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           PART 3: RIDER EXPERIENCE
+           ════════════════════════════════════════════════════════════ -->
+
+      <section id="booking-flow" class="doc-section">
+        <h1>Booking Flow</h1>
+        <p class="lead">A streamlined 3-step process optimized for conversion. Each step has a loading skeleton for perceived performance.</p>
+        
+        <h2>Step 1: Location &amp; Service</h2>
+        <p>Component: <code>Step1Location.tsx</code></p>
+        <ul>
+          <li><strong>Pickup &amp; Dropoff:</strong> Address autocomplete via Google Maps Places API, with additional stops (up to 3)</li>
+          <li><strong>Saved Locations:</strong> Quick-select dropdown for logged-in users</li>
+          <li><strong>Service Type:</strong> Hourly or Flat-rate</li>
+          <li><strong>Transfer Type:</strong> One-way, Return, or Return (New Ride)</li>
+          <li><strong>Date &amp; Time:</strong> Smart time picker with surge pricing indicators and business hours enforcement</li>
+          <li><strong>Passengers / Luggage / Child Seats / Flight Number / Notes</strong></li>
+          <li><strong>Map Preview:</strong> Route visualization with distance and duration</li>
+          <li><strong>Traffic Alerts:</strong> Real-time traffic condition banners</li>
+        </ul>
+
+        <h2>Step 2: Vehicle Selection</h2>
+        <p>Component: <code>Step2Vehicle.tsx</code></p>
+        <ul>
+          <li><strong>Dynamic Pricing:</strong> Base price + per-km rate with pricing rules applied</li>
+          <li><strong>Categories:</strong> Sedan, SUV, Van, Luxury (configurable)</li>
+          <li><strong>Capacity Filtering:</strong> Only vehicles that fit passengers/luggage</li>
+          <li><strong>Favorites, Comparison Drawer, Smart Fare Suggestions, Surge Alerts</strong></li>
+        </ul>
+
+        <h2>Step 3: Payment &amp; Confirmation</h2>
+        <p>Component: <code>Step3Payment.tsx</code></p>
+        <ul>
+          <li><strong>Payment Methods:</strong> Card (Stripe), PayPal, Bank Transfer</li>
+          <li><strong>Promo Codes, Billing Details, Price Breakdown, Order Summary</strong></li>
+          <li><strong>Deposit Requirement:</strong> Configurable percentage (default 30%)</li>
+          <li><strong>Guest Email:</strong> Required for non-authenticated bookings</li>
+        </ul>
+
+        <h2>Post-Booking</h2>
+        <ul>
+          <li><strong>Confirmation Page:</strong> Booking reference, calendar export (ICS/Google/Outlook), receipt download</li>
+          <li><strong>Email Notification:</strong> Branded email via <code>send-booking-email</code> edge function</li>
+          <li><strong>Real-time Status:</strong> Timeline visualization + live tracking</li>
+          <li><strong>Loyalty Points:</strong> Automatically earned on completed rides</li>
+        </ul>
+      </section>
+
+      <section id="guest-bookings" class="doc-section">
+        <h1>Guest Bookings</h1>
+        <p>Users can book rides without creating an account. Email is required in Step 3 for confirmation. The booking is created with <code>user_id = NULL</code>. The booking reference allows tracking without login at <code>/track</code>.</p>
+        <div class="warning-box">
+          <h4>⚠️ Limitation</h4>
+          <p>Guest bookings cannot be modified after creation. Users are encouraged to create an account for full booking management.</p>
+        </div>
+      </section>
+
+      <section id="vehicle-selection" class="doc-section">
+        <h1>Vehicle Selection</h1>
+        <h2>Vehicle Schema</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Column</th><th>Type</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>name</code></td><td>TEXT</td><td>Display name</td></tr>
+              <tr><td><code>category</code></td><td>TEXT</td><td>sedan, suv, van, luxury</td></tr>
+              <tr><td><code>passengers</code> / <code>luggage</code></td><td>INTEGER</td><td>Capacity limits</td></tr>
+              <tr><td><code>base_price</code> / <code>price_per_km</code></td><td>NUMERIC</td><td>Pricing</td></tr>
+              <tr><td><code>features</code></td><td>TEXT[]</td><td>Leather seats, WiFi, etc.</td></tr>
+              <tr><td><code>image</code></td><td>TEXT</td><td>From vehicle-images bucket</td></tr>
+              <tr><td><code>is_active</code> / <code>sort_order</code></td><td>BOOLEAN / INT</td><td>Visibility &amp; ordering</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2>Pricing Hooks</h2>
+        <ul>
+          <li><code>useVehiclePricing</code> — Total price from distance + rules + surge</li>
+          <li><code>useDynamicPricing</code> — Time/distance/zone/vehicle pricing rules</li>
+          <li><code>useSurgePricing</code> — Real-time demand-based surge multipliers</li>
+        </ul>
+      </section>
+
+      <section id="payment-methods" class="doc-section">
+        <h1>Payment Methods</h1>
+        <div class="tech-grid">
+          <div class="tech-card"><h3>💳 Stripe</h3><p>Credit/debit card with webhook integration</p></div>
+          <div class="tech-card"><h3>🅿️ PayPal</h3><p>PayPal payments with IPN webhook</p></div>
+          <div class="tech-card"><h3>🏦 Bank Transfer</h3><p>Wire transfer with manual verification</p></div>
+        </div>
+        <p>All gateways are configured in <strong>Admin → Settings → Integrations</strong> with test/live mode toggles. Users can save and verify payment methods in their account. Demo mock payments available via <code>VITE_DEMO_MOCK_PAYMENTS=true</code>.</p>
+      </section>
+
+      <section id="booking-fees" class="doc-section">
+        <h1>Fees &amp; Surcharges</h1>
+        <p class="lead">All fees are transparent and shown in the price breakdown before booking confirmation.</p>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Fee</th><th>Column</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Booking Fee</strong></td><td><code>booking_fee</code></td><td>Platform service charge (configurable in Admin → Settings)</td></tr>
+              <tr><td><strong>Toll Charges</strong></td><td><code>toll_charges</code></td><td>Toll plaza fees along the route</td></tr>
+              <tr><td><strong>Airport Charges</strong></td><td><code>airport_charges</code></td><td>Airport pickup/dropoff surcharge</td></tr>
+              <tr><td><strong>Cancellation Fee</strong></td><td><code>cancellation_fee</code></td><td>Late cancellation charge (within configured window)</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <h2>Price Breakdown Example</h2>
+        <pre><code class="language-text">Base Fare                    $45.00
+Distance (12.3 km × $1.50)   $18.45
+Booking Fee                   $5.00
+Toll Charges                  $3.50
+Airport Charges               $8.00
+───────────────────────────────────
+Subtotal                     $79.95
+Promo Code (SAVE10 -10%)     -$7.99
+Tax (VAT 20%)                $14.39
+───────────────────────────────────
+Total                        $86.35</code></pre>
+      </section>
+
+      <section id="promo-codes" class="doc-section">
+        <h1>Promo Codes</h1>
+        <p>Percentage-based discounts validated via <code>validate_promo_code</code> database function. Features: date range validity, global + per-user usage limits, minimum booking amount. Usage tracked via <code>promo_code_uses</code> table.</p>
+      </section>
+
+      <section id="recurring-bookings" class="doc-section">
+        <h1>Recurring Bookings</h1>
+        <p>Users set up automatic recurring rides with frequency options: Daily, Weekly, Weekdays, Custom (specific days). The <code>generate-recurring-bookings</code> edge function runs daily to create upcoming bookings from templates.</p>
+      </section>
+
+      <section id="ride-sharing" class="doc-section">
+        <h1>Ride Sharing</h1>
+        <p>Users can split ride costs with other passengers via email invitation.</p>
+        <ol>
+          <li>Booking owner enters recipient email and cost split percentage</li>
+          <li>Email sent with unique share token</li>
+          <li>Recipient accepts/declines at <code>/share/:token</code></li>
+          <li>Counter-proposals supported</li>
+        </ol>
+      </section>
+
+      <section id="real-time-tracking" class="doc-section">
+        <h1>Real-time Tracking</h1>
+        <h2>Live Driver Location</h2>
+        <p>When a driver is assigned, users track the driver's location at <code>/track</code>:</p>
+        <ul>
+          <li>Position updates every 10 seconds via Supabase Realtime</li>
+          <li>Interactive Leaflet map centered on pickup, with "Waiting for driver location…" overlay until GPS data arrives</li>
+          <li>Estimated arrival time via <code>calculate-eta</code> edge function</li>
+          <li>Booking status timeline, contact buttons (call/message driver), traffic alerts, AI live chat widget</li>
+        </ul>
+        <h2>Booking Statuses</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Status</th><th>Description</th><th>Actions</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge badge-yellow">pending</span></td><td>Awaiting confirmation</td><td>Cancel, Modify</td></tr>
+              <tr><td><span class="badge badge-blue">confirmed</span></td><td>Confirmed, awaiting driver</td><td>Cancel, Track</td></tr>
+              <tr><td><span class="badge badge-green">completed</span></td><td>Ride finished</td><td>Rate Driver, Receipt</td></tr>
+              <tr><td><span class="badge badge-red">cancelled</span></td><td>Booking cancelled</td><td>View Details</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="notifications" class="doc-section">
+        <h1>Notifications</h1>
+        <h2>Channels</h2>
+        <ul>
+          <li><strong>In-App:</strong> Bell icon with unread badge counter</li>
+          <li><strong>Email:</strong> Via Resend with branded HTML templates</li>
+          <li><strong>SMS:</strong> Configurable phone notifications</li>
+          <li><strong>Push:</strong> Browser push (VAPID-based)</li>
+          <li><strong>Voice:</strong> ElevenLabs announcements for drivers</li>
+        </ul>
+        <p>Automatic triggers fire on: booking status changes, driver assignment, driver arrival (ETA ≤5 min), ride start/completion. User preferences stored in <code>notification_preferences</code> table.</p>
+      </section>
+
+      <section id="user-account" class="doc-section">
+        <h1>User Account</h1>
+        <div class="tech-grid">
+          <div class="tech-card"><h3>👤 Profile</h3><p>Name, email, phone, avatar, preferred vehicle, theme, language</p></div>
+          <div class="tech-card"><h3>🔔 Notifications</h3><p>Channel preferences (email, SMS, push)</p></div>
+          <div class="tech-card"><h3>💳 Payments</h3><p>Saved methods with micro-transaction verification</p></div>
+          <div class="tech-card"><h3>⚙️ Settings</h3><p>Theme, language, billing details (8 fields)</p></div>
+        </div>
+      </section>
+
+      <section id="loyalty-rewards" class="doc-section">
+        <h1>Loyalty &amp; Rewards</h1>
+        <h2>Rider Loyalty Points</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Tier</th><th>Lifetime Points</th><th>Benefits</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge badge-gray">Bronze</span></td><td>0+</td><td>Base earning rate, standard support</td></tr>
+              <tr><td><span class="badge badge-blue">Silver</span></td><td>500+</td><td>1.5x earning rate, priority booking</td></tr>
+              <tr><td><span class="badge badge-yellow">Gold</span></td><td>2,000+</td><td>2x earning rate, free upgrades</td></tr>
+              <tr><td><span class="badge badge-purple">Platinum</span></td><td>5,000+</td><td>3x earning rate, VIP support, exclusive offers</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Points are earned from ride completions, referrals, and promotions. Balance and history shown via <code>LoyaltyPointsSection</code> in the Account page.</p>
+      </section>
+
+      <section id="ai-chatbot" class="doc-section">
+        <h1>AI Booking Chatbot</h1>
+        <p>Floating AI assistant on the booking page for natural language booking guidance. Context-aware (receives current booking state), renders Markdown responses, powered by built-in AI models (no API key required). Controllable via <code>VITE_DEMO_AI_CHATBOT</code>.</p>
+        <p>A separate <code>LiveChatWidget</code> is available on the tracking page, contextually aware of the current booking.</p>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           PART 4: DRIVER PORTAL
+           ════════════════════════════════════════════════════════════ -->
+
+      <section id="driver-onboarding" class="doc-section">
+        <h1>Driver Onboarding</h1>
+        <h2>Application Process</h2>
+        <p>The <code>BecomeDriverDialog</code> opens a 3-step wizard:</p>
+        <ol>
+          <li><strong>Personal Information:</strong> Name, email, phone</li>
+          <li><strong>License Details:</strong> License number, expiry date</li>
+          <li><strong>Agreement:</strong> Terms of service + background check consent</li>
+        </ol>
+        <h2>Onboarding Statuses</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Status</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge badge-yellow">pending</span></td><td>Application submitted, awaiting review</td></tr>
+              <tr><td><span class="badge badge-blue">documents_required</span></td><td>Additional documents needed</td></tr>
+              <tr><td><span class="badge badge-purple">verification</span></td><td>Background check in progress</td></tr>
+              <tr><td><span class="badge badge-green">approved</span></td><td>Application approved, driver active</td></tr>
+              <tr><td><span class="badge badge-red">rejected</span></td><td>Application rejected (re-application available)</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="driver-dashboard" class="doc-section">
+        <h1>Driver Dashboard</h1>
+        <p>Mobile-optimized dashboard at <code>/driver</code> with pull-to-refresh.</p>
+        <ul>
+          <li><strong>Availability Toggle:</strong> Switch Available/Offline status</li>
+          <li><strong>Map View:</strong> All pickup locations with Mapbox</li>
+          <li><strong>List View:</strong> Pickups sorted by ETA urgency (red ≤5min, amber ≤10min, green &gt;10min)</li>
+          <li><strong>Active Ride Card:</strong> Live timer, route details</li>
+          <li><strong>Urgent Pickup FAB:</strong> Floating button for imminent pickups</li>
+          <li><strong>Today's Earnings:</strong> Real-time summary with commission breakdown</li>
+          <li><strong>Geofence Indicator:</strong> Zone entry/exit alerts</li>
+        </ul>
+      </section>
+
+      <section id="shift-management" class="doc-section">
+        <h1>Shift Management</h1>
+        <p>Shifts link drivers to zones with date/time ranges. Statuses: scheduled → active (checked in) → completed (checked out) or missed. Admin creates shifts in <code>/admin/scheduling</code>. Drivers see their shifts with check-in/out capability.</p>
+      </section>
+
+      <section id="earnings-tracking" class="doc-section">
+        <h1>Earnings &amp; Commission</h1>
+        <p class="lead">Fully automated commission system that deducts a configurable percentage from every completed ride.</p>
+
+        <h2>How Commission Works</h2>
+        <ol>
+          <li><strong>Admin sets rate:</strong> Commission % in Admin → Settings → Booking Policies (e.g., 15%)</li>
+          <li><strong>Ride completes:</strong> The <code>auto_record_driver_earning_on_completion</code> trigger fires</li>
+          <li><strong>Earnings calculated:</strong> Calls <code>record_driver_earning_with_commission()</code></li>
+          <li><strong>Record created:</strong> gross_amount, commission_rate, commission_amount, net amount</li>
+          <li><strong>Summary updated:</strong> Driver's total/monthly earnings auto-updated</li>
+        </ol>
+
+        <h2>Earnings Breakdown</h2>
+        <pre><code class="language-text">Rider Paid (Gross Fare):    $50.00
+Commission Rate:             15%
+Service Fee (Deduction):    -$7.50
+─────────────────────────────────
+Driver Net Pay:              $42.50</code></pre>
+
+        <p>The <code>DriverEarningsTracker</code> component shows the visual "Rider Paid → Service Fee → You Earned" flow with per-ride detail and earning types (ride, tip, bonus, adjustment).</p>
+      </section>
+
+      <section id="driver-bonuses" class="doc-section">
+        <h1>Driver Bonuses</h1>
+        <p>Bonus types: milestone, performance, referral, and seasonal. Each has amount, rides_required, progress tracking, and validity dates. Stored in <code>driver_bonuses</code> table.</p>
+      </section>
+
+      <section id="document-management" class="doc-section">
+        <h1>Document Management</h1>
+        <p>Drivers upload license, insurance, and vehicle registration documents via <code>DriverDocumentPortal</code>. Documents go through a verification workflow (pending → verified/rejected). Expiring documents trigger alerts via <code>check-expiring-documents</code> edge function.</p>
+      </section>
+
+      <section id="location-tracking" class="doc-section">
+        <h1>Location Tracking</h1>
+        <p>Driver GPS coordinates are updated in real-time via <code>DriverLocationTracker</code>. Updates broadcast to riders through Supabase Realtime. The <code>DriverRouteMap</code> component shows the route from current location to pickup/dropoff.</p>
+      </section>
+
+      <section id="driver-navigation" class="doc-section">
+        <h1>Navigation Integration</h1>
+        <p>Deep links to Google Maps, Waze, and Apple Maps for turn-by-turn navigation. The navigation button opens the user's preferred mapping app with the destination pre-filled.</p>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           PART 5: ADMIN PANEL
+           ════════════════════════════════════════════════════════════ -->
+
+      <section id="admin-dashboard" class="doc-section">
+        <h1>Admin Dashboard</h1>
+        <p>The dashboard at <code>/admin</code> shows real-time KPIs: today's bookings, active rides, revenue, pending tasks. Includes stat cards, traffic heatmap, driver deployment widget, pending documents, and API quota alerts.</p>
+      </section>
+
+      <section id="admin-bookings" class="doc-section">
+        <h1>Bookings Management</h1>
+        <p>Full CRUD at <code>/admin/bookings</code> with search, filter (status, date range, vehicle), server-side pagination. Actions: assign driver, update status, modify details, process refund, view payment status.</p>
+      </section>
+
+      <section id="admin-drivers" class="doc-section">
+        <h1>Driver Management</h1>
+        <p>Manage drivers at <code>/admin/drivers</code>. View applications at <code>/admin/driver-applications</code>. Review documents at <code>/admin/document-review</code>. Features: add/edit driver, performance cards, smart assignment, document verification, expiring document alerts.</p>
+      </section>
+
+      <section id="admin-vehicles" class="doc-section">
+        <h1>Vehicle Management</h1>
+        <p>CRUD for vehicles at <code>/admin/vehicles</code>. Configure: name, category, capacity, pricing (base + per-km + hourly), features, images, display order, active/inactive status.</p>
+      </section>
+
+      <section id="admin-pricing" class="doc-section">
+        <h1>Pricing Rules</h1>
+        <p>Rule types: time-based (peak hours), distance-based (tiers), zone-based (surcharges), vehicle-specific. Each rule has multiplier, flat fee, priority, day/time constraints. Test with the Price Calculator at <code>/admin/calculator</code>.</p>
+      </section>
+
+      <section id="admin-commission" class="doc-section">
+        <h1>Commission Settings</h1>
+        <p class="lead">Configure the platform's revenue share from each completed ride.</p>
+        <p>Navigate to <strong>Admin → Settings → Booking Policies</strong>:</p>
+        <ul>
+          <li><strong>Commission Rate (%):</strong> 0–100%, step: 0.5%. Default: 15%.</li>
+          <li><strong>Booking Fee:</strong> Fixed platform fee per booking</li>
+          <li><strong>Cancellation Fee:</strong> Charged for late cancellations</li>
+        </ul>
+        <p>Rate changes take effect immediately for new completions. Already-completed rides retain their original rate. All changes logged in the Audit Log.</p>
+      </section>
+
+      <section id="admin-zones-routes" class="doc-section">
+        <h1>Zones &amp; Routes</h1>
+        <h2>Zone Management</h2>
+        <p>Zones at <code>/admin/zones</code>: geographic areas with name, description, multiplier, active status. Used for zone-based pricing rules and driver shift assignments.</p>
+        <h2>Route Management</h2>
+        <p>Routes at <code>/admin/routes</code>: predefined origin-destination pairs with base price, estimated distance/duration, origin/destination zone links, display order.</p>
+      </section>
+
+      <section id="admin-revenue" class="doc-section">
+        <h1>Revenue &amp; Analytics</h1>
+        <p>Revenue dashboard at <code>/admin/revenue</code> with charts, booking volume trends, driver performance, payment method breakdown, and commission revenue tracking.</p>
+        <ul>
+          <li><strong>Total Revenue</strong> — Sum of completed booking fares</li>
+          <li><strong>Commission Revenue</strong> — Platform's share from all rides</li>
+          <li><strong>Driver Payouts</strong> — Net amounts paid to drivers</li>
+          <li><strong>Booking Fees</strong> — Total platform booking fees</li>
+        </ul>
+      </section>
+
+      <section id="admin-settings" class="doc-section">
+        <h1>Admin Settings (8 Tabs)</h1>
+        <p>All settings stored in <code>system_settings</code> table with audit logging.</p>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>#</th><th>Tab</th><th>What It Controls</th></tr></thead>
+            <tbody>
+              <tr><td>1</td><td><strong>General</strong></td><td>Business info (name, email, phone, address), social links, business hours, timezone</td></tr>
+              <tr><td>2</td><td><strong>Booking</strong></td><td>Deposit %, cancellation hours, advance booking limits, currency, tax settings, commission rate, booking fee, distance unit (km/miles)</td></tr>
+              <tr><td>3</td><td><strong>Notifications</strong></td><td>Email sender name/address, confirmation/reminder toggles, SMS provider</td></tr>
+              <tr><td>4</td><td><strong>Security</strong></td><td>Email verification, session timeout, max login attempts, 2FA, IP whitelist</td></tr>
+              <tr><td>5</td><td><strong>Appearance</strong></td><td>Primary/accent colors, logo upload (light/dark), favicon, dark mode default. Colors applied as CSS custom properties for white-labeling.</td></tr>
+              <tr><td>6</td><td><strong>Integrations</strong></td><td>Maps provider, Stripe (test/live), PayPal, Bank Transfer. API key update forms.</td></tr>
+              <tr><td>7</td><td><strong>Audit Log</strong></td><td>All settings changes with user, timestamp, old/new values. Filterable.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           PART 6: TECHNICAL REFERENCE
+           ════════════════════════════════════════════════════════════ -->
+
+      <section id="architecture" class="doc-section">
+        <h1>Architecture</h1>
+        <div class="architecture-diagram">
+          <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                        Frontend (React + Vite)                   │
+├─────────────────────────────────────────────────────────────────┤
+│  Booking Flow │ Driver Portal │ Admin Panel │ User Account       │
+│  AI Chatbot   │ Setup Wizard  │ PWA Support │ i18n (18 languages)│
+│  Loyalty      │ Features Page │ Demo Mode   │ Commission System  │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     Backend (Supabase)                            │
+├─────────────────────────────────────────────────────────────────┤
+│  Auth (GoTrue) │ Database (PostgreSQL) │ Edge Functions (Deno)   │
+│  Storage       │ Realtime (WebSockets) │ Secrets (API Keys)      │
+└─────────────────────────────────────────────────────────────────┘
+                              │
+                              ▼
+┌─────────────────────────────────────────────────────────────────┐
+│                     External Integrations                        │
+├─────────────────────────────────────────────────────────────────┤
+│  Google Maps │ Mapbox │ Resend (Email) │ ElevenLabs (Voice)     │
+│  Stripe      │ PayPal │ Bank Transfer                           │
+└─────────────────────────────────────────────────────────────────┘
+          </pre>
+        </div>
+
+        <h2>Data Flow</h2>
+        <ol>
+          <li><strong>User Action:</strong> User interacts with the React frontend</li>
+          <li><strong>API Call:</strong> Supabase client sends request to database or edge function</li>
+          <li><strong>RLS Check:</strong> Row Level Security verifies access permissions</li>
+          <li><strong>Database Operation:</strong> Data is read/written to PostgreSQL</li>
+          <li><strong>Triggers:</strong> Database triggers fire (notifications, earnings, commission, ratings)</li>
+          <li><strong>Realtime:</strong> Changes broadcast to subscribed clients via WebSockets</li>
+          <li><strong>UI Update:</strong> React components re-render via TanStack Query</li>
+        </ol>
+
+        <h2>Key Design Patterns</h2>
+        <ul>
+          <li><strong>SECURITY DEFINER functions:</strong> <code>has_role()</code>, <code>get_user_roles()</code> bypass RLS to prevent recursive policy checks</li>
+          <li><strong>Enum-based access:</strong> Roles stored in separate <code>user_roles</code> table</li>
+          <li><strong>Upsert patterns:</strong> Settings and demo data use ON CONFLICT for idempotency</li>
+          <li><strong>Edge Functions:</strong> All sensitive operations (payments, emails, API keys) are server-side</li>
+          <li><strong>Commission triggers:</strong> Automatic calculation on ride completion</li>
+          <li><strong>Dynamic branding:</strong> CSS custom properties applied from database at runtime</li>
+        </ul>
+      </section>
+
+      <section id="tech-stack" class="doc-section">
+        <h1>Tech Stack</h1>
+        <h2>Frontend</h2>
+        <div class="tech-grid">
+          <div class="tech-card"><h3>React 18</h3><p>Modern hooks, concurrent features</p></div>
+          <div class="tech-card"><h3>TypeScript</h3><p>Full type safety, strict mode</p></div>
+          <div class="tech-card"><h3>Vite</h3><p>Fast dev server and build tool</p></div>
+          <div class="tech-card"><h3>Tailwind CSS</h3><p>Utility-first with HSL tokens</p></div>
+          <div class="tech-card"><h3>shadcn/ui</h3><p>Accessible Radix components</p></div>
+          <div class="tech-card"><h3>TanStack Query</h3><p>Data fetching &amp; caching</p></div>
+          <div class="tech-card"><h3>React Router 6</h3><p>Client-side routing</p></div>
+          <div class="tech-card"><h3>Framer Motion</h3><p>Production animations</p></div>
+          <div class="tech-card"><h3>Leaflet + Mapbox</h3><p>Interactive maps</p></div>
+          <div class="tech-card"><h3>Recharts</h3><p>Admin data visualization</p></div>
+        </div>
+        <h2>Backend</h2>
+        <div class="tech-grid">
+          <div class="tech-card"><h3>PostgreSQL 15+</h3><p>RLS, triggers, functions</p></div>
+          <div class="tech-card"><h3>Edge Functions</h3><p>25+ serverless Deno functions</p></div>
+          <div class="tech-card"><h3>Realtime</h3><p>WebSocket subscriptions</p></div>
+          <div class="tech-card"><h3>Auth (GoTrue)</h3><p>Email/password + Google OAuth</p></div>
+          <div class="tech-card"><h3>Storage</h3><p>S3-compatible (4 buckets)</p></div>
+          <div class="tech-card"><h3>Row Level Security</h3><p>Fine-grained access control</p></div>
+        </div>
+      </section>
+
+      <section id="database-schema" class="doc-section">
+        <h1>Database Schema</h1>
+        <p class="lead">20+ tables with RLS. Key tables summarized below.</p>
+
+        <h2>Core Tables</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Table</th><th>Key Columns</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>bookings</code></td><td>booking_reference, user_id, status, driver_id, total_price, fees</td><td>All ride bookings with pricing and status lifecycle</td></tr>
+              <tr><td><code>drivers</code></td><td>30+ cols: name, license, location, ratings, earnings, onboarding status</td><td>Driver profiles and verification</td></tr>
+              <tr><td><code>vehicles</code></td><td>name, category, capacity, pricing, features, image</td><td>Vehicle fleet configuration</td></tr>
+              <tr><td><code>profiles</code></td><td>full_name, phone, avatar, theme, language, billing_* (8 fields)</td><td>Extended user information</td></tr>
+              <tr><td><code>user_roles</code></td><td>user_id, role (admin/moderator/user)</td><td>Role-based access control</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Financial Tables</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Table</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>driver_earnings</code></td><td>Per-ride earnings with gross, commission_rate, commission_amount, net</td></tr>
+              <tr><td><code>driver_payouts</code></td><td>Payout records with period, amount, status</td></tr>
+              <tr><td><code>driver_bonuses</code></td><td>Milestone/performance/referral bonuses with progress</td></tr>
+              <tr><td><code>payment_methods</code></td><td>Saved cards/bank/PayPal with verification</td></tr>
+              <tr><td><code>promo_codes</code> / <code>promo_code_uses</code></td><td>Discount codes and redemption tracking</td></tr>
+              <tr><td><code>loyalty_points</code> / <code>loyalty_balances</code></td><td>Rider loyalty system with tiers</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Supporting Tables</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Table</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>driver_documents</code></td><td>License, insurance uploads with verification workflow</td></tr>
+              <tr><td><code>driver_shifts</code></td><td>Zone-linked shift scheduling with check-in/out</td></tr>
+              <tr><td><code>driver_ratings</code></td><td>Per-ride ratings and comments</td></tr>
+              <tr><td><code>notifications</code> / <code>notification_preferences</code></td><td>Multi-channel notification system</td></tr>
+              <tr><td><code>zones</code> / <code>routes</code> / <code>pricing_rules</code></td><td>Geographic and pricing configuration</td></tr>
+              <tr><td><code>system_settings</code> / <code>settings_audit_log</code></td><td>Key-value config with change history</td></tr>
+              <tr><td><code>page_content</code></td><td>CMS-backed pages (privacy policy, terms)</td></tr>
+              <tr><td><code>recurring_bookings</code> / <code>ride_shares</code></td><td>Recurring rides and cost sharing</td></tr>
+              <tr><td><code>languages</code></td><td>Supported languages with activation toggles and completeness</td></tr>
+              <tr><td><code>translation_overrides</code></td><td>Per-language translation key overrides</td></tr>
+              <tr><td><code>email_logs</code></td><td>Email delivery history with status and error tracking</td></tr>
+              <tr><td><code>map_api_usage</code></td><td>API call tracking per provider and type</td></tr>
+              <tr><td><code>favorite_vehicles</code></td><td>User vehicle favorites for quick selection</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="edge-functions" class="doc-section">
+        <h1>Edge Functions</h1>
+        <p class="lead">30+ serverless functions running on the Deno runtime. Deployed via <code>supabase functions deploy</code>.</p>
+
+        <h2>Communication</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Function</th><th>Purpose</th><th>Secret Required</th></tr></thead>
+            <tbody>
+              <tr><td><code>send-booking-email</code></td><td>Transactional emails with branding</td><td>RESEND_API_KEY</td></tr>
+              <tr><td><code>send-booking-reminders</code></td><td>Upcoming ride reminders</td><td>RESEND_API_KEY</td></tr>
+              <tr><td><code>send-push-notification</code></td><td>Browser push via Web Push</td><td>VAPID keys</td></tr>
+              <tr><td><code>send-sms</code></td><td>SMS notifications</td><td>Provider key</td></tr>
+              <tr><td><code>send-whatsapp-message</code></td><td>WhatsApp messages</td><td>Provider key</td></tr>
+              <tr><td><code>send-document-notification</code></td><td>Document status emails</td><td>RESEND_API_KEY</td></tr>
+              <tr><td><code>send-verification-email</code></td><td>Email verification</td><td>RESEND_API_KEY</td></tr>
+              <tr><td><code>notify-*</code> (4 functions)</td><td>Shift/ride/driver notifications</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>AI &amp; Intelligence</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Function</th><th>Purpose</th><th>Secret Required</th></tr></thead>
+            <tbody>
+              <tr><td><code>ai-booking-chat</code></td><td>AI booking assistant</td><td>Built-in AI</td></tr>
+              <tr><td><code>smart-fare-suggestions</code></td><td>AI fare optimization</td><td>Built-in AI</td></tr>
+              <tr><td><code>predict-driver-deployment</code></td><td>AI driver placement</td><td>Built-in AI</td></tr>
+              <tr><td><code>analyze-surge-pricing</code></td><td>Demand-based pricing</td><td>—</td></tr>
+              <tr><td><code>predict-traffic</code></td><td>Traffic prediction</td><td>GOOGLE_MAPS_API_KEY</td></tr>
+              <tr><td><code>auto-dispatch</code></td><td>Automatic driver assignment</td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Maps &amp; Location</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Function</th><th>Purpose</th><th>Secret Required</th></tr></thead>
+            <tbody>
+              <tr><td><code>get-traffic-data</code></td><td>Real-time traffic conditions</td><td>GOOGLE_MAPS_API_KEY</td></tr>
+              <tr><td><code>calculate-eta</code></td><td>Driver ETA via Distance Matrix</td><td>GOOGLE_MAPS_API_KEY</td></tr>
+              <tr><td><code>location-proxy</code></td><td>Address geocoding &amp; reverse geocoding via OpenStreetMap Nominatim</td><td>— (free, no key)</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Payments &amp; Webhooks</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Function</th><th>Purpose</th><th>Secret Required</th></tr></thead>
+            <tbody>
+              <tr><td><code>process-payment</code></td><td>Unified payment processing</td><td>Via system_settings</td></tr>
+              <tr><td><code>process-refund</code></td><td>Admin refund processing</td><td>Via system_settings</td></tr>
+              <tr><td><code>stripe-webhook</code></td><td>Stripe payment events</td><td>Via system_settings</td></tr>
+              <tr><td><code>paypal-webhook</code></td><td>PayPal IPN events</td><td>Via system_settings</td></tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Administration</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Function</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>setup-demo-users</code></td><td>Seed demo accounts &amp; data</td></tr>
+              <tr><td><code>update-payment-secret</code> / <code>update-sms-secret</code> / <code>update-ai-secret</code></td><td>Update API keys from admin panel</td></tr>
+              <tr><td><code>check-expiring-documents</code> / <code>check-expiring-verifications</code></td><td>Document/verification expiry alerts</td></tr>
+              <tr><td><code>check-api-usage-alerts</code></td><td>API quota monitoring</td></tr>
+              <tr><td><code>generate-recurring-bookings</code></td><td>Create bookings from recurring templates</td></tr>
+              <tr><td><code>translate-batch</code></td><td>Bulk AI translation for i18n keys</td></tr>
+              <tr><td><code>update-email-provider</code></td><td>Update email provider config from admin</td></tr>
+              <tr><td><code>ai-booking-features</code></td><td>AI route suggestions, vehicle recommendations, booking summaries</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="api-rpc-functions" class="doc-section">
+        <h1>RPC Functions</h1>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Function</th><th>Parameters</th><th>Returns</th><th>Description</th></tr></thead>
+            <tbody>
+              <tr><td><code>has_role</code></td><td>_user_id, _role</td><td>BOOLEAN</td><td>Check if user has a specific role</td></tr>
+              <tr><td><code>get_user_roles</code></td><td>_user_id</td><td>SETOF app_role</td><td>Get all roles for a user</td></tr>
+              <tr><td><code>make_user_admin</code></td><td>user_email</td><td>VOID</td><td>Assign admin role by email</td></tr>
+              <tr><td><code>validate_promo_code</code></td><td>p_code, p_booking_amount, p_user_id</td><td>TABLE</td><td>Validate and return promo code details</td></tr>
+              <tr><td><code>use_promo_code</code></td><td>p_promo_code_id, p_user_id, p_booking_id</td><td>VOID</td><td>Record promo code usage</td></tr>
+              <tr><td><code>increment_map_api_usage</code></td><td>p_provider, p_api_type, p_count</td><td>VOID</td><td>Track API call counts</td></tr>
+              <tr><td><code>record_driver_earning_with_commission</code></td><td>p_driver_id, p_booking_id, p_gross_amount, p_commission_rate, p_description</td><td>UUID</td><td>Record earning with commission calc</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="api-realtime" class="doc-section">
+        <h1>Realtime Channels</h1>
+        <p>Supabase Realtime is used for: booking status/driver location updates, driver availability changes, notification delivery, system settings changes (brand colors, currency).</p>
+        <div class="code-block">
+          <div class="code-header"><span>Subscribe to Booking Updates</span></div>
+          <pre><code class="language-typescript">const channel = supabase
+  .channel(`booking-${bookingId}`)
+  .on('postgres_changes', {
+    event: 'UPDATE',
+    schema: 'public',
+    table: 'bookings',
+    filter: `id=eq.${bookingId}`,
+  }, (payload) =&gt; {
+    updateDriverMarker(payload.new.driver_location_lat, payload.new.driver_location_lng);
+    updateBookingStatus(payload.new.status);
+  })
+  .subscribe();</code></pre>
+        </div>
+      </section>
+
+      <section id="authentication" class="doc-section">
+        <h1>Authentication</h1>
+        <h2>Supported Methods</h2>
+        <ul>
+          <li><strong>Email/Password:</strong> Standard registration and login with Zod validation</li>
+          <li><strong>Google OAuth:</strong> Cloud-managed or self-hosted Supabase OAuth (auto-detected)</li>
+          <li><strong>Apple OAuth:</strong> Cloud-managed or self-hosted Supabase OAuth (auto-detected)</li>
+          <li><strong>X (Twitter) OAuth:</strong> Direct Supabase OAuth only</li>
+          <li><strong>Facebook OAuth:</strong> Direct Supabase OAuth only</li>
+          <li><strong>Password Reset:</strong> <code>ForgotPasswordDialog</code> with email link flow</li>
+        </ul>
+        <h2>Auth Context</h2>
+        <p><code>AuthContext</code> provides: user, session, loading, isCloud, signIn, signUp, signInWithSocialProvider (Google/Apple/Twitter/Facebook), signOut. Profile auto-creation via <code>handle_new_user</code> trigger. The <code>isCloud</code> flag auto-detects the hosting environment for OAuth routing.</p>
+        <h2>Role-Based Access</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Role</th><th>Permissions</th></tr></thead>
+            <tbody>
+              <tr><td><span class="badge badge-gray">user</span></td><td>Book rides, manage own data, rate drivers, earn loyalty points</td></tr>
+              <tr><td><span class="badge badge-blue">moderator</span></td><td>View reports, moderate content</td></tr>
+              <tr><td><span class="badge badge-purple">admin</span></td><td>Full system access — all data, settings, users, commission, bonuses</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <p>Frontend hook: <code>useUserRoles()</code> returns roles, isAdmin, isModerator, hasRole(), loading.</p>
+      </section>
+
+      <section id="rls-policies" class="doc-section">
+        <h1>RLS &amp; Security</h1>
+        <p>All 20+ tables use Row Level Security. Common patterns:</p>
+        <ul>
+          <li><strong>User-owned:</strong> <code>auth.uid() = user_id</code></li>
+          <li><strong>Admin ALL:</strong> <code>has_role(auth.uid(), 'admin')</code></li>
+          <li><strong>Public read:</strong> <code>is_active = true</code> or <code>USING (true)</code></li>
+          <li><strong>Driver-owned:</strong> Subquery matching <code>drivers.user_id = auth.uid()</code></li>
+          <li><strong>Setup exception:</strong> <code>NOT EXISTS (SELECT 1 FROM user_roles WHERE role = 'admin')</code></li>
+        </ul>
+      </section>
+
+      <section id="pwa" class="doc-section">
+        <h1>PWA Support</h1>
+        <ul>
+          <li>Service worker (<code>public/sw.js</code>) for offline caching</li>
+          <li>Web app manifest with icons (192x192, 512x512)</li>
+          <li><code>InstallPromptBanner</code> for install promotion</li>
+          <li>Dedicated <code>/install</code> page with platform-specific instructions</li>
+          <li><code>vite-plugin-pwa</code> for build-time manifest generation</li>
+        </ul>
+      </section>
+
+      <section id="i18n" class="doc-section">
+        <h1>Multi-language</h1>
+        <p>18 languages via <code>LanguageContext</code>: English, Spanish, French, German, Arabic (RTL), Hindi, Italian, Japanese, Korean, Dutch, Polish, Portuguese, Russian, Swedish, Thai, Turkish, and Chinese. User preference stored in <code>profiles.language_preference</code>. Languages are managed from the <code>languages</code> database table with activation toggles and translation completeness tracking.</p>
+        <p><strong>Translation Overrides:</strong> Admins can override any translation key per-language via the <code>translation_overrides</code> table. The <strong>Bulk Translation Manager</strong> in Admin Settings allows batch translation using the <code>translate-batch</code> edge function.</p>
+      </section>
+
+      <section id="theming" class="doc-section">
+        <h1>Theming &amp; Branding</h1>
+        <p>Theme management uses <code>next-themes</code>. HSL-based design tokens in <code>index.css</code>. User preference stored in <code>profiles.theme_preference</code> (light/dark/system).</p>
+        <p><strong>Dynamic Branding:</strong> The <code>SystemSettingsContext</code> reads brand colors from the database and applies them as CSS custom properties at runtime. Primary color, accent color, logos, and favicon are all configurable from Admin → Settings → Appearance without code changes.</p>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           PART 7: SELF-HOSTING GUIDE
+           ════════════════════════════════════════════════════════════ -->
+
+      <section id="self-hosting-overview" class="doc-section">
+        <h1>Self-Hosting Overview</h1>
+        <p class="lead">RideFlow can be self-hosted on your own infrastructure for full data sovereignty, customization, cost control, and regulatory compliance.</p>
+        <div class="architecture-diagram">
+          <pre>
+┌─────────────────────────────────────────────────────────────────┐
+│                     Your Infrastructure                          │
+├─────────────────────────────────────────────────────────────────┤
+│  ┌──────────────────┐     ┌──────────────────────────────────┐   │
+│  │   Frontend App   │     │         Supabase Instance        │   │
+│  │  (Static Files)  │────▶│  (Self-hosted or Supabase.com)   │   │
+│  │  Vercel/Netlify/  │     │  PostgreSQL + Auth + Edge Funcs  │   │
+│  │  Docker/S3+CF    │     │  + Realtime + Storage            │   │
+│  └──────────────────┘     └──────────────────────────────────┘   │
+└─────────────────────────────────────────────────────────────────┘
+          </pre>
+        </div>
+
+        <h2>System Requirements</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Component</th><th>Minimum</th><th>Recommended</th></tr></thead>
+            <tbody>
+              <tr><td>Node.js / Bun</td><td>Node.js 18+</td><td>Node.js 20 LTS</td></tr>
+              <tr><td>PostgreSQL</td><td>14+</td><td>15+</td></tr>
+              <tr><td>RAM (Frontend)</td><td>512 MB</td><td>1 GB+</td></tr>
+              <tr><td>RAM (Database)</td><td>1 GB</td><td>4 GB+</td></tr>
+              <tr><td>Storage</td><td>10 GB</td><td>50 GB+</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="self-hosting-oauth" class="doc-section">
+        <h1>Authentication &amp; OAuth</h1>
+        <p class="lead">RideFlow supports two OAuth environments. The app auto-detects which path to use at runtime — no code changes required.</p>
+
+        <h2>How It Works</h2>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Environment</th><th>Detection</th><th>OAuth Method</th></tr></thead>
+            <tbody>
+              <tr>
+                <td><strong>Cloud Hosted</strong></td>
+                <td>Cloud-hosted domain detection (e.g., <code>*.yourplatform.app</code>)</td>
+                <td>Managed OAuth via built-in cloud auth SDK — zero configuration needed</td>
+              </tr>
+              <tr>
+                <td><strong>Self-Hosted</strong></td>
+                <td>Any other hostname</td>
+                <td>Standard <code>supabase.auth.signInWithOAuth()</code> — you configure providers in Supabase Dashboard</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <h2>Self-Hosted OAuth Setup</h2>
+        <ol>
+          <li>Open your <strong>Supabase Dashboard → Authentication → Providers</strong></li>
+          <li>Enable <strong>Google</strong> and/or <strong>Apple</strong></li>
+          <li>Enter your <strong>Client ID</strong> and <strong>Client Secret</strong> (from Google Cloud Console / Apple Developer Portal)</li>
+          <li>Set the <strong>Redirect URL</strong> to <code>https://&lt;your-supabase-url&gt;/auth/v1/callback</code></li>
+          <li>In RideFlow Admin Settings → Integrations, toggle on the providers you configured</li>
+        </ol>
+
+        <div class="info-box">
+          <h4>💡 Build Compatibility</h4>
+          <p>The cloud auth SDK is loaded via dynamic <code>import()</code> and is <strong>not required</strong> at build time. Self-hosted builds will succeed without the package installed — the import silently falls back to Supabase OAuth at runtime.</p>
+        </div>
+
+        <div class="warning-box">
+          <h4>⚠️ Provider Visibility</h4>
+          <p>Social login buttons only appear on the Auth page if the corresponding provider is enabled in Admin Settings → Integrations. Make sure to toggle them on after configuring credentials.</p>
+        </div>
+      </section>
+
+        <h1>Supabase Setup</h1>
+        <h2>Option 1: Supabase Cloud (Recommended)</h2>
+        <ol>
+          <li>Create account at <a href="https://supabase.com" target="_blank">supabase.com</a></li>
+          <li>Create project, note URL and anon key</li>
+          <li>Run database migrations (see below)</li>
+          <li>Configure auth, create storage buckets</li>
+        </ol>
+        <h2>Option 2: Self-Hosted Supabase (Docker)</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code class="language-bash">git clone --depth 1 https://github.com/supabase/supabase
+cd supabase/docker
+cp .env.example .env
+# Edit .env with your settings
+docker compose up -d</code></pre>
+        </div>
+      </section>
+
+      <section id="self-hosting-deployment" class="doc-section">
+        <h1>Deploy Options</h1>
+        <h2>Static File Hosting</h2>
+        <p>After <code>npm run build</code>, deploy the <code>dist/</code> folder to any static hosting provider: Vercel, Netlify, AWS S3+CloudFront, or Docker with nginx.</p>
+
+        <h2>Docker Example</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Dockerfile</span></div>
+          <pre><code class="language-bash">FROM node:20-alpine AS build
+WORKDIR /app
+COPY package*.json ./
+RUN npm install
+COPY . .
+RUN npm run build
+
+FROM nginx:alpine
+COPY --from=build /app/dist /usr/share/nginx/html
+COPY nginx.conf /etc/nginx/conf.d/default.conf
+EXPOSE 80</code></pre>
+        </div>
+
+        <div class="info-box">
+          <h4>💡 SPA Routing</h4>
+          <p>Configure your web server to serve <code>index.html</code> for all routes. The <code>public/.htaccess</code> file handles this for Apache. For nginx, add <code>try_files $uri $uri/ /index.html;</code>.</p>
+        </div>
+      </section>
+
+      <section id="self-hosting-migrations" class="doc-section">
+        <h1>Database Migration</h1>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code class="language-bash"># Login and link to your project
+npx supabase login
+npx supabase link --project-ref YOUR_PROJECT_REF
+
+# Push all migrations
+npx supabase db push</code></pre>
+        </div>
+        <div class="warning-box">
+          <h4>⚠️ Common Error: pgcrypto</h4>
+          <p>If you see <code>ERROR: function gen_random_bytes(integer) does not exist</code>, run this SQL first:</p>
+        </div>
+        <pre><code class="language-sql">CREATE EXTENSION IF NOT EXISTS pgcrypto WITH SCHEMA extensions;</code></pre>
+        <p>Then edit migration files: <code>gen_random_bytes</code> → <code>extensions.gen_random_bytes</code></p>
+      </section>
+
+      <section id="self-hosting-edge-functions" class="doc-section">
+        <h1>Edge Functions Deployment</h1>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code class="language-bash"># Deploy all functions at once
+supabase functions deploy
+
+# Deploy a specific function
+supabase functions deploy send-booking-email</code></pre>
+        </div>
+        <p>See <a href="#edge-functions">Edge Functions</a> for the full list with required secrets.</p>
+      </section>
+
+      <section id="self-hosting-storage" class="doc-section">
+        <h1>Storage Setup</h1>
+        <p>Create 4 storage buckets:</p>
+        <div class="table-wrapper">
+          <table>
+            <thead><tr><th>Bucket</th><th>Public</th><th>Purpose</th></tr></thead>
+            <tbody>
+              <tr><td><code>vehicle-images</code></td><td>Yes</td><td>Vehicle photos</td></tr>
+              <tr><td><code>avatars</code></td><td>Yes</td><td>User profile pictures</td></tr>
+              <tr><td><code>driver-documents</code></td><td>No</td><td>License, insurance docs (private)</td></tr>
+              <tr><td><code>branding-assets</code></td><td>Yes</td><td>Logos, favicons</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <section id="self-hosting-security" class="doc-section">
+        <h1>Security Hardening</h1>
+        <div class="info-box">
+          <h4>🔒 Production Checklist</h4>
+          <ul>
+            <li>✅ Enable RLS on all tables and review all policies</li>
+            <li>✅ Use service_role key only server-side</li>
+            <li>✅ Enable email verification</li>
+            <li>✅ Configure rate limiting and CORS restrictions</li>
+            <li>✅ Set up SSL/TLS</li>
+            <li>✅ Disable demo mode (<code>VITE_DEMO_MODE=false</code>)</li>
+            <li>✅ Remove demo accounts and data</li>
+            <li>✅ Restrict Google Maps API key referrers</li>
+            <li>✅ Set API usage quotas</li>
+            <li>✅ Regular security audits</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="self-hosting-troubleshooting" class="doc-section">
+        <h1>Troubleshooting</h1>
+        <h3>CORS Errors</h3>
+        <p>Verify edge function CORS headers include your domain. Check API allowed origins.</p>
+        <h3>Auth Not Working</h3>
+        <p>Verify SUPABASE_URL and key. Check email confirmation settings. Verify redirect URLs.</p>
+        <h3>RLS Permission Denied</h3>
+        <p>Ensure user is authenticated. Test policies with role impersonation. Check <code>has_role()</code> function.</p>
+        <h3>Edge Functions 500 Errors</h3>
+        <p>Check logs: <code>supabase functions logs [name]</code>. Verify all secrets are set.</p>
+        <h3>Maps Not Loading</h3>
+        <p>Verify GOOGLE_MAPS_API_KEY secret. Enable required APIs in Google Cloud. Check referrer restrictions. Or enable <code>VITE_DEMO_MOCK_MAPS=true</code> for testing.</p>
+        <h3>Commission Not Applied</h3>
+        <p>Verify the <code>auto_record_driver_earning_on_completion</code> trigger exists. Check <code>booking_policies.commissionPercentage</code> in <code>system_settings</code>. Ensure booking has <code>driver_id</code> and <code>total_price</code>.</p>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           PART 8: UPGRADE GUIDE
+           ════════════════════════════════════════════════════════════ -->
+
+      <section id="upgrade-guide" class="doc-section">
+        <h1>Upgrade Guide</h1>
+        <p class="lead">Follow these steps to update RideFlow to any newer version. The same procedure applies regardless of your current version.</p>
+
+        <div class="warning-box">
+          <h4>⚠️ Before You Begin</h4>
+          <ul>
+            <li><strong>Back up your database</strong> — run <code>pg_dump</code> or use your hosting provider's snapshot feature</li>
+            <li><strong>Back up your <code>.env</code> file</strong> and any custom branding assets</li>
+            <li><strong>Read the <a href="#changelog">Changelog</a></strong> for every version between your current and target version to understand new features and changes</li>
+          </ul>
+        </div>
+
+        <h2>Step 1 — Download the New Version</h2>
+        <p>Replace your project files with the target release. Keep your <code>.env</code> file separate — do not overwrite it.</p>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code># If using Git
+git fetch origin
+git checkout vX.X.X
+
+# Or download the release archive and extract over your project directory</code></pre>
+        </div>
+
+        <h2>Step 2 — Install Dependencies</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code>npm install
+# or: bun install</code></pre>
+        </div>
+
+        <h2>Step 3 — Update Environment Variables</h2>
+        <p>Compare your existing <code>.env</code> with the new <code>.env.example</code> and add any new variables. Check the <a href="#changelog">Changelog</a> for details on what was added in each version.</p>
+
+        <h2>Step 4 — Install the Supabase CLI</h2>
+        <p>If you don't already have the Supabase CLI installed locally:</p>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code>npm i supabase</code></pre>
+        </div>
+
+        <h2>Step 5 — Log In to Supabase</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code>npx supabase login</code></pre>
+        </div>
+        <p>This opens a browser window to authenticate with your Supabase account. You only need to do this once per machine.</p>
+
+        <h2>Step 6 — Link Your Project</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code>npx supabase link --project-ref YOUR_SUPABASE_PROJECT_ID</code></pre>
+        </div>
+        <div class="info-box">
+          <h4>ℹ️ Finding Your Project ID</h4>
+          <p>Your project ID is visible in your Supabase Dashboard URL: <code>https://supabase.com/dashboard/project/<strong>YOUR_PROJECT_ID</strong></code>. If already linked from a previous upgrade, you can skip this step.</p>
+        </div>
+
+        <h2>Step 7 — Apply Database Migrations</h2>
+        <p>This pushes all pending migration files to your database. New tables, columns, functions, triggers, and RLS policies will be applied automatically.</p>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code>npx supabase db push</code></pre>
+        </div>
+        <div class="warning-box">
+          <h4>⚠️ Important</h4>
+          <p>Migration files are cumulative — the CLI tracks which ones have already been applied. Only new migrations since your last version will run. Never modify or delete existing migration files.</p>
+        </div>
+
+        <h2>Step 8 — Deploy Edge Functions</h2>
+        <p>This deploys all edge functions (new and updated) to your Supabase project:</p>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code>npx supabase functions deploy</code></pre>
+        </div>
+        <div class="info-box">
+          <h4>ℹ️ Note</h4>
+          <p>This command deploys <strong>all</strong> functions in the <code>supabase/functions/</code> directory. It's safe to run even if some functions haven't changed — unchanged functions are simply redeployed with the same code.</p>
+        </div>
+
+        <h2>Step 9 — Build &amp; Deploy the Frontend</h2>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal</span></div>
+          <pre><code># Build the production bundle
+npm run build
+
+# Test locally before deploying to production
+npm run dev
+
+# Deploy to your hosting provider — examples:
+
+# Vercel
+npx vercel --prod
+
+# Netlify
+npx netlify deploy --prod --dir=dist
+
+# Firebase Hosting
+npx firebase deploy --only hosting
+
+# Any static host / VPS — upload the dist/ folder
+scp -r dist/* user@your-server:/var/www/rideflow/</code></pre>
+        </div>
+        <p>The <code>npm run build</code> command generates a <code>dist/</code> folder with static files. Deploy this folder to your hosting provider (Vercel, Netlify, Firebase, VPS, etc.).</p>
+
+        <h2>Step 10 — Verify</h2>
+        <p>After upgrading, check the following:</p>
+        <ul>
+          <li>✅ Application loads without console errors</li>
+          <li>✅ Booking flow works end-to-end (create → confirm → track)</li>
+          <li>✅ Admin dashboard loads with all sections accessible</li>
+          <li>✅ Driver login and dashboard function correctly</li>
+          <li>✅ Existing data (bookings, drivers, users) is intact</li>
+          <li>✅ Footer version matches the target release</li>
+        </ul>
+
+        <h2>Quick Reference — Full Command Sequence</h2>
+        <p>Copy and run this complete sequence for a typical upgrade:</p>
+        <div class="code-block">
+          <div class="code-header"><span>Terminal — Complete Upgrade</span></div>
+          <pre><code># 1. Get the new version
+git fetch origin &amp;&amp; git checkout vX.X.X
+
+# 2. Install dependencies
+npm install
+
+# 3. Install Supabase CLI (if not already installed)
+npm i supabase
+
+# 4. Log in (one-time per machine)
+npx supabase login
+
+# 5. Link project (skip if already linked)
+npx supabase link --project-ref YOUR_SUPABASE_PROJECT_ID
+
+# 6. Apply database migrations
+npx supabase db push
+
+# 7. Deploy edge functions
+npx supabase functions deploy
+
+# 8. Build frontend
+npm run build
+
+# 9. Deploy frontend (pick your host)
+npx vercel --prod          # Vercel
+# npx netlify deploy --prod --dir=dist   # Netlify
+# npx firebase deploy --only hosting     # Firebase</code></pre>
+        </div>
+      </section>
+
+      <!-- ════════════════════════════════════════════════════════════
+           PART 9: CHANGELOG
+           ════════════════════════════════════════════════════════════ -->
+
+      <section id="changelog" class="doc-section">
+        <h1>Changelog</h1>
+        <p class="lead">Track all version updates, new features, and improvements to RideFlow.</p>
+
+        <div class="changelog-entry">
+          <div class="changelog-header">
+            <h2><span class="version-badge">v2.2.3</span> AI Provider Verification &amp; Multi-Provider Routing</h2>
+            <span class="changelog-date">March 2026</span>
+          </div>
+          <h3>🚀 New Features</h3>
+          <ul>
+            <li><strong>Preferred Provider Routing:</strong> The <code>translate-batch</code> edge function now accepts a <code>preferredProvider</code> parameter, allowing callers to force a specific AI backend (<code>openai</code> or <code>google_gemini</code>) regardless of the default priority chain</li>
+            <li><strong>AI Provider Verification:</strong> Both Google Gemini and OpenAI APIs have been independently tested and confirmed operational for bulk translation workloads</li>
+          </ul>
+          <h3>🔧 Improvements</h3>
+          <ul>
+            <li><strong>AI Settings UI Copy:</strong> Updated admin AI Services panel to clarify that built-in AI is active by default and custom API keys are optional — new translation keys <code>builtInAiActive</code> and <code>customKeyOptional</code></li>
+            <li><strong>Provider Resolution Logic:</strong> Refactored <code>resolveAiProvider</code> to cleanly support an optional override parameter while preserving the existing Gemini → OpenAI → Lovable fallback chain</li>
+          </ul>
+          <h3>📖 Documentation</h3>
+          <ul>
+            <li><strong>Changelog:</strong> Added v2.2.3 release notes</li>
+          </ul>
+        </div>
+
+        <div class="changelog-entry">
+          <div class="changelog-header">
+            <h2><span class="version-badge">v2.2.2</span> 18-Language i18n, AI Features, Dual OAuth &amp; UI Refinements</h2>
+            <span class="changelog-date">March 2026</span>
+          </div>
+          <h3>🚀 New Features</h3>
+          <ul>
+            <li><strong>18 Languages:</strong> Expanded i18n from 4 to 18 languages — Arabic (RTL), Hindi, Italian, Japanese, Korean, Dutch, Polish, Portuguese, Russian, Swedish, Thai, Turkish, and Chinese added alongside English, Spanish, French, and German</li>
+            <li><strong>Bulk Translation Manager:</strong> Admin settings tab for batch-translating all keys into any supported language via the <code>translate-batch</code> edge function</li>
+            <li><strong>Translation Overrides:</strong> Per-language key overrides stored in <code>translation_overrides</code> table, applied at runtime via <code>useLanguagesFromDB</code> hook</li>
+            <li><strong>AI Booking Features:</strong> New <code>ai-booking-features</code> edge function providing smart route suggestions, vehicle recommendations, and natural-language booking summaries — supports admin-configured Google Gemini or OpenAI keys</li>
+            <li><strong>Location Proxy:</strong> New <code>location-proxy</code> edge function using OpenStreetMap Nominatim for free address geocoding and reverse geocoding (no API key required)</li>
+            <li><strong>Email Provider Config:</strong> Admin can configure email delivery provider and view email delivery logs from the Notifications settings tab</li>
+            <li><strong>X (Twitter) OAuth:</strong> Users can sign in with their X/Twitter account via Supabase OAuth</li>
+            <li><strong>Facebook OAuth:</strong> Users can sign in with their Facebook account via Supabase OAuth</li>
+            <li><strong>Self-Hosted Supabase OAuth:</strong> Social login (Google/Apple) auto-detects the hosting environment — uses managed OAuth on cloud-hosted deployments and <code>supabase.auth.signInWithOAuth()</code> on self-hosted deployments</li>
+            <li><strong>Admin Provider Toggles:</strong> All 4 social login providers (Google, Apple, X/Twitter, Facebook) can be independently enabled/disabled from Admin Settings → Integrations</li>
+            <li><strong>Self-Hosting Guidance:</strong> Admin settings include instructions for self-hosted users to configure OAuth providers in their Supabase Dashboard</li>
+          </ul>
+          <h3>🔧 Improvements</h3>
+          <ul>
+            <li><strong>Address Input Redesign:</strong> Clean minimal inputs with colored accent borders (green for pickup/stops, red for drop-off), integrated locate-me and saved-locations buttons</li>
+            <li><strong>Translation Coverage:</strong> All hardcoded UI strings converted to use <code>useLanguage()</code> translation keys throughout booking flow components</li>
+            <li><strong>Languages Table:</strong> Database-managed language registry with activation toggles and translation completeness percentages</li>
+            <li><strong>Auth Context Refactor:</strong> <code>signInWithSocialProvider</code> handles four providers with automatic routing — cloud-managed for Google/Apple, direct Supabase for Twitter/Facebook. Exposes <code>isCloud</code> flag for environment-aware behavior</li>
+            <li><strong>Auth Page UI:</strong> Social login buttons conditionally rendered based on <code>system_settings</code> flags</li>
+            <li><strong>Removed Legacy OAuth Edge Functions:</strong> Deleted <code>social-auth-redirect</code>, <code>social-auth-callback</code>, and <code>update-auth-provider</code> in favor of native SDK methods</li>
+            <li><strong>Edge Functions:</strong> Added <code>translate-batch</code>, <code>update-email-provider</code>, and <code>ai-booking-features</code>; cleaned obsolete entries from <code>supabase/config.toml</code></li>
+            <li><strong>Edge Function Migration:</strong> Replaced deprecated <code>import { serve } from "https://deno.land/std/http/server.ts"</code> with native <code>Deno.serve()</code> across all 36 edge functions to resolve bundling failures caused by unreachable <code>deno.land</code> hosts. Pinned <code>@supabase/supabase-js</code> to <code>@2.49.1</code> for all functions</li>
+          </ul>
+          <h3>🐛 Bug Fixes</h3>
+          <ul>
+            <li><strong>Self-Hosted Build Fix:</strong> Converted the static cloud auth SDK import to a dynamic <code>import()</code> so Rollup/Vite no longer fails during self-hosted builds where the SDK is unavailable</li>
+          </ul>
+          <h3>📚 Documentation</h3>
+          <ul>
+            <li><strong>i18n Section:</strong> Updated from 4 to 18 languages with translation override and bulk translation details</li>
+            <li><strong>Edge Functions:</strong> Added 3 new functions to the reference table</li>
+            <li><strong>Authentication:</strong> Updated to reflect all 4 social OAuth providers</li>
+            <li><strong>Changelog:</strong> Merged all v2.2.2 entries into a single consolidated release</li>
+          </ul>
+        </div>
+
+        <div class="changelog-entry">
+          <div class="changelog-header">
+            <h2><span class="version-badge">v2.1.2</span> Live Tracking Map, Driver UX &amp; Contact Visibility Fixes</h2>
+            <span class="changelog-date">February 2026</span>
+          </div>
+          <h3>🚀 New Features</h3>
+          <ul>
+            <li><strong>Live Tracking Map:</strong> Replaced static placeholder with a real Leaflet map on the booking tracking page, centered on the pickup location while waiting for driver GPS data</li>
+            <li><strong>Driver Waiting Indicator:</strong> Floating status overlay with animated car icon and "Waiting for driver location…" message on the tracking map</li>
+            <li><strong>Privacy Policy &amp; Terms of Service:</strong> New <code>/privacy-policy</code> and <code>/terms-of-service</code> pages with CMS-backed content and sensible defaults</li>
+          </ul>
+          <h3>🐛 Bug Fixes</h3>
+          <ul>
+            <li><strong>Call Driver Button:</strong> Fixed text visibility by switching from <code>bg-accent</code> to <code>bg-primary text-primary-foreground</code> for proper contrast in all themes</li>
+            <li><strong>Complete Ride Button:</strong> Removed customer-facing "Complete Ride" action from the tracking page — this is now driver-only, preventing accidental ride completion</li>
+          </ul>
+          <h3>🔧 Improvements</h3>
+          <ul>
+            <li><strong>Assistance Section:</strong> Wrapped "Need assistance?" contact buttons in a styled card with <code>bg-secondary/30</code> for better visual hierarchy</li>
+            <li><strong>Live Chat UX:</strong> Added toast notification guiding users to the floating chat widget when clicking the Live Chat button</li>
+            <li><strong>Access Control:</strong> Tightened tracking page to only show customer-appropriate actions</li>
+          </ul>
+          <h3>📚 Documentation</h3>
+          <ul>
+            <li><strong>Complete Restructure:</strong> Reorganized all documentation into a clear linear flow: Getting Started → Configuration → Features → Technical Reference → Self-Hosting</li>
+            <li><strong>Standardized Setup:</strong> Consolidated Install, Build, Deploy into a single sequential path with numbered steps</li>
+          </ul>
+        </div>
+
+        <div class="changelog-entry">
+          <div class="changelog-header">
+            <h2><span class="version-badge">v1.4.0</span> Commission System, Loyalty, Enhanced Demo Mode &amp; Comprehensive Docs</h2>
+            <span class="changelog-date">February 2026</span>
+          </div>
+          <h3>🚀 New Features</h3>
+          <ul>
+            <li><strong>Commission System:</strong> Configurable % auto-deducted from every completed ride with full driver earnings breakdown</li>
+            <li><strong>Driver Earnings UI:</strong> Visual "Rider Paid → Service Fee → You Earned" flow with progress bar and per-ride detail</li>
+            <li><strong>Booking Fees &amp; Surcharges:</strong> Toll charges, airport fees, booking fee, cancellation fee — all rider-paid and visible in price breakdown</li>
+            <li><strong>Loyalty Points System:</strong> Rider points with Bronze→Platinum tiers, balance tracking, and transaction history</li>
+            <li><strong>Driver Bonuses:</strong> Milestone, performance, referral, and seasonal bonus types with progress tracking</li>
+            <li><strong>Features Page:</strong> Public <code>/features</code> route with categorized feature summary and print/PDF export</li>
+            <li><strong>Distance Unit Settings:</strong> Configurable km/miles with automatic conversion across the app</li>
+            <li><strong>Enhanced Demo Mode:</strong> 10 granular environment variables for fine-grained demo control</li>
+            <li><strong>Dynamic Branding:</strong> SystemSettingsContext applies brand colors as CSS custom properties</li>
+          </ul>
+          <h3>🔧 Improvements</h3>
+          <ul>
+            <li>Separated <code>showDemoQuickLogin()</code> from master <code>isDemoMode()</code> for granular control</li>
+            <li>Commission rate stored per-earning record for historical accuracy</li>
+            <li>Database trigger <code>auto_record_driver_earning_on_completion</code> for automatic commission</li>
+          </ul>
+        </div>
+
+        <div class="changelog-entry">
+          <div class="changelog-header">
+            <h2><span class="version-badge">v1.3.0</span> Setup Wizard, Demo Mode &amp; Documentation</h2>
+            <span class="changelog-date">February 2026</span>
+          </div>
+          <h3>🚀 New Features</h3>
+          <ul>
+            <li><strong>Setup Wizard:</strong> 7-step onboarding at <code>/setup</code> for self-hosted installations</li>
+            <li><strong>Setup Guard:</strong> Automatic redirect when no Super Admin exists</li>
+            <li><strong>Multi-variable Demo Mode:</strong> Master toggle + granular controls via env vars</li>
+            <li><strong>Demo Banner &amp; Watermark:</strong> Visual indicators for demo environments</li>
+          </ul>
+        </div>
+
+        <div class="changelog-entry">
+          <div class="changelog-header">
+            <h2><span class="version-badge">v1.2.0</span> Payment Webhooks &amp; Multi-Gateway Support</h2>
+            <span class="changelog-date">February 2026</span>
+          </div>
+          <h3>🚀 New Features</h3>
+          <ul>
+            <li>Stripe, PayPal IPN, Coinbase Commerce webhook edge functions</li>
+            <li>Unified <code>process-payment</code> and <code>process-refund</code> functions</li>
+            <li>Payment status tracker with real-time lifecycle visualization</li>
+          </ul>
+        </div>
+
+        <div class="changelog-entry">
+          <div class="changelog-header">
+            <h2><span class="version-badge">v1.1.0</span> Driver Portal &amp; Admin Enhancements</h2>
+            <span class="changelog-date">January 2026</span>
+          </div>
+          <h3>🚀 New Features</h3>
+          <ul>
+            <li>Complete driver onboarding flow with document upload</li>
+            <li>Driver dashboard with map/list views and pull-to-refresh</li>
+            <li>Shift management and earnings tracking</li>
+            <li>Admin scheduling, revenue analytics, document review</li>
+          </ul>
+        </div>
+
+        <div class="changelog-entry">
+          <div class="changelog-header">
+            <h2><span class="version-badge">v1.0.0</span> Initial Release</h2>
+            <span class="changelog-date">January 2026</span>
+          </div>
+          <h3>🚀 Features</h3>
+          <ul>
+            <li>3-step booking flow with guest support</li>
+            <li>Vehicle management and dynamic pricing</li>
+            <li>Real-time tracking and notifications</li>
+            <li>Admin dashboard with full CRUD</li>
+            <li>Multi-language and theming support</li>
+            <li>PWA with offline capabilities</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- ==================== FOOTER ==================== -->
+      <div class="doc-footer">
+        <p>RideFlow Documentation</p>
+        <p class="version">Version 2.2.3 (latest) • March 2026</p>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
