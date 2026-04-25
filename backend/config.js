@@ -16,4 +16,10 @@ export const config = {
   databaseUrl: required('DATABASE_URL', ''),
   jwtSecret: required('RENDER_JWT_SECRET', 'rideflow-render-dev-secret-change-me'),
   autoApplySchema: process.env.RENDER_AUTO_APPLY_SCHEMA === 'true',
+  adminIdentifiers: String(
+    process.env.RENDER_BOOTSTRAP_ADMIN_IDENTIFIERS || 'robert,carlos,lexy,balbino',
+  )
+    .split(',')
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean),
 };

@@ -6,6 +6,112 @@ import { query, withTransaction } from './db.js';
 
 const TOKEN_TTL_SECONDS = 60 * 60 * 24 * 7;
 
+function normalizeIdentifier(value) {
+  return String(value || '').trim().toLowerCase();
+}
+
+function firstNameFromFullName(value) {
+  return String(value || '').trim().split(/\s+/).filter(Boolean)[0] || '';
+}
+
+function getUserMetadata(user) {
+  return user?.metadata && typeof user.metadata === 'object' ? user.metadata : {};
+}
+
+function getUserIdentifiers(user) {
+  const metadata = getUserMetadata(user);
+  const identifiers = new Set();
+  const email = normalizeIdentifier(user?.email);
+  const username = normalizeIdentifier(metadata.username);
+  const fullName = normalizeIdentifier(metadata.full_name);
+  const firstName = normalizeIdentifier(firstNameFromFullName(metadata.full_name));
+
+  if (email) {
+    identifiers.add(email);
+    const localPart = email.split('@')[0];
+    if (localPart) identifiers.add(localPart);
+  }
+  if (username) identifiers.add(username);
+  if (fullName) identifiers.add(fullName);
+  if (firstName) identifiers.add(firstName);
+
+  return identifiers;
+}
+
+function getDesiredRoles(user) {
+  const metadata = getUserMetadata(user);
+  const roles = new Set(['user']);
+  const declaredRole = normalizeIdentifier(metadata.role);
+  const isAdmin = metadata.is_admin === true;
+  const isBootstrapAdmin = Array.from(getUserIdentifiers(user)).some((identifier) => config.adminIdentifiers.includes(identifier));
+
+  if (declaredRole === 'admin' || isAdmin || isBootstrapAdmin) {
+    roles.add('admin');
+  }
+
+  if (declaredRole === 'moderator') {
+    roles.add('moderator');
+  }
+
+  return Array.from(roles).sort();
+}
+
+async function findUserByIdentifier(identifier) {
+  const normalizedIdentifier = normalizeIdentifier(identifier);
+  if (!normalizedIdentifier) {
+    return null;
+  }
+
+  const result = await query(
+    `select id, email, metadata
+     from auth_users
+     where lower(email) = lower($1)
+        or lower(coalesce(metadata->>'username', '')) = lower($1)
+        or lower(coalesce(metadata->>'full_name', '')) = lower($1)
+        or split_part(lower(coalesce(metadata->>'full_name', '')), ' ', 1) = lower($1)
+     limit 1`,
+    [normalizedIdentifier],
+  );
+
+  return result.rows[0] || null;
+}
+
+async function syncUserRoles(userOrId, existingRoles = null) {
+  const user = typeof userOrId === 'string' ? await getUserById(userOrId) : userOrId;
+  if (!user) {
+    return existingRoles || [];
+  }
+
+  const desiredRoles = getDesiredRoles(user);
+  const currentRoles = new Set(existingRoles || []);
+  const missingRoles = desiredRoles.filter((role) => !currentRoles.has(role));
+
+  if (missingRoles.length) {
+    await withTransaction(async (client) => {
+      for (const role of missingRoles) {
+        await client.query(
+          `insert into user_roles (user_id, role)
+           values ($1, $2)
+           on conflict (user_id, role) do nothing`,
+          [user.id, role],
+        );
+      }
+
+      if (missingRoles.includes('admin')) {
+        await client.query(
+          `update auth_users
+           set metadata = coalesce(metadata, '{}'::jsonb) || '{"role":"admin","is_admin":true}'::jsonb,
+               updated_at = now()
+           where id = $1`,
+          [user.id],
+        );
+      }
+    });
+  }
+
+  return desiredRoles;
+}
+
 function isMissingRelation(error, relationName) {
   return error && error.code === '42P01' && (!relationName || String(error.message || '').includes(`\"${relationName}\"`));
 }
@@ -107,15 +213,17 @@ export async function signUp({ email, password, options }) {
     throw new Error('User already registered');
   }
 
-  const fullName = options?.data?.full_name || '';
+  const metadata = options?.data && typeof options.data === 'object' ? { ...options.data } : {};
+  const fullName = metadata.full_name || '';
   const passwordHash = await bcrypt.hash(password, 10);
   const userId = uuidv4();
+  const desiredRoles = getDesiredRoles({ id: userId, email, metadata });
 
   const user = await withTransaction(async (client) => {
     await client.query(
       `insert into auth_users (id, email, password_hash, metadata)
        values ($1, $2, $3, $4::jsonb)`,
-      [userId, email, passwordHash, JSON.stringify({ full_name: fullName })],
+      [userId, email, passwordHash, JSON.stringify(metadata)],
     );
     await client.query(
       `insert into profiles (id, email, full_name)
@@ -123,12 +231,14 @@ export async function signUp({ email, password, options }) {
        on conflict (id) do update set email = excluded.email, full_name = excluded.full_name, updated_at = now()`,
       [userId, email, fullName],
     );
-    await client.query(
-      `insert into user_roles (user_id, role)
-       values ($1, 'user')
-       on conflict (user_id, role) do nothing`,
-      [userId],
-    );
+    for (const role of desiredRoles) {
+      await client.query(
+        `insert into user_roles (user_id, role)
+         values ($1, $2)
+         on conflict (user_id, role) do nothing`,
+        [userId, role],
+      );
+    }
 
     const created = await client.query('select id, email, metadata from auth_users where id = $1 limit 1', [userId]);
     return created.rows[0];
@@ -156,6 +266,8 @@ export async function signIn({ email, password }) {
       if (!valid) {
         throw new Error('Invalid login credentials');
       }
+
+      await syncUserRoles(user);
 
       return {
         user: sanitizeUser(user),
@@ -219,8 +331,10 @@ export async function updateUser(userId, payload) {
 export async function getUserRoles(userId) {
   try {
     const result = await query('select role from user_roles where user_id = $1 order by role asc', [userId]);
-    if (result.rowCount) {
-      return result.rows.map((row) => row.role);
+    const roles = result.rows.map((row) => row.role);
+    const syncedRoles = await syncUserRoles(userId, roles);
+    if (syncedRoles.length) {
+      return syncedRoles;
     }
   } catch (error) {
     if (!isMissingRelation(error, 'user_roles')) {
@@ -242,18 +356,34 @@ export async function getUserRoles(userId) {
 }
 
 export async function makeUserAdmin(userEmail) {
-  const result = await query('select id from auth_users where lower(email) = lower($1) limit 1', [userEmail]);
-  const user = result.rows[0];
+  const user = await findUserByIdentifier(userEmail);
   if (!user) {
     throw new Error('User not found');
   }
 
-  await query(
-    `insert into user_roles (user_id, role)
-     values ($1, 'admin')
-     on conflict (user_id, role) do nothing`,
-    [user.id],
-  );
+  await withTransaction(async (client) => {
+    await client.query(
+      `insert into user_roles (user_id, role)
+       values ($1, 'admin')
+       on conflict (user_id, role) do nothing`,
+      [user.id],
+    );
+
+    await client.query(
+      `insert into user_roles (user_id, role)
+       values ($1, 'user')
+       on conflict (user_id, role) do nothing`,
+      [user.id],
+    );
+
+    await client.query(
+      `update auth_users
+       set metadata = coalesce(metadata, '{}'::jsonb) || '{"role":"admin","is_admin":true}'::jsonb,
+           updated_at = now()
+       where id = $1`,
+      [user.id],
+    );
+  });
 
   return null;
 }

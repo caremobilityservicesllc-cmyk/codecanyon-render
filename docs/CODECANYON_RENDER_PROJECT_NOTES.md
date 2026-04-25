@@ -64,6 +64,8 @@
 - Backend auth now accepts either `auth_users.email` or `auth_users.metadata->>'username'` at sign-in, so admin and driver logins can use username-based credentials.
 - Booking now starts with no static fallback vehicle selected, so the live DB catalog drives what customers see in step 2.
 - Local hotfix build now removes the Vite PWA app-shell registration and clears stale service workers/cache storage on startup to prevent post-deploy black/black-screen states from stale cached bundles.
+- 2026-04-25: Production admin diagnosis found that `admin@demo.com` could sign in but `get_user_roles` returned an empty array; the remote admin role was restored with the `make_user_admin` backend function and role resolution returned `['admin','user']` again.
+- 2026-04-25: Backend auth now preserves full `options.data` metadata on sign-up and auto-heals admin role rows from metadata/bootstrap identifiers, so known admins like `robert`, `carlos`, `lexy`, and `balbino` do not depend on one-off manual role inserts.
 
 ## Current Route Intent
 
@@ -128,4 +130,5 @@
 
 - Latest pushed commit for the auth and driver migration validation batch: `587773d901760f96ce95de4882a3978489351596`
 - Current pending hotfix before next Render deploy: disable stale PWA registration and purge stale service worker/cache state on app startup.
+- 2026-04-25 manual production repair: restored the missing admin role row for `admin@demo.com` after confirming the session authenticated but the role function returned empty.
 - Previous deploy reference: `296d0ba`
