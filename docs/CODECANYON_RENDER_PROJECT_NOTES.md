@@ -63,6 +63,7 @@
 - Driver usernames and phones from the provided user-directory screenshots were synced for the matching imported drivers in local and Render production.
 - Backend auth now accepts either `auth_users.email` or `auth_users.metadata->>'username'` at sign-in, so admin and driver logins can use username-based credentials.
 - Booking now starts with no static fallback vehicle selected, so the live DB catalog drives what customers see in step 2.
+- Local hotfix build now removes the Vite PWA app-shell registration and clears stale service workers/cache storage on startup to prevent post-deploy black/black-screen states from stale cached bundles.
 
 ## Current Route Intent
 
@@ -80,7 +81,7 @@
 - GitHub repo: `caremobilityservicesllc-cmyk/codecanyon-render`
 - Active branch: `main`
 - `render.yaml` is configured with `autoDeploy: true`
-- Latest pushed deploy batch included route guard stabilization and navigation fixes
+- Latest pushed deploy batch included auth and driver migration fixes; the current pending hotfix is focused on stale cached frontend bundles causing black-screen behavior after deploys.
 
 ## Required Environment Variables
 
@@ -109,8 +110,7 @@
 
 ## Pending Deploy Batch
 
-- Username-based sign-in support in `backend/auth.js`.
-- Driver roster import/provision/sync scripts added for the current business directory migration.
+- PWA/cache hotfix in `vite.config.ts` and `src/main.tsx` to disable stale app-shell registration and clear old service workers/caches on startup.
 - No raw `LICENCE/` image files are required for deployment; the import scripts already contain the normalized driver dataset.
 
 ## Latest Data Import
@@ -126,5 +126,6 @@
 
 ## Latest Deploy Reference
 
-- Latest pushed commit for the Render production validation batch: `296d0ba`
-- Previous deploy reference: `aa90d061b616c8d8810717bfdbe12dfea06a4893`
+- Latest pushed commit for the auth and driver migration validation batch: `587773d901760f96ce95de4882a3978489351596`
+- Current pending hotfix before next Render deploy: disable stale PWA registration and purge stale service worker/cache state on app startup.
+- Previous deploy reference: `296d0ba`
