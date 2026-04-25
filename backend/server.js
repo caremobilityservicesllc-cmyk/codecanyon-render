@@ -12,10 +12,15 @@ import { getUserRoles, makeUserAdmin, requireUser, signIn, signUp, updateUser } 
 const app = express();
 const rootDir = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const distDir = path.join(rootDir, 'dist');
+const docsDir = path.join(rootDir, 'docs');
 
 app.use(cors({ origin: true, credentials: true }));
 app.use(express.json({ limit: '5mb' }));
 app.use('/api/render/storage/public', express.static(storageRoot));
+
+if (fs.existsSync(docsDir)) {
+  app.use('/docs', express.static(docsDir));
+}
 
 function isDatabaseUnavailable(error) {
   return Boolean(

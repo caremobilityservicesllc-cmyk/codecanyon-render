@@ -66,6 +66,7 @@
 - Local hotfix build now removes the Vite PWA app-shell registration and clears stale service workers/cache storage on startup to prevent post-deploy black/black-screen states from stale cached bundles.
 - 2026-04-25: Production admin diagnosis found that `admin@demo.com` could sign in but `get_user_roles` returned an empty array; the remote admin role was restored with the `make_user_admin` backend function and role resolution returned `['admin','user']` again.
 - 2026-04-25: Backend auth now preserves full `options.data` metadata on sign-up and auto-heals admin role rows from metadata/bootstrap identifiers, so known admins like `robert`, `carlos`, `lexy`, and `balbino` do not depend on one-off manual role inserts.
+- 2026-04-25: Role sync now preserves existing elevated roles instead of collapsing them back to `user`, `admin@demo.com` is included in bootstrap admin identifiers, the home page no longer hard-fails if `sessionStorage` is unavailable, and Express now serves `/docs/*` so footer documentation links no longer fall into the SPA fallback.
 
 ## Current Route Intent
 

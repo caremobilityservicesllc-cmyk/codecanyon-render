@@ -23,6 +23,30 @@ import { useBookingCheckout } from '@/hooks/useBookingCheckout';
 
 const HOME_SPLASH_SEEN_KEY = 'rideflow-home-splash-seen';
 
+function hasSeenHomeSplash() {
+  if (typeof window === 'undefined') {
+    return true;
+  }
+
+  try {
+    return sessionStorage.getItem(HOME_SPLASH_SEEN_KEY) === 'true';
+  } catch {
+    return true;
+  }
+}
+
+function markHomeSplashSeen() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  try {
+    sessionStorage.setItem(HOME_SPLASH_SEEN_KEY, 'true');
+  } catch {
+    // Ignore storage failures so the home route never crashes.
+  }
+}
+
 const initialBookingDetails: BookingDetails = {
   serviceType: 'flat-rate',
   transferType: 'one-way',
@@ -54,13 +78,7 @@ const Index = () => {
   const [currentStep, setCurrentStep] = useState(1);
   const [bookingDetails, setBookingDetails] = useState<BookingDetails>(initialBookingDetails);
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [showSplash, setShowSplash] = useState(() => {
-    if (typeof window === 'undefined') {
-      return false;
-    }
-
-    return sessionStorage.getItem(HOME_SPLASH_SEEN_KEY) !== 'true';
-  });
+  const [showSplash, setShowSplash] = useState(() => !hasSeenHomeSplash());
 
   useEffect(() => {
     if (!showSplash) {
@@ -73,7 +91,7 @@ const Index = () => {
 
   useEffect(() => {
     if (!showSplash && typeof window !== 'undefined') {
-      sessionStorage.setItem(HOME_SPLASH_SEEN_KEY, 'true');
+      markHomeSplashSeen();
     }
   }, [showSplash]);
 

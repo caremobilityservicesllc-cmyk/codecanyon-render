@@ -88,9 +88,11 @@ async function syncUserRoles(userOrId, existingRoles = null) {
 
   const desiredRoles = getDesiredRoles(user);
   const currentRoles = new Set(existingRoles || []);
-  const missingRoles = desiredRoles.filter((role) => !currentRoles.has(role));
+  const effectiveRoles = Array.from(new Set([...currentRoles, ...desiredRoles])).sort();
+  const missingRoles = effectiveRoles.filter((role) => !currentRoles.has(role));
+  const shouldPersistAdminMetadata = effectiveRoles.includes('admin') && !desiredRoles.includes('admin');
 
-  if (missingRoles.length) {
+  if (missingRoles.length || shouldPersistAdminMetadata) {
     await withTransaction(async (client) => {
       for (const role of missingRoles) {
         await client.query(
@@ -101,7 +103,7 @@ async function syncUserRoles(userOrId, existingRoles = null) {
         );
       }
 
-      if (missingRoles.includes('admin')) {
+      if (effectiveRoles.includes('admin')) {
         await client.query(
           `update auth_users
            set metadata = coalesce(metadata, '{}'::jsonb) || '{"role":"admin","is_admin":true}'::jsonb,
@@ -113,7 +115,7 @@ async function syncUserRoles(userOrId, existingRoles = null) {
     });
   }
 
-  return desiredRoles;
+  return effectiveRoles;
 }
 
 function isMissingRelation(error, relationName) {

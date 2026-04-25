@@ -17,7 +17,7 @@ export const config = {
   jwtSecret: required('RENDER_JWT_SECRET', 'rideflow-render-dev-secret-change-me'),
   autoApplySchema: process.env.RENDER_AUTO_APPLY_SCHEMA === 'true',
   adminIdentifiers: String(
-    process.env.RENDER_BOOTSTRAP_ADMIN_IDENTIFIERS || 'robert,carlos,lexy,balbino',
+    process.env.RENDER_BOOTSTRAP_ADMIN_IDENTIFIERS || 'admin@demo.com,robert,carlos,lexy,balbino',
   )
     .split(',')
     .map((value) => value.trim().toLowerCase())
