@@ -63,12 +63,16 @@ async function findUserByIdentifier(identifier) {
   }
 
   const result = await query(
-    `select id, email, metadata
-     from auth_users
-     where lower(email) = lower($1)
-        or lower(coalesce(metadata->>'username', '')) = lower($1)
-        or lower(coalesce(metadata->>'full_name', '')) = lower($1)
-        or split_part(lower(coalesce(metadata->>'full_name', '')), ' ', 1) = lower($1)
+    `select au.id, au.email, au.metadata
+     from auth_users au
+     left join profiles p on p.id = au.id
+     where lower(au.email) = lower($1)
+        or lower(coalesce(au.metadata->>'username', '')) = lower($1)
+        or lower(coalesce(au.metadata->>'full_name', '')) = lower($1)
+        or split_part(lower(coalesce(au.metadata->>'full_name', '')), ' ', 1) = lower($1)
+        or lower(coalesce(p.email, '')) = lower($1)
+        or lower(coalesce(p.full_name, '')) = lower($1)
+        or split_part(lower(coalesce(p.full_name, '')), ' ', 1) = lower($1)
      limit 1`,
     [normalizedIdentifier],
   );
