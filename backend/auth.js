@@ -142,7 +142,14 @@ export async function signUp({ email, password, options }) {
 
 export async function signIn({ email, password }) {
   try {
-    const result = await query('select id, email, password_hash, metadata from auth_users where lower(email) = lower($1) limit 1', [email]);
+    const result = await query(
+      `select id, email, password_hash, metadata
+       from auth_users
+       where lower(email) = lower($1)
+          or lower(coalesce(metadata->>'username', '')) = lower($1)
+       limit 1`,
+      [email],
+    );
     const user = result.rows[0];
     if (user) {
       const valid = await bcrypt.compare(password, user.password_hash);

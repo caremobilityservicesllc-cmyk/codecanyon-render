@@ -58,6 +58,10 @@
 - Render production now has a real `drivers` row for `driver@demo.com` and a real booking `DEMO-0001` for `user@demo.com`.
 - Render production `db/query` now prefers migrated `bookings` and `drivers` tables over legacy fallbacks, with legacy paths used only when the migrated tables are missing.
 - Fleet catalog loaded in local and Render production with 12 active vehicles from the current medical transport roster.
+- Driver roster loaded from the `LICENCE/` folder into local and Render production with 22 records using license-based imports.
+- Driver auth accounts provisioned in local and Render production for the imported roster using capitalized first-name usernames.
+- Driver usernames and phones from the provided user-directory screenshots were synced for the matching imported drivers in local and Render production.
+- Backend auth now accepts either `auth_users.email` or `auth_users.metadata->>'username'` at sign-in, so admin and driver logins can use username-based credentials.
 - Booking now starts with no static fallback vehicle selected, so the live DB catalog drives what customers see in step 2.
 
 ## Current Route Intent
@@ -105,7 +109,20 @@
 
 ## Pending Deploy Batch
 
-- No unpublished production-critical batch at this time.
+- Username-based sign-in support in `backend/auth.js`.
+- Driver roster import/provision/sync scripts added for the current business directory migration.
+- No raw `LICENCE/` image files are required for deployment; the import scripts already contain the normalized driver dataset.
+
+## Latest Data Import
+
+- 2026-04-24: Imported 22 drivers from the local `LICENCE/` folder into local PostgreSQL and Render production.
+- Import method: `backend/scripts/import-licence-drivers.js`
+- Safety defaults: imported drivers are `is_active=true` and `is_available=false` until phone/onboarding data is completed.
+- 2026-04-24: Provisioned 22 driver login accounts in local and Render production with `backend/scripts/provision-driver-logins.js`.
+- Login rule: username is the driver first name capitalized; password is `Name@NN`, currently `NN=00` where phone digits are still missing.
+- 2026-04-24: Synced 16 driver usernames/phones from the supplied screenshots with `backend/scripts/sync-driver-directory-details.js` and `backend/scripts/driver-directory-overrides.js`.
+- Updated logins now use the supplied usernames where available, with passwords regenerated as `username@lastTwoPhoneDigits`.
+- Remaining imported drivers without screenshot phone data still keep the placeholder `@00` suffix until their numbers are provided.
 
 ## Latest Deploy Reference
 
